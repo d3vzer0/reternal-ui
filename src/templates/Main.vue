@@ -1,7 +1,7 @@
 <template>
   <b-container fluid>
     <b-row id="row-main">
-      <b-col xl="2" lg="3" md="3" sm="3" cols="1" id="col-sidebar">
+      <b-col xl="2" lg="2" md="2" sm="2" cols="1" id="col-sidebar">
         <div id="sidebar-header">
           <img src="@/assets/reternal.png" id="sidebar-header-image">
         </div>
@@ -60,10 +60,9 @@
         </div>
       </b-col>
 
-      <b-col id="col-main">
+      <b-col id="col-main" xl="10" lg="10" md="10" sm="10" cols="11">
         <b-row id="row-navbar">
           <b-col cols="12">
-
           <b-navbar toggleable="md" type="light" variant="platinum" >
             <b-navbar-nav>
               <b-nav-item href="#"> <font-awesome-icon icon="terminal" /> Terminal</b-nav-item>
