@@ -1,6 +1,35 @@
 <template>
   <div class="mitre-overview">
-    
+     <b-modal ref="techniquedetails" id="techniquemodal" size="lg" hide-footer :title="mitre_technique_details.technique_id">
+         <table class="table">
+           <tr>
+             <td>Name</td>
+             <td>{{mitre_technique_details.name}}</td>
+          </tr>
+          <tr>
+             <td>Platforms</td>
+             <td v-if="mitre_technique_details.platforms">{{mitre_technique_details.platforms.join(', ')}}</td>
+          </tr>
+          <tr>
+             <td>Phases</td>
+             <td v-if="mitre_technique_details.kill_chain_phases">{{mitre_technique_details.kill_chain_phases.join(', ')}}</td>
+          </tr>
+          <tr>
+             <td>Permissions</td>
+             <td v-if="mitre_technique_details.permissions_required">{{mitre_technique_details.permissions_required.join(', ')}}</td>
+          </tr>
+         <tr>
+             <td>DataSource</td>
+             <td v-if="mitre_technique_details.data_sources">{{mitre_technique_details.data_sources.join(', ')}}</td>
+          </tr>            
+          <tr>
+             <td>Description</td>
+             <td><pre>{{mitre_technique_details.description}}</pre></td>
+          </tr>
+
+         </table>
+    </b-modal>
+
     <b-row class="top-10">
       <b-col>
         <b-card header="filter mitre" header-tag="header">
@@ -25,7 +54,12 @@
         <b-card-group columns>
           <b-card :header="mitre_phase.kill_chain_phase + ': ' + mitre_phase.platform" v-for="mitre_phase in filter_mitre_techniques">
             <b-list-group flush>
-              <b-list-group-item v-for="mitre_technique in mitre_phase.techniques">{{mitre_technique.name}}</b-list-group-item>
+              <b-list-group-item v-for="mitre_technique in mitre_phase.techniques">
+                <b-row>
+                  <b-col cols="9">{{mitre_technique.name}}</b-col>
+                  <b-col><b-badge href="#" pill @click="get_technique_details(mitre_technique.technique_id)" variant="primary">Details</b-badge></b-col>
+                </b-row>
+              </b-list-group-item>
             </b-list-group>
           </b-card>
         </b-card-group>
@@ -64,6 +98,7 @@ export default {
       mitre_search_technique: '',
       mitre_search_phase: '',
       mitre_search_platform: '',
+      mitre_technique_details: false,
       error: false
     }
   },
@@ -74,6 +109,18 @@ export default {
         .catch(response => this.generic_failed(response))
   },
   methods: {
+    get_technique_details (technique_id){
+      this.$http
+        .get('mitre/technique/' + technique_id)
+        .then(response => this.parse_technique_details(response))
+        .catch(response => this.generic_failed(response))
+    },
+    parse_technique_details (response){
+      this.mitre_technique_details = response.data;
+      this.$refs.techniquedetails.show();
+
+    },
+
     parse_mitre (response){
      this.mitre_techniques = response.data;
     },
@@ -90,7 +137,6 @@ export default {
       )
       return filtered_techniques;
     }
-
   }
 };
 </script>

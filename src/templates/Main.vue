@@ -200,5 +200,20 @@ export default{
 .footer
   height: 50px
 
+#techniquemodal
+  font-size: 14px
+
+pre 
+  font-family: inherit
+  font-size: inherit
+  font-weight: inherit
+  -webkit-font-smoothing: antialiased
+  -moz-osx-font-smoothing: grayscale
+  white-space: pre-wrap
+  white-space: -moz-pre-wrap
+  white-space: -pre-wrap
+  white-space: -o-pre-wrap
+  word-wrap: break-word
+
 
 </style>
