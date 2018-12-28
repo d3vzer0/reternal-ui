@@ -1,5 +1,8 @@
 <template>
   <b-container fluid>
+    <b-alert :show="error_countdown" variant="primary" @dismissed="error_seconds=0" @dismiss-count-down="countdown_changed"> 
+      {{this.error_message}}      
+    </b-alert>
     <b-row id="row-main">
       <b-col xl="2" lg="2" md="2" sm="2" cols="1" id="col-sidebar">
         <div id="sidebar-header">
@@ -118,6 +121,10 @@
 <script>
 export default{
   name: 'Main',
+  data (){
+    return {
+    }
+  },
   methods: {
     logout (){
       localStorage.removeItem("token");

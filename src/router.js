@@ -3,6 +3,7 @@ import Router from "vue-router";
 import Main from "./templates/Main.vue";
 import Login from "./templates/Login.vue";
 import Home from "./views/Home.vue";
+import Macros from "./views/Macros.vue";
 import store from "./store/index.js";
 
 
@@ -22,6 +23,11 @@ const router = new Router({
           path: "/home",
           name: "Home",
           component: Home
+        },
+        {
+          path: "/macros",
+          name: "Macros",
+          component: Macros
         }
       ]
     },
