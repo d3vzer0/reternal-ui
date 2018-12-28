@@ -7,13 +7,28 @@ import axios from "./api"
 import router from "./router";
 
 import { store } from "./store"
-import { library } from "@fortawesome/fontawesome-svg-core"
-import { faTerminal, faCog, faEye, faBullseye } from "@fortawesome/free-solid-svg-icons"
-import { faHome, faDesktop, faMap, faCalendar, faDownload } from "@fortawesome/free-solid-svg-icons"
-import { faUser } from "@fortawesome/free-regular-svg-icons"
-import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome"
+import { library } from "@fortawesome/fontawesome-svg-core";
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
-library.add(faTerminal, faCog, faEye, faBullseye, faCalendar, faHome, faDesktop, faMap, faDownload, faUser)
+// import { faUser } from "@fortawesome/free-regular-svg-icons";
+import { faTerminal, faCog, faEye, faBullseye, faUser, faBookmark  } from "@fortawesome/free-solid-svg-icons"
+import { faHome, faDesktop, faMap, faCalendar, faDownload, faInfo} from "@fortawesome/free-solid-svg-icons"
+
+library.add(
+  faTerminal,
+  faCog,
+  faEye,
+  faBullseye,
+  faCalendar,
+  faHome,
+  faDesktop,
+  faMap,
+  faDownload,
+  faUser,
+  faInfo,
+  faBookmark
+);
+
 Vue.component("font-awesome-icon", FontAwesomeIcon)
 Vue.config.productionTip = false
 
