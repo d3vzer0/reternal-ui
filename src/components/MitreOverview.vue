@@ -111,7 +111,7 @@ export default {
     get_techniques_filtered (){
       setTimeout(() =>
         this.$http
-          .get('mitre/aggregate', {params:{name:this.mitre_search_technique,
+          .get('mitre/techniques', {params:{name:this.mitre_search_technique,
                phase:this.mitre_search_phase,
                platform:this.mitre_search_platform}})
           .then(response => this.parse_mitre(response))
