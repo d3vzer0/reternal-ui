@@ -4,8 +4,9 @@ import Main from "./templates/Main.vue";
 import Login from "./templates/Login.vue";
 import Home from "./views/Home.vue";
 import Macros from "./views/Macros.vue";
+import Agents from "./views/Agents.vue";
 import store from "./store/index.js";
-
+import AgentDetails from "./views/AgentDetails.vue";
 
 Vue.use(Router);
 
@@ -28,6 +29,16 @@ const router = new Router({
           path: "/macros",
           name: "Macros",
           component: Macros
+        },
+        {
+          path: "/agents",
+          name: "Agents",
+          component: Agents
+        },
+        {
+          path: "/agent/:agent_id",
+          name: "AgentDetails",
+          component: AgentDetails
         }
       ]
     },

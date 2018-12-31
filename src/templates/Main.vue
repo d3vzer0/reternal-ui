@@ -1,8 +1,8 @@
 <template>
   <b-container fluid>
-    <b-alert :show="error_countdown" variant="primary" @dismissed="error_seconds=0" @dismiss-count-down="countdown_changed"> 
+    <!-- <b-alert :show="error_countdown" variant="primary" @dismissed="error_seconds=0" @dismiss-count-down="countdown_changed"> 
       {{this.error_message}}      
-    </b-alert>
+    </b-alert> -->
     <b-row id="row-main">
       <b-col xl="2" lg="2" md="2" sm="2" cols="1" id="col-sidebar">
         <div id="sidebar-header">
@@ -12,11 +12,11 @@
           <hr>
           <b-nav vertical id="sidebar-nav" class="sidebar-nav-links">
             <ul class="nav flex-column">
-              <b-nav-item class="nav-item" to="home">
+              <b-nav-item class="nav-item" to="/home">
                 <span class="nav-item-icon"><font-awesome-icon icon="home" /></span>
                 <span class="nav-item-title">Index</span>
               </b-nav-item>
-              <b-nav-item class="nav-item" to="agents">
+              <b-nav-item class="nav-item" to="/agents">
                 <span class="nav-item-icon"><font-awesome-icon icon="desktop" /></span>
                 <span class="nav-item-title">Agents</span>
               </b-nav-item>
@@ -27,19 +27,19 @@
           </div>
           <b-nav vertical id="sidebar-nav" class="sidebar-nav-links">
             <ul class="nav flex-column">
-              <b-nav-item class="nav-item" to="payloads">
+              <b-nav-item class="nav-item" to="/payloads">
                 <span class="nav-item-icon"><font-awesome-icon icon="download" /></span>
                 <span class="nav-item-title">payloads</span>
               </b-nav-item>
-              <b-nav-item class="nav-item" to="macros">
+              <b-nav-item class="nav-item" to="/macros">
                 <span class="nav-item-icon"><font-awesome-icon icon="bookmark" /></span>
                 <span class="nav-item-title">macros</span>
               </b-nav-item>
-              <b-nav-item class="nav-item" to="startup">
+              <b-nav-item class="nav-item" to="/startup">
                 <span class="nav-item-icon"><font-awesome-icon icon="calendar" /></span>
                 <span class="nav-item-title">startup tasks</span>
               </b-nav-item>
-              <b-nav-item class="nav-item" to="commands">
+              <b-nav-item class="nav-item" to="/commands">
                 <span class="nav-item-icon"><font-awesome-icon icon="terminal" /></span>
                 <span class="nav-item-title">commands</span>
               </b-nav-item>

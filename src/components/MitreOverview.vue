@@ -72,6 +72,8 @@
 </template>
 
 <script>
+import _ from 'lodash'; 
+
 export default {
   name: "MitreOverview",
   data(){
@@ -108,16 +110,14 @@ export default {
    this.get_techniques_filtered();
   },
   methods: {
-    get_techniques_filtered (){
-      setTimeout(() =>
+    get_techniques_filtered: _.debounce(function (){
         this.$http
           .get('mitre/techniques', {params:{name:this.mitre_search_technique,
                phase:this.mitre_search_phase,
                platform:this.mitre_search_platform}})
           .then(response => this.parse_mitre(response))
           .catch(response => this.generic_failed(response))
-      ,200);
-    },
+    },500),
     get_technique_details (technique_id){
       this.$http
         .get('mitre/technique/' + technique_id)
