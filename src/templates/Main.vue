@@ -16,6 +16,10 @@
                 <span class="nav-item-icon"><font-awesome-icon icon="home" /></span>
                 <span class="nav-item-title">Index</span>
               </b-nav-item>
+              <b-nav-item class="nav-item" to="/mitre">
+                <span class="nav-item-icon"><font-awesome-icon icon="archive" /></span>
+                <span class="nav-item-title">Mitre</span>
+              </b-nav-item>
               <b-nav-item class="nav-item" to="/agents">
                 <span class="nav-item-icon"><font-awesome-icon icon="desktop" /></span>
                 <span class="nav-item-title">Agents</span>
@@ -99,7 +103,7 @@
 
         <b-row id="row-content">
           <b-col cols="12">
-            <transition name="fade">
+            <transition>
               <router-view></router-view>
             </transition>
           </b-col>
@@ -217,6 +221,12 @@ pre
   white-space: -pre-wrap
   white-space: -o-pre-wrap
   word-wrap: break-word
+
+// .fade-enter-active, .fade-leave-active 
+//   transition: opacity .5s
+
+// .fade-enter, .fade-leave-to 
+//   opacity: 0;
 
 
 </style>

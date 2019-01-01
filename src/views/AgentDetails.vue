@@ -16,7 +16,22 @@
     </b-row>
     <b-row class="top-10">
       <b-col cols="12">
-        <b-table striped ref="detailstable" hover :fields="fields" :items="get_details_filtered" :current-page="details_current_page" :per-page="details_search_limit"></b-table>
+        <b-table striped ref="detailstable" hover :fields="fields" :items="get_details_filtered" :current-page="details_current_page" :per-page="details_search_limit">
+          <template slot="show_details" slot-scope="row">
+            <b-button size="sm" @click.stop="row.toggleDetails" variant="primary" class="mr-2">
+            {{ row.detailsShowing ? 'Hide' : 'Show'}} Details
+            </b-button>
+          </template>
+          <template slot="row-details" slot-scope="row">
+            <b-card>
+              <b-row>
+                <b-col>Working Dir</b-col>
+                <b-col>{{ row.item.working_dir }}</b-col>
+              </b-row>
+            </b-card>
+          </template>
+          
+        </b-table>
           <b-row>
           <b-col md="6">
             <b-pagination :total-rows="details_result_count" :per-page="details_search_limit" v-model="details_current_page" @click.native="get_details_filtered"/>
@@ -45,7 +60,8 @@ export default {
         beacon_id: {label:"Beacon ID"},
         username: {label:"Username"},
         hostname: {label:"Hostname"},
-        remote_ip: {label:"Remote IP"}
+        remote_ip: {label:"Remote IP"},
+        show_details: {label:"Details"}
       }
 
     }
@@ -71,6 +87,8 @@ export default {
             platform: detail.platform,
             remote_ip: detail.remote_ip,
             hostname: detail.hostname,
+            working_dir: detail.working_dir,
+            _showDetails: false
           }
           results.push(result);
         });

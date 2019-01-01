@@ -10,9 +10,9 @@ import { store } from "./store"
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
-// import { faUser } from "@fortawesome/free-regular-svg-icons";
 import { faTerminal, faCog, faEye, faBullseye, faUser, faBookmark  } from "@fortawesome/free-solid-svg-icons"
 import { faHome, faDesktop, faMap, faCalendar, faDownload, faInfo} from "@fortawesome/free-solid-svg-icons"
+import { faArchive } from "@fortawesome/free-solid-svg-icons"
 
 library.add(
   faTerminal,
@@ -26,7 +26,8 @@ library.add(
   faDownload,
   faUser,
   faInfo,
-  faBookmark
+  faBookmark,
+  faArchive
 );
 
 Vue.component("font-awesome-icon", FontAwesomeIcon)

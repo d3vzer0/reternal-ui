@@ -1,6 +1,6 @@
 <template>
   <div class="agents top-10">
-      <AgentTiles></AgentTiles>
+    <AgentTiles></AgentTiles>
   </div>
 </template>
 

@@ -4,7 +4,7 @@
     <b-row class="top-10">
       <b-col>
         <b-card header="filter mitre" header-tag="header">
-          <p class="card-text">Filter the mitre table for specific attack simulations</p>
+          <p class="card-text">Filter tiles to only display specific agents based on hostname, username or platform</p>
           <b-form method="get" @submit.prevent="filter_mite">
             <b-row>
               <b-col xl="2" lg="3" md="4" sm="6">
