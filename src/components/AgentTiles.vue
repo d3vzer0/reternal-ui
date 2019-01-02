@@ -85,7 +85,7 @@ export default {
                 search:this.agent_search_generic}})
           .then(response => this.parse_agents(response))
           .catch(response => this.generic_failed(response))
-      }, 500),
+      }, 200),
     parse_agents (response){
       this.agent_list = response.data;
     },

@@ -1,23 +1,39 @@
 <template>
-  <div class="home top-10">
-    <CommandsScheduler></CommandsScheduler>
+  <div class="home">
+    <b-row class="top-10">
+      <b-col cols="8">
+       <CommandsScheduler></CommandsScheduler>
+       </b-col>
+       <b-col>
+        <MitreScheduler></MitreScheduler>
+      </b-col>
+    </b-row>
+    <b-row class="top-10">
+      <b-col cols="12">
+       <ExecutionPanel></ExecutionPanel>
+      </b-col>
+    </b-row>
   </div>
 </template>
 
 <script>
 import CommandsScheduler from "@/components/CommandsScheduler";
+import MitreScheduler from "@/components/MitreScheduler";
+import ExecutionPanel from "@/views/ExecutionPanel";
 
 export default {
   name: "Home",
   data(){
     return {
-      selected_agents: this.$store.getters['selection/get_agents']
+    
     }
   },
   methods: {
   },
   components: {
-    CommandsScheduler
+    CommandsScheduler,
+    MitreScheduler,
+    ExecutionPanel
   }
   
 };
