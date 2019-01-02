@@ -11,7 +11,10 @@ export default {
   name: "Home",
   data(){
     return {
+      selected_agents: this.$store.getters['selection/get_agents']
     }
+  },
+  methods: {
   },
   components: {
     CommandsScheduler

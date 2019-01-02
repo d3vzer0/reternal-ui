@@ -23,7 +23,7 @@
     <b-row class="top-10 agent-tiles">
       <b-col cols="12">
         <b-card-group columns>
-          <b-card :header="agent.hostname" v-for="agent in agent_list" class="agent-card">
+          <b-card :header="agent.hostname" v-for="agent in agent_list" class="agent-card" v-on:click="click_agent_tile(agent)" :class="{active: is_selected(agent)}">
             <b-row>
               <b-col>State</b-col><b-col>{{agent.state}}</b-col>
             </b-row>
@@ -63,6 +63,8 @@ export default {
     return {
       agent_list: [
       ],
+      is_active: false,
+      selected_agents: this.$store.getters['selection/get_agents'],
       agent_search_platform: "Windows",
       agent_search_generic: "",
       platform_options: [
@@ -89,16 +91,29 @@ export default {
     },
     generic_failed (response){
       this.error = "Unable to perform request";
+    },
+    click_agent_tile (agent_object){
+      this.$store.commit('selection/add_agent', agent_object);
+    },
+    is_selected (agent_object){
+      if(this.$store.getters['selection/get_agents'].includes(agent_object.beacon_id)){
+        return true;
+      }
     }
   }
 };
 </script>
 
 <style lang="sass">
+
 .agent-card
   width: 200px
+  &.active
+    border-color: #9e1d1d
+    border-width: 2px
 
 .agent-tiles
   .btn
     width: 100%
+
 </style>

@@ -4,9 +4,9 @@ export default {
     template: "login-template"
   },
   mutations: {
-      change_template(state, payload) {
+    change_template(state, payload) {
       state.template = payload;
-      }
+    }
   },
   getters: {
     current_template(state) {

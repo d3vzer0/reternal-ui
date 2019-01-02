@@ -81,8 +81,11 @@
                 <template slot="button-content">
                 <font-awesome-icon icon="bullseye" />  Beacons
                 </template>
-                <b-dropdown-item href="#">Profile</b-dropdown-item>
-                <b-dropdown-item href="#">Signout</b-dropdown-item>
+
+                <div v-for="(platform, key, index) in selected_agents">
+                  <b-dropdown-item v-for="agent in platform" href="#">{{agent.hostname}}</b-dropdown-item>
+                  <b-dropdown-divider v-if="platform.agent"></b-dropdown-divider>
+                </div>
               </b-nav-item-dropdown>
             </b-navbar-nav>
 
@@ -123,17 +126,23 @@
 
 
 <script>
-export default{
+export default {
   name: 'Main',
   data (){
     return {
+      selected_agents: this.$store.getters['selection/get_agents_detailed']
     }
+  },
+  mounted (){
   },
   methods: {
     logout (){
       localStorage.removeItem("token");
       this.$router.replace(this.$route.query.redirect || '/login')
     },
+    populate_beacons_selection (){
+
+    }
   }
 }
 </script>
