@@ -9,7 +9,7 @@
         <b-col cols="3">
           <b-form-input type="text" placeholder="Sleep"></b-form-input>
         </b-col>
-        <b-col cols="2">
+        <b-col cols="3">
           <b-button type="submit" variant="primary" class="fullwidth">Add</b-button>
         </b-col>
       </b-row>

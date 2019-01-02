@@ -4,6 +4,7 @@ import template from "@/store/template-store";
 import auth from "@/store/auth-store";
 import error from "@/store/error-store";
 import selection from "@/store/selection-store";
+import task from "@/store/task-store";
 
 Vue.use(Vuex);
 
@@ -12,7 +13,8 @@ export const store = new Vuex.Store({
     template,
     auth,
     error,
-    selection
+    selection,
+    task
   }
 })
 

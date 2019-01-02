@@ -1,5 +1,5 @@
 <template>
-  <b-form-select :options="command_options" required/>
+  <b-form-select :options="command_options" required v-model="$parent.command_name"/>
 </template>
 
 <script>
@@ -7,6 +7,7 @@ export default {
   name: "CommandsDropdown",
   data(){
     return {
+      command_name: "",
       command_options: [
       ],
    
@@ -26,7 +27,7 @@ export default {
     parse_commands (response){
       var command_list = [];
       response.data.forEach(function(command){
-        var command_data = {value:command._id["$oid"], text:command.name};
+        var command_data = {value:command.name, text:command.name};
         command_list.push(command_data);
       });
       this.command_options = command_list;

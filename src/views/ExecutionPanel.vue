@@ -1,33 +1,33 @@
 <template>
   <b-card-group class="executionpanel">
-    <b-card header="Type" class="col-2">
+    <b-card header="Queue" class="col-2">
       <b-list-group flush>
-        <b-list-group-item> Command </b-list-group-item>
-        <b-list-group-item> Technique </b-list-group-item>
+        <b-list-group-item v-on:click="show_commands_card = !show_commands_card"> Command <b-badge>{{task_commands.length}}</b-badge></b-list-group-item>
+        <b-list-group-item> Technique <b-badge>{{task_techniques.length}}</b-badge></b-list-group-item>
       </b-list-group>
     </b-card>
     <b-card header="Command" class="col-4">
-      <b-list-group flush>
-        <b-list-group-item> exec_shell </b-list-group-item>
-        <b-list-group-item> exec_shell </b-list-group-item>
-        <b-list-group-item> exec_shell </b-list-group-item>
-        <b-list-group-item> exec_shell </b-list-group-item>
-        <b-list-group-item> exec_shell </b-list-group-item>
-
+      <b-list-group flush v-if="show_commands_card">
+        <b-list-group-item v-for="command in task_commands" v-on:click="show_command_details(command)">{{command.name}}</b-list-group-item>
       </b-list-group>
     </b-card>
     <b-card header="Input">
-      <b-list-group flush>
+      <b-list-group flush v-if="show_details_panel">
         <b-list-group-item>
           <b-row>
             <b-col><b>Input</b></b-col>
-            <b-col>cat /etc/passwd</b-col>
+            <b-col>{{selected_command_input}}</b-col>
           </b-row>
         </b-list-group-item>
         <b-list-group-item>
           <b-row>
             <b-col><b>Sleep</b></b-col>
-            <b-col>5</b-col>
+            <b-col>{{selected_command_sleep}}</b-col>
+          </b-row>
+        </b-list-group-item>
+         <b-list-group-item>
+          <b-row>
+            <b-col><b-button variant="primary" class="fullwidth" v-on:click="remove_command(selected_command_rand)">Remove from task</b-button></b-col>
           </b-row>
         </b-list-group-item>
       </b-list-group>
@@ -41,11 +41,29 @@ export default {
   name: "ExecutionPanel",
   data(){
     return {
+      show_details_panel: false,
+      show_commands_card: false,
+      show_techniques_card: false,
+      selected_command_input: "",
+      selected_command_sleep: 0,
+      selected_command_rand: 0,
+      task_commands: this.$store.getters['task/commands'],
+      task_techniques: this.$store.getters['task/techniques']
 
     }
   },
   methods: {
-
+    show_command_details(command){
+      this.selected_command_input = command.input;
+      this.selected_command_sleep = command.sleep;
+      this.selected_command_rand = command.rand;
+      this.show_details_panel = true;
+    },
+    remove_command(command_rand){
+      this.$store.commit('task/remove_command', command_rand);
+      this.task_commands = this.$store.getters['task/commands'];
+      this.show_details_panel = false;
+    }
   },
   components: {
   
