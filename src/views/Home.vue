@@ -1,11 +1,11 @@
 <template>
   <div class="home">
     <b-row class="top-10">
-      <b-col cols="8">
-       <CommandsScheduler></CommandsScheduler>
-       </b-col>
-       <b-col>
+      <b-col cols="5">
         <MitreScheduler></MitreScheduler>
+      </b-col>
+      <b-col cols="7">
+       <CommandsScheduler></CommandsScheduler>
       </b-col>
     </b-row>
     <b-row class="top-10">
