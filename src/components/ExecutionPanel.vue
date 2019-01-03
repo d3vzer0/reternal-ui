@@ -2,8 +2,8 @@
   <b-card-group class="executionpanel">
     <b-card header="Queue" class="col-2">
       <b-list-group flush>
-        <b-list-group-item v-on:click="show_commands_card = !show_commands_card"> Command <b-badge>{{task_commands.length}}</b-badge></b-list-group-item>
-        <b-list-group-item> Technique <b-badge>{{task_techniques.length}}</b-badge></b-list-group-item>
+        <b-list-group-item v-bind:class="{ active: show_commands_card }" v-on:click="show_commands_card = !show_commands_card, show_techniques_card = false"> Command <b-badge>{{task_commands.length}}</b-badge></b-list-group-item>
+        <b-list-group-item v-bind:class="{ active: show_techniques_card }" v-on:click="show_techniques_card = !show_techniques_card, show_commands_card = false"> Technique <b-badge>{{task_techniques.length}}</b-badge></b-list-group-item>
       </b-list-group>
     </b-card>
     <b-card header="Command" class="col-4">
@@ -27,7 +27,7 @@
         </b-list-group-item>
          <b-list-group-item>
           <b-row>
-            <b-col><b-button variant="primary" class="fullwidth" v-on:click="remove_command(selected_command_rand)">Remove from task</b-button></b-col>
+            <b-col><b-button variant="primary-reversed" class="fullwidth" v-on:click="remove_command(selected_command_rand)">Remove from recipe</b-button></b-col>
           </b-row>
         </b-list-group-item>
       </b-list-group>
@@ -42,7 +42,7 @@ export default {
   data(){
     return {
       show_details_panel: false,
-      show_commands_card: false,
+      show_commands_card: true,
       show_techniques_card: false,
       selected_command_input: "",
       selected_command_sleep: 0,
@@ -80,10 +80,15 @@ export default {
     &.active
       border-color: white
       background-color: #9d3a3a
+      .badge
+        background-color: white
+        color: black
   .card
     padding: 0px
   .card-body
     padding: 0px
+  .badge
+    background-color: #9d3a3a
 
 
 </style>

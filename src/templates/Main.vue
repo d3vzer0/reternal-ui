@@ -69,17 +69,11 @@
           <b-navbar toggleable="md" type="light" variant="platinum" >
             <b-navbar-nav>
               <b-nav-item href="#"> <font-awesome-icon icon="terminal" /> Terminal</b-nav-item>
-              <b-nav-item-dropdown right>
-                <template slot="button-content">
-                <font-awesome-icon icon="eye" />  Views
-                </template>
-                <b-dropdown-item href="#">Profile</b-dropdown-item>
-                <b-dropdown-item href="#">Signout</b-dropdown-item>
-              </b-nav-item-dropdown>
+              <b-nav-item href="#"> <font-awesome-icon icon="play-circle" /> Run Recipe</b-nav-item>
 
               <b-nav-item-dropdown right>
                 <template slot="button-content">
-                <font-awesome-icon icon="bullseye" />  Beacons
+                 <font-awesome-icon icon="bullseye" />  Agents
                 </template>
 
                 <div v-for="(platform, key, index) in selected_agents">
@@ -87,7 +81,10 @@
                   <b-dropdown-divider v-if="platform.agent"></b-dropdown-divider>
                 </div>
               </b-nav-item-dropdown>
+
             </b-navbar-nav>
+
+            
 
             <b-navbar-nav class="ml-auto">
               <b-nav-item-dropdown right>

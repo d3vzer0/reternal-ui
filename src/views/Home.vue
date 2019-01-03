@@ -1,11 +1,20 @@
 <template>
   <div class="home">
     <b-row class="top-10">
-      <b-col cols="5">
-        <MitreScheduler></MitreScheduler>
+      <b-col cols="4">
+        <DateTimeCard></DateTimeCard>
       </b-col>
-      <b-col cols="7">
-       <CommandsScheduler></CommandsScheduler>
+      <b-col cols="8">
+        <b-row>
+          <b-col>
+            <CommandsScheduler></CommandsScheduler>
+          </b-col>
+        </b-row>
+        <b-row>
+          <b-col>
+            <MitreScheduler></MitreScheduler>
+          </b-col>
+        </b-row>
       </b-col>
     </b-row>
     <b-row class="top-10">
@@ -19,7 +28,8 @@
 <script>
 import CommandsScheduler from "@/components/CommandsScheduler";
 import MitreScheduler from "@/components/MitreScheduler";
-import ExecutionPanel from "@/views/ExecutionPanel";
+import ExecutionPanel from "@/components/ExecutionPanel";
+import DateTimeCard from "@/components/DateTimeCard";
 
 export default {
   name: "Home",
@@ -29,11 +39,15 @@ export default {
     }
   },
   methods: {
+    testclick (){
+      console.log(this.$store.getters['task/date'])
+    }
   },
   components: {
     CommandsScheduler,
     MitreScheduler,
-    ExecutionPanel
+    ExecutionPanel,
+    DateTimeCard
   }
   
 };

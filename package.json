@@ -22,6 +22,7 @@
     "style-loader": "^0.23.1",
     "vue": "^2.5.17",
     "vue-axios": "^2.1.4",
+    "vue-ctk-date-time-picker": "^1.4.2",
     "vue-jwt-decode": "^0.1.0",
     "vue-masonry-css": "^1.0.3",
     "vue-moment": "^4.0.0",

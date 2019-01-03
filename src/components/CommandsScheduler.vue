@@ -1,6 +1,6 @@
 <template>
   <b-card header="command selection" header-tag="header">
-    <p class="card-text">Add manual command to task</p>
+    <p class="card-text">Add manual command to recipe</p>
     <b-form method="post" @submit.prevent="add_command">
       <b-row>
         <b-col cols="3">

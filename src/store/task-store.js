@@ -2,7 +2,8 @@ export default {
   namespaced: true,
   state: {
     commands: [],
-    techniques: []
+    techniques: [],
+    selected_date: ""
   },
   getters: {
     commands(state){
@@ -10,6 +11,9 @@ export default {
     },
     techniques(state){
       return state.techniques;
+    },
+    date(state){
+      return state.selected_date;
     }
   },
   mutations: {
@@ -21,6 +25,9 @@ export default {
     },
     remove_command(state, command_rand){
       state.commands = state.commands.filter(cmd => cmd.rand !== command_rand);
+    },
+    change_date(state, date){
+      state.selected_date = date;
     }
   }
 }
