@@ -25,9 +25,10 @@ export default {
     return {
       agent_list: [
       ],
-      agent_search_platform: "Windows",
+      agent_search_platform: "",
       agent_search_generic: "",
       platform_options: [
+        { text: "Any", value: "" },
         { text: "Windows", value: "Windows" },
         { text: "Mac", value: "macOS" },
         { text: "Linux", value: 'Linux' },
@@ -40,7 +41,6 @@ export default {
   },
   methods: {
     get_agents_filtered: _.debounce(function (){
-      console.log(1);
         this.$http
           .get('agents', {params:{platform:this.agent_search_platform,
                 search:this.agent_search_generic}})
@@ -49,7 +49,6 @@ export default {
       }, 200),
     parse_agents (response){
       this.$parent.agent_list = response.data;
-      console.log(this.$parent.agent_list)
     },
     generic_failed (response){
       this.error = "Unable to perform request";

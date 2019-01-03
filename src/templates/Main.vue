@@ -69,7 +69,7 @@
           <b-navbar toggleable="md" type="light" variant="platinum" >
             <b-navbar-nav>
               <b-nav-item href="#"> <font-awesome-icon icon="terminal" /> Terminal</b-nav-item>
-              <b-nav-item href="#"> <font-awesome-icon icon="play-circle" /> Run Recipe</b-nav-item>
+              <b-nav-item v-on:click="run_recipe"> <font-awesome-icon icon="play-circle" /> Run Recipe</b-nav-item>
 
               <b-nav-item-dropdown right>
                 <template slot="button-content">
@@ -137,8 +137,31 @@ export default {
       localStorage.removeItem("token");
       this.$router.replace(this.$route.query.redirect || '/login')
     },
+    run_recipe(){
+      var selected_date = this.$store.getters['task/date'];
+      var selected_commands = this.filter_commands(this.$store.getters['task/commands']);
+      var selected_techniques = this.$store.getters['task/techniques'];
+      var selected_agents = this.$store.getters['selection/get_agents'];
+      for (var agent_id of selected_agents){
+        this.$http
+          .post('tasks', {beacon_id: agent_id, commands: selected_commands})
+          .then(response => this.schedule_success(response))
+          .catch(response => this.generic_failed(response))
+      }
+    },
+    filter_commands(commands){
+      var command_list = [];
+      commands.forEach(function(command){
+        var details = {type: "manual", input:command.input, name :command.name, sleep: command.sleep}
+        command_list.push(details)
+      })
+      return command_list;
+    },
     populate_beacons_selection (){
 
+    },
+    generic_failed (response){
+      console.log(response.data)
     }
   }
 }

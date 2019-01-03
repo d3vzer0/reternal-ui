@@ -18,6 +18,7 @@ export default {
   },
   mutations: {
     add_command(state, command){
+      command.type = "manual";
       state.commands.push(command);
     },
     add_technique(state, technique){
