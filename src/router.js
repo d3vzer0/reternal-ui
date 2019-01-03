@@ -9,6 +9,8 @@ import Macros from "./views/Macros.vue";
 import Agents from "./views/Agents.vue";
 import AgentDetails from "./views/AgentDetails.vue";
 import Mitre from "./views/Mitre.vue";
+import Recipe from "./views/Recipe.vue";
+import Payloads from "./views/Payloads.vue";
 
 Vue.use(Router);
 
@@ -26,6 +28,16 @@ const router = new Router({
           path: "/home",
           name: "Home",
           component: Home
+        },
+        {
+          path: "/payloads",
+          name: "Payloads",
+          component: Payloads
+        },
+        {
+          path: "/recipe",
+          name: "Recipe",
+          component: Recipe
         },
         {
           path: "/mitre",

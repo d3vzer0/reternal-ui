@@ -36,14 +36,14 @@
           <p class="card-text">Filter the mitre table for specific attack simulations</p>
           <b-form method="get" @submit.prevent="filter_mite">
             <b-row>
-              <b-col xl="2" lg="3" md="4" sm="6">
+              <b-col xl="3" lg="3" md="4" sm="6">
                 <b-form-radio-group id="platform-select" v-model="mitre_search_platform" @change="get_techniques_filtered" buttons :options="platform_options" button-variant="primary-reversed">
                 </b-form-radio-group>
               </b-col>
               <b-col xl="4" lg="5" md="4" sm="2">
                 <b-form-select :options="technique_options" v-model="mitre_search_phase" @change="get_techniques_filtered" required />
               </b-col>
-              <b-col xl="6" lg="4" md="4" sm="4">
+              <b-col xl="5" lg="4" md="4" sm="4">
                 <b-form-input type="text" v-model.lazy="mitre_search_technique" @keyup.native="get_techniques_filtered" placeholder="Technique name"></b-form-input>
               </b-col>
             </b-row>
@@ -59,8 +59,8 @@
             <b-list-group flush>
               <b-list-group-item v-for="mitre_technique in mitre_phase.techniques">
                 <b-row>
-                  <b-col cols="11">{{mitre_technique.name}}</b-col>
-                  <b-col cols="1" @click="get_technique_details(mitre_technique.technique_id)" class="awesome-primary"><font-awesome-icon icon="info" /></b-col>
+                  <b-col cols="10">{{mitre_technique.name}}</b-col>
+                  <b-col cols="2" @click="get_technique_details(mitre_technique.technique_id)" class="awesome-primary"><font-awesome-icon icon="info" /></b-col>
                 </b-row>
               </b-list-group-item>
             </b-list-group>

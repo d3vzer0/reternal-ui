@@ -1,35 +1,11 @@
 <template>
   <div class="home">
     <b-row class="top-10">
-      <b-col cols="4">
-        <DateTimeCard></DateTimeCard>
-      </b-col>
-      <b-col cols="8">
-        <b-row>
-          <b-col>
-            <CommandsScheduler></CommandsScheduler>
-          </b-col>
-        </b-row>
-        <b-row>
-          <b-col>
-            <MitreScheduler></MitreScheduler>
-          </b-col>
-        </b-row>
-      </b-col>
-    </b-row>
-    <b-row class="top-10">
-      <b-col cols="12">
-       <ExecutionPanel></ExecutionPanel>
-      </b-col>
     </b-row>
   </div>
 </template>
 
 <script>
-import CommandsScheduler from "@/components/CommandsScheduler";
-import MitreScheduler from "@/components/MitreScheduler";
-import ExecutionPanel from "@/components/ExecutionPanel";
-import DateTimeCard from "@/components/DateTimeCard";
 
 export default {
   name: "Home",
@@ -44,10 +20,7 @@ export default {
     }
   },
   components: {
-    CommandsScheduler,
-    MitreScheduler,
-    ExecutionPanel,
-    DateTimeCard
+
   }
   
 };

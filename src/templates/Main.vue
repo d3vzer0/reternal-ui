@@ -16,6 +16,10 @@
                 <span class="nav-item-icon"><font-awesome-icon icon="home" /></span>
                 <span class="nav-item-title">Index</span>
               </b-nav-item>
+               <b-nav-item class="nav-item" to="/recipe">
+                <span class="nav-item-icon"><font-awesome-icon icon="tasks" /></span>
+                <span class="nav-item-title">Recipe</span>
+              </b-nav-item>
               <b-nav-item class="nav-item" to="/mitre">
                 <span class="nav-item-icon"><font-awesome-icon icon="archive" /></span>
                 <span class="nav-item-title">Mitre</span>
