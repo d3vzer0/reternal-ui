@@ -1,5 +1,5 @@
 <template>
-  <b-form-select :options="command_options" required v-model="$parent.command_name"/>
+  <b-form-select :options="command_options" required v-model="command"/>
 </template>
 
 <script>
@@ -15,7 +15,17 @@ export default {
     }
   },
   mounted () {
-    this.get_commands()
+    this.get_commands();
+  },
+  computed: {
+    command: {
+      get: function(){
+        return this.$store.getters['selection/command'];
+      },
+      set: function(value){
+        this.$store.commit('selection/change_command', value);
+      }
+    }
   },
   methods: {
     get_commands (){
