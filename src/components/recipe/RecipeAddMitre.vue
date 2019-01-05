@@ -20,7 +20,7 @@
 <script>
 import MitreDropdown from "@/components/mitre/MitreDropdown";
 export default {
-  name: "MitreScheduler",
+  name: "RecipeAddMitre",
   data(){
     return {
       mitre_options: [
