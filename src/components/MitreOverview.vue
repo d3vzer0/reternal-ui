@@ -37,14 +37,14 @@
           <b-form method="get" @submit.prevent="filter_mite">
             <b-row>
               <b-col xl="3" lg="3" md="4" sm="6">
-                <b-form-radio-group id="platform-select" v-model="mitre_search_platform" @change="get_techniques_filtered" buttons :options="platform_options" button-variant="primary-reversed">
+                <b-form-radio-group id="platform-select" v-model="search_platform"  buttons :options="platform_options" button-variant="primary-reversed">
                 </b-form-radio-group>
               </b-col>
               <b-col xl="4" lg="5" md="4" sm="2">
-                <b-form-select :options="technique_options" v-model="mitre_search_phase" @change="get_techniques_filtered" required />
+                <b-form-select :options="technique_options" v-model="search_phase" required />
               </b-col>
               <b-col xl="5" lg="4" md="4" sm="4">
-                <b-form-input type="text" v-model.lazy="mitre_search_technique" @keyup.native="get_techniques_filtered" placeholder="Technique name"></b-form-input>
+                <b-form-input type="text" v-model.lazy="search_technique" placeholder="Technique name"></b-form-input>
               </b-col>
             </b-row>
           </b-form>
@@ -99,9 +99,9 @@ export default {
       ],
       mitre_techniques: [
       ],
-      mitre_search_technique: "",
-      mitre_search_phase: "",
-      mitre_search_platform: "Windows",
+      search_technique: "",
+      search_phase: "",
+      search_platform: "Windows",
       mitre_technique_details: false,
       error: false
     }
@@ -111,18 +111,18 @@ export default {
   },
   methods: {
     get_techniques_filtered: _.debounce(function (){
-        this.$http
-          .get('mitre/techniques', {params:{name:this.mitre_search_technique,
-               phase:this.mitre_search_phase,
-               platform:this.mitre_search_platform}})
-          .then(response => this.parse_mitre(response))
-          .catch(response => this.generic_failed(response))
-    },500),
+      this.$http
+        .get('mitre/techniques', {params:{name:this.search_technique,
+              phase:this.search_phase,
+              platform:this.search_platform}})
+        .then(response => this.parse_mitre(response))
+        .catch(error => EventBus.$emit('showalert', error.response))
+    },200),
     get_technique_details (technique_id){
       this.$http
         .get('mitre/technique/' + technique_id)
         .then(response => this.parse_technique_details(response))
-        .catch(response => this.generic_failed(response))
+        .catch(error => EventBus.$emit('showalert', error.response))
     
     },
     parse_technique_details (response){
@@ -137,13 +137,18 @@ export default {
       this.error = "Unable to perform request";
     }
   },
-  computed: {
-    filter_mitre_techniques (){
-      var filtered_techniques = this.mitre_techniques.filter(mitre_phase => 
-        mitre_phase.kill_chain_phase.toLowerCase().includes(this.mitre_search_phase.toLowerCase()) &&
-        mitre_phase.platform.toLowerCase().includes(this.mitre_search_platform.toLowerCase())
-      )
-      return filtered_techniques;
+  watch: {
+    search_phase: function(value){
+      this.search_phase = value;
+      this.get_techniques_filtered();
+    },
+    search_platform: function(value){
+      this.search_platform = value;
+      this.get_techniques_filtered();
+    },
+    search_technique: function(value){
+      this.search_technique = value;
+      this.get_techniques_filtered();
     }
   }
 };

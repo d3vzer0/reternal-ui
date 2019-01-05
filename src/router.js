@@ -11,6 +11,7 @@ import AgentDetails from "./views/AgentDetails.vue";
 import Mitre from "./views/Mitre.vue";
 import Recipe from "./views/Recipe.vue";
 import Payloads from "./views/Payloads.vue";
+import Startup from "./views/Startup.vue";
 
 Vue.use(Router);
 
@@ -38,6 +39,11 @@ const router = new Router({
           path: "/recipe",
           name: "Recipe",
           component: Recipe
+        },
+        {
+          path: "/startup",
+          name: "Startup",
+          component: Startup
         },
         {
           path: "/mitre",

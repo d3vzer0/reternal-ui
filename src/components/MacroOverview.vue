@@ -22,7 +22,7 @@
         </b-list-group-item>
          <b-list-group-item>
           <b-row>
-            <b-col><b-button variant="primary-reversed" class="fullwidth" v-on:click="remove_macro(selected_command_rand)">Remove macro</b-button></b-col>
+            <b-col><b-button variant="primary-reversed" class="fullwidth" v-on:click="delete_macro">Remove macro</b-button></b-col>
           </b-row>
         </b-list-group-item>
       </b-list-group>
@@ -33,7 +33,7 @@
 </template>
 
 <script>
-import { EventBus } from "@/eventbus/eventbus.js";
+import EventBus from "@/eventbus";
 
 export default {
   name: "MacroOverview",
@@ -46,15 +46,24 @@ export default {
       show_details_panel: false,
     }
   },
-  mounted (){
-    this.get_macros(),
+  created (){
     EventBus.$on('refresh-macros', this.get_macros);
+  },
+  mounted (){
+    this.get_macros();
 
   },
   methods: {
      get_macros (){
       this.$http
         .get('macros')
+        .then(response => this.parse_macros(response))
+        .catch(response => this.generic_failed(response))
+    },
+    delete_macro(){
+      var delete_url = `macro/${this.macro_id}`;
+      this.$http
+        .delete(delete_url)
         .then(response => this.parse_macros(response))
         .catch(response => this.generic_failed(response))
     },

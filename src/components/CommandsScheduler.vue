@@ -27,7 +27,6 @@ export default {
   name: "CommandsCheduler",
   data(){
     return {
-      command_name: "",
       command_input: "",
       command_sleep: 0,
       command_options: [
@@ -38,7 +37,7 @@ export default {
     add_command (){
       var random_array = new Uint32Array(5);
       var random_id = window.crypto.getRandomValues(random_array)[2];
-      var command_options = {name: this.command_name, input: this.command_input, sleep: this.command_sleep, rand: random_id}
+      var command_options = {name: this.$store.getters['selection/command'], input: this.command_input, sleep: this.command_sleep, rand: random_id}
       this.$store.commit('task/add_command', command_options);
     }
   },

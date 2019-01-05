@@ -24,7 +24,7 @@
 
 <script>
 import CommandsDropdown from "@/components/CommandsDropdown";
-import { EventBus } from "@/eventbus/eventbus.js";
+import EventBus from "@/eventbus";
 
 export default {
   name: "MacroCreate",
@@ -37,14 +37,13 @@ export default {
   methods: {
     create_macro(){
       var selected_command = this.$store.getters['selection/command'];
-      EventBus.$emit('refresh-macros');
-      // this.$http
-      //   .post('macros', {command: selected_command, name: this.create_alias_name, input:this.create_alias_input})
-      //   .then(response => this.create_success(response))
-        // .catch(response => this.generic_failed(response))
+      this.$http
+        .post('macros', {command: selected_command, name: this.create_alias_name, input:this.create_alias_input})
+        .then(response => this.create_success(response))
+        .catch(response => this.generic_failed(response))
     },
     create_success(response){
-      this.$emit('refreshmacros');
+      EventBus.$emit('refresh-macros');
     }
   },
   components: {

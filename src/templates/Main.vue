@@ -1,8 +1,10 @@
 <template>
   <b-container fluid>
-    <!-- <b-alert :show="error_countdown" variant="primary" @dismissed="error_seconds=0" @dismiss-count-down="countdown_changed"> 
-      {{this.error_message}}      
-    </b-alert> -->
+    <b-alert :show="dismiss_countDown" variant="primary" @dismissed="dismiss_countDown=0" @dismiss-count-down="countDownChanged"> 
+      {{this.alert_message}}      
+    </b-alert>
+
+    <BootModal></BootModal>
     <b-row id="row-main">
       <b-col xl="2" lg="2" md="2" sm="2" cols="1" id="col-sidebar">
         <div id="sidebar-header">
@@ -47,10 +49,6 @@
                 <span class="nav-item-icon"><font-awesome-icon icon="calendar" /></span>
                 <span class="nav-item-title">startup tasks</span>
               </b-nav-item>
-              <b-nav-item class="nav-item" to="/commands">
-                <span class="nav-item-icon"><font-awesome-icon icon="terminal" /></span>
-                <span class="nav-item-title">commands</span>
-              </b-nav-item>
             </ul>
           </b-nav>
           <div class="nav-category">
@@ -74,10 +72,11 @@
             <b-navbar-nav>
               <b-nav-item href="#"> <font-awesome-icon icon="terminal" /> Terminal</b-nav-item>
               <b-nav-item v-on:click="run_recipe"> <font-awesome-icon icon="play-circle" /> Run Recipe</b-nav-item>
+              <b-nav-item v-on:click="boot_recipe"> <font-awesome-icon icon="arrow-alt-circle-down" /> Startup Recipe</b-nav-item>
 
               <b-nav-item-dropdown right>
                 <template slot="button-content">
-                 <font-awesome-icon icon="bullseye" />  Agents
+                 <font-awesome-icon icon="desktop" />  Agents
                 </template>
 
                 <div v-for="(platform, key, index) in selected_agents">
@@ -127,14 +126,30 @@
 
 
 <script>
+import BootModal from "@/components/BootModal";
+import EventBus from "@/eventbus";
+
 export default {
   name: 'Main',
   data (){
     return {
-      selected_agents: this.$store.getters['selection/get_agents_detailed']
+      selected_agents: this.$store.getters['selection/get_agents_detailed'],
+      alert_message: "",
+      alert_type: "primary",
+      dismiss_secs: 10,
+      dismiss_countDown: 0,
     }
   },
   mounted (){
+    EventBus.$on('showalert', alert_data =>{
+      var alert_variant = {
+        400:"primary",
+        200: "success"
+      }
+      this.alert_type = alert_variant[alert_data.status];
+      this.alert_message = alert_data.data;
+      this.show_alert();
+    });
   },
   methods: {
     logout (){
@@ -153,6 +168,14 @@ export default {
           .catch(response => this.generic_failed(response))
       }
     },
+    boot_recipe(){
+      var recipe_data = {
+        date: this.$store.getters['task/date'],
+        commands: this.filter_commands(this.$store.getters['task/commands']),
+        techniques: this.$store.getters['selection/get_agents']
+      }
+      EventBus.$emit('confirmboot', recipe_data);
+    },
     filter_commands(commands){
       var command_list = [];
       commands.forEach(function(command){
@@ -164,9 +187,15 @@ export default {
     populate_beacons_selection (){
 
     },
-    generic_failed (response){
-      console.log(response.data)
+    countDownChanged (dismiss_countDown) {
+      this.dismiss_countDown = dismiss_countDown
+    },
+    show_alert () {
+      this.dismiss_countDown = this.dismiss_secs
     }
+  },
+  components: {
+    BootModal
   }
 }
 </script>
