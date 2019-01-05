@@ -70,7 +70,7 @@
           <b-col cols="12">
           <b-navbar toggleable="md" type="light" variant="platinum" >
             <b-navbar-nav>
-              <b-nav-item href="#"> <font-awesome-icon icon="terminal" /> Terminal</b-nav-item>
+              <b-nav-item to="terminal"> <font-awesome-icon icon="terminal" /> Terminal</b-nav-item>
               <b-nav-item v-on:click="run_recipe"> <font-awesome-icon icon="play-circle" /> Run Recipe</b-nav-item>
               <b-nav-item v-on:click="boot_recipe"> <font-awesome-icon icon="arrow-alt-circle-down" /> Startup Recipe</b-nav-item>
 

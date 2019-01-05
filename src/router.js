@@ -12,6 +12,7 @@ import Mitre from "./views/Mitre.vue";
 import Recipe from "./views/Recipe.vue";
 import Payloads from "./views/Payloads.vue";
 import Startup from "./views/Startup.vue";
+import Terminal from "./views/Terminal.vue";
 
 Vue.use(Router);
 
@@ -29,6 +30,11 @@ const router = new Router({
           path: "/home",
           name: "Home",
           component: Home
+        },
+        {
+          path: "/terminal",
+          name: "Terminal",
+          component: Terminal
         },
         {
           path: "/payloads",
