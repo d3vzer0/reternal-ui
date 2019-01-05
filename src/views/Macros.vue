@@ -14,11 +14,11 @@
 </template>
 
 <script>
-import MacroCreate from "@/components/MacroCreate";
-import MacroOverview from "@/components/MacroOverview";
+import MacroCreate from "@/components/macro/MacroCreate";
+import MacroOverview from "@/components/macro/MacroOverview";
 
 export default {
-  name: "Commands",
+  name: "Macros",
   data(){
     return {
       create_alias_name: "",

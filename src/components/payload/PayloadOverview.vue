@@ -14,7 +14,7 @@
 import axios from "axios";
 
 export default {
-  name: "PayloadTiles",
+  name: "PayloadOverview",
   data(){
     return {
       available_payloads: [],

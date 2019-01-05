@@ -7,15 +7,15 @@
     </b-row>
     <b-row class="top-10">
       <b-col cols="12">
-       <StartupPanel></StartupPanel>
+       <StartupOverview></StartupOverview>
       </b-col>
     </b-row>
   </div>
 </template>
 
 <script>
-import StartupPanel from "@/components/StartupPanel";
-import StartupFilter from "@/components/StartupFilter";
+import StartupOverview from "@/components/startup/StartupOverview";
+import StartupFilter from "@/components/startup/StartupFilter";
 
 export default {
   name: "Startup",
@@ -30,7 +30,7 @@ export default {
     }
   },
   components: {
-    StartupPanel,
+    StartupOverview,
     StartupFilter
   }
   

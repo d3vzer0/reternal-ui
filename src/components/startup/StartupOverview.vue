@@ -50,7 +50,7 @@
 import EventBus from "@/eventbus";
 
 export default {
-  name: "StartupPanel",
+  name: "StartupOverview",
   data(){
     return {
       startup_list: [],

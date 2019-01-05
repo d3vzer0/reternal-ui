@@ -18,7 +18,7 @@
 </template>
 
 <script>
-import MitreDropdown from "@/components/MitreDropdown";
+import MitreDropdown from "@/components/mitre/MitreDropdown";
 export default {
   name: "MitreScheduler",
   data(){

@@ -47,7 +47,7 @@ export default {
     }
   },
   created (){
-    EventBus.$on('refresh-macros', this.get_macros);
+    EventBus.$on('refreshmacros', this.get_macros);
   },
   mounted (){
     this.get_macros();

@@ -7,7 +7,7 @@
     </b-row>
     <b-row class="top-10">
       <b-col cols="12">
-        <AgentTiles></AgentTiles>
+        <AgentOverview></AgentOverview>
       </b-col>
     </b-row>
   </div>
@@ -15,8 +15,8 @@
 
 <script>
 // import AgentTiles from "@/components/AgentTiles";
-import AgentFilter from "@/components/AgentFilter";
-import AgentTiles from "@/components/AgentTiles";
+import AgentFilter from "@/components/agent/AgentFilter";
+import AgentOverview from "@/components/agent/AgentOverview";
 
 export default {
   name: "Agents",
@@ -27,7 +27,7 @@ export default {
   },
   components: {
     AgentFilter,
-    AgentTiles
+    AgentOverview
   }
   
 };

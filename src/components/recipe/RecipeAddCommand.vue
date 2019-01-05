@@ -21,10 +21,10 @@
 </template>
 
 <script>
-import CommandsDropdown from "@/components/CommandsDropdown";
+import CommandsDropdown from "@/components/commands/CommandsDropdown";
 
 export default {
-  name: "CommandsCheduler",
+  name: "RecipeAddCommand",
   data(){
     return {
       command_input: "",

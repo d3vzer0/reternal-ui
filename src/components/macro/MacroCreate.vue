@@ -23,7 +23,7 @@
 </template>
 
 <script>
-import CommandsDropdown from "@/components/CommandsDropdown";
+import CommandsDropdown from "@/components/commands/CommandsDropdown";
 import EventBus from "@/eventbus";
 
 export default {
@@ -43,7 +43,7 @@ export default {
         .catch(response => this.generic_failed(response))
     },
     create_success(response){
-      EventBus.$emit('refresh-macros');
+      EventBus.$emit('refreshmacros');
     }
   },
   components: {

@@ -34,7 +34,7 @@ import VueMasonry from "vue-masonry-css";
 Vue.use(VueMasonry);
 
 export default {
-  name: "AgentTiles",
+  name: "AgentOverview",
   data(){
     return {
       is_active: false,

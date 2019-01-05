@@ -2,14 +2,14 @@
   <div class="default-payloads">
     <b-row class="top-10">
       <b-col cols="12">
-        <PayloadTiles></PayloadTiles>
+        <PayloadOverview></PayloadOverview>
       </b-col>
     </b-row>
   </div>
 </template>
 
 <script>
-import PayloadTiles from "@/components/PayloadTiles";
+import PayloadOverview from "@/components/payload/PayloadOverview";
 
 export default {
   name: "Payloads",
@@ -18,7 +18,7 @@ export default {
     }
   },
   components: {
-    PayloadTiles
+    PayloadOverview
   }
   
 };

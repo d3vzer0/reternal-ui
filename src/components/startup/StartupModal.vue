@@ -1,5 +1,5 @@
 <template>
-  <b-modal ref="showboot" id="showboot" size="md" hide-footer title="Select platform to schedule on-startup recipe">
+  <b-modal ref="confirmstartup" id="confirmstartup" size="md" hide-footer title="Select platform to schedule on-startup recipe">
     <b-form method="post" @submit.prevent="save_boot">
       <b-row>
         <b-col cols="12">
@@ -24,7 +24,7 @@
 import EventBus from "@/eventbus";
 
 export default {
-  name: "BootModal",
+  name: "StartupModal",
   data(){
     return {
       platforms: ["Windows", "Linux", "macOS"],
@@ -36,7 +36,7 @@ export default {
   mounted (){
     EventBus.$on('confirmboot', recipe_data =>{
       this.recipe_data = recipe_data;
-      this.$refs.showboot.show();
+      this.$refs.confirmstartup.show();
     });
   },
   methods: {

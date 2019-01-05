@@ -4,7 +4,7 @@
       {{this.alert_message}}      
     </b-alert>
 
-    <BootModal></BootModal>
+    <StartupModal></StartupModal>
     <b-row id="row-main">
       <b-col xl="2" lg="2" md="2" sm="2" cols="1" id="col-sidebar">
         <div id="sidebar-header">
@@ -126,7 +126,7 @@
 
 
 <script>
-import BootModal from "@/components/BootModal";
+import StartupModal from "@/components/startup/StartupModal";
 import EventBus from "@/eventbus";
 
 export default {
@@ -195,7 +195,7 @@ export default {
     }
   },
   components: {
-    BootModal
+    StartupModal
   }
 }
 </script>

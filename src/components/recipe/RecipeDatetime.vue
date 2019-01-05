@@ -17,7 +17,7 @@ import "vue-ctk-date-time-picker/dist/vue-ctk-date-time-picker.css";
 Vue.component("vue-ctk-date-time-picker", VueCtkDateTimePicker);
 
 export default {
-  name: "DateTimeCard",
+  name: "RecipeDatetime",
   data(){
     return {
     }

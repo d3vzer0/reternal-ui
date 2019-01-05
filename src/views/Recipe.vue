@@ -2,34 +2,34 @@
   <div class="home">
     <b-row class="top-10">
       <b-col cols="5">
-        <DateTimeCard></DateTimeCard>
+        <RecipeDatetime></RecipeDatetime>
       </b-col>
       <b-col cols="7">
         <b-row>
           <b-col>
-            <CommandsScheduler></CommandsScheduler>
+            <RecipeAddCommand></RecipeAddCommand>
           </b-col>
         </b-row>
         <b-row>
           <b-col>
-            <MitreScheduler></MitreScheduler>
+            <RecipeAddMitre></RecipeAddMitre>
           </b-col>
         </b-row>
       </b-col>
     </b-row>
     <b-row class="top-10">
       <b-col cols="12">
-       <ExecutionPanel></ExecutionPanel>
+       <RecipeOverview></RecipeOverview>
       </b-col>
     </b-row>
   </div>
 </template>
 
 <script>
-import CommandsScheduler from "@/components/CommandsScheduler";
-import MitreScheduler from "@/components/MitreScheduler";
-import ExecutionPanel from "@/components/ExecutionPanel";
-import DateTimeCard from "@/components/DateTimeCard";
+import RecipeAddCommand from "@/components/recipe/RecipeAddCommand";
+import RecipeAddMitre from "@/components/recipe/RecipeAddMitre";
+import RecipeOverview from "@/components/recipe/RecipeOverview";
+import RecipeDatetime from "@/components/recipe/RecipeDatetime";
 
 export default {
   name: "Recipe",
@@ -44,10 +44,10 @@ export default {
     }
   },
   components: {
-    CommandsScheduler,
-    MitreScheduler,
-    ExecutionPanel,
-    DateTimeCard
+    RecipeAddCommand,
+    RecipeAddMitre,
+    RecipeOverview,
+    RecipeDatetime
   }
   
 };
