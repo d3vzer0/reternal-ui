@@ -13,6 +13,7 @@ import Recipe from "./views/Recipe.vue";
 import Payloads from "./views/Payloads.vue";
 import Startup from "./views/Startup.vue";
 import Terminal from "./views/Terminal.vue";
+import Mapping from "./views/Mapping.vue";
 
 Vue.use(Router);
 
@@ -55,6 +56,11 @@ const router = new Router({
           path: "/mitre",
           name: "Mitre",
           component: Mitre
+        },
+        {
+          path: "/mapping",
+          name: "Mapping",
+          component: Mapping
         },
         {
           path: "/macros",

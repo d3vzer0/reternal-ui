@@ -26,9 +26,21 @@
                 <span class="nav-item-icon"><font-awesome-icon icon="tasks" /></span>
                 <span class="nav-item-title">Recipe Builder</span>
               </b-nav-item>
+
+            </ul>
+          </b-nav>
+          <div class="nav-category">
+            MITRE
+          </div>
+          <b-nav vertical id="sidebar-nav" class="sidebar-nav-links">
+            <ul class="nav flex-column">
+              <b-nav-item class="nav-item" to="/mapping">
+                <span class="nav-item-icon"><font-awesome-icon icon="link" /></span>
+                <span class="nav-item-title">Linked techniques</span>
+              </b-nav-item>
               <b-nav-item class="nav-item" to="/mitre">
                 <span class="nav-item-icon"><font-awesome-icon icon="archive" /></span>
-                <span class="nav-item-title">Mitre</span>
+                <span class="nav-item-title">Mitre Archive</span>
               </b-nav-item>
             </ul>
           </b-nav>
@@ -233,6 +245,8 @@ export default {
       margin-top: 20px
       margin-bottom: 10px
 
+    .active
+      color: #9e1d1d
     .nav-item-title
       margin-left: 10px
     a
@@ -242,7 +256,7 @@ export default {
       letter-spacing: 1px
       &:hover
         .nav-item-icon
-          color: #ff7f51
+          color: #9e1d1d
  
 
 #row-content

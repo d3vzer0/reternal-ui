@@ -5,7 +5,7 @@
         <b-list-group-item v-for="mitre_technique in mitre_phase.techniques">
           <b-row>
             <b-col cols="10">{{mitre_technique.name}}</b-col>
-            <b-col cols="2" @click="EventBus.$emit('showtechnique', mitre_technique.technique_id)" class="awesome-primary"><font-awesome-icon icon="info" /></b-col>
+            <b-col cols="2" @click="show_technique(mitre_technique.technique_id)" class="awesome-primary"><font-awesome-icon icon="info" /></b-col>
           </b-row>
         </b-list-group-item>
       </b-list-group>
@@ -56,6 +56,9 @@ export default {
       this.search_platform = filters.platform;
       this.search_phase = filters.phase;
       this.get_techniques_filtered();
+    },
+    show_technique(technique_id){
+      EventBus.$emit('showtechnique', technique_id)
     }
   }
 };

@@ -1,7 +1,7 @@
 <template>
 
   <b-card header="filter mitre" header-tag="header">
-  <p class="card-text">Find details regarding specific MITRE techniques</p>
+  <p class="card-text">Filter the MITRE table to find mapped techniques</p>
     <b-form method="get" @submit.prevent="filter_mite">
       <b-row>
           <b-col xl="3" lg="3" md="4" sm="6">
@@ -24,7 +24,7 @@
 import EventBus from "@/eventbus";
 
 export default {
-  name: "MitreFilter",
+  name: "MappingFilter",
   data(){
     return {
       platform_options: [
@@ -64,15 +64,15 @@ export default {
   watch: {
     search_phase: function(value){
       this.search_phase = value;
-      EventBus.$emit('refreshmitre', this.search_filters)
+      EventBus.$emit('refreshmapping', this.search_filters)
     },
     search_platform: function(value){
       this.search_platform = value;
-      EventBus.$emit('refreshmitre', this.search_filters);
+      EventBus.$emit('refreshmapping', this.search_filters);
     },
     search_technique: function(value){
       this.search_technique = value;
-      EventBus.$emit('refreshmitre', this.search_filters);
+      EventBus.$emit('refreshmapping', this.search_filters);
     }
   }
 };

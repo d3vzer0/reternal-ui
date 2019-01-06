@@ -41,8 +41,8 @@ export default {
     }
   },
   created (){
-   EventBus.$on('showtechnique', technique_details => {
-     this.parse_technique_details(technique_details);
+   EventBus.$on('showtechnique', technique_id => {
+     this.get_technique_details(technique_id);
    })
   },
   methods: {
