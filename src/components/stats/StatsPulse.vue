@@ -29,7 +29,7 @@ export default {
            yAxes: [{
             ticks: {
                 beginAtZero: true,
-                stepSize: 1
+                // stepSize: 1
             }
         }]
         },
@@ -57,7 +57,7 @@ export default {
       };
       response.data.forEach(pulse => {
         var dd = pulse["_id"]
-        var parsed_date = `${dd.year}-${dd.month}-${dd.day} ${dd.hour}:${dd.minute}`;
+        var parsed_date = `${dd.year}-${dd.month}-${dd.day} ${dd.hour}:00`;
         var date_object = new Date(parsed_date)
         collection.labels.push(date_object)
         var data = {t: date_object, y:pulse.total}
