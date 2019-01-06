@@ -12,7 +12,7 @@ import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
 import { faTerminal, faCog, faEye, faBullseye, faUser, faBookmark  } from "@fortawesome/free-solid-svg-icons"
 import { faHome, faDesktop, faMap, faCalendar, faDownload, faInfo} from "@fortawesome/free-solid-svg-icons"
-import { faArchive, faPlayCircle, faTasks, faArrowAltCircleDown } from "@fortawesome/free-solid-svg-icons"
+import { faArchive, faPlayCircle, faTasks, faArrowAltCircleDown, faArrowRight} from "@fortawesome/free-solid-svg-icons"
 
 library.add(
   faTerminal,
@@ -30,7 +30,8 @@ library.add(
   faArchive,
   faPlayCircle,
   faTasks,
-  faArrowAltCircleDown
+  faArrowAltCircleDown,
+  faArrowRight,
 );
 
 Vue.component("font-awesome-icon", FontAwesomeIcon)

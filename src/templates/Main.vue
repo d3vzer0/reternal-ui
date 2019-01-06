@@ -16,19 +16,19 @@
             <ul class="nav flex-column">
               <b-nav-item class="nav-item" to="/home">
                 <span class="nav-item-icon"><font-awesome-icon icon="home" /></span>
-                <span class="nav-item-title">Index</span>
-              </b-nav-item>
-               <b-nav-item class="nav-item" to="/recipe">
-                <span class="nav-item-icon"><font-awesome-icon icon="tasks" /></span>
-                <span class="nav-item-title">Recipe</span>
-              </b-nav-item>
-              <b-nav-item class="nav-item" to="/mitre">
-                <span class="nav-item-icon"><font-awesome-icon icon="archive" /></span>
-                <span class="nav-item-title">Mitre</span>
+                <span class="nav-item-title">Dashboard</span>
               </b-nav-item>
               <b-nav-item class="nav-item" to="/agents">
                 <span class="nav-item-icon"><font-awesome-icon icon="desktop" /></span>
                 <span class="nav-item-title">Agents</span>
+              </b-nav-item>
+               <b-nav-item class="nav-item" to="/recipe">
+                <span class="nav-item-icon"><font-awesome-icon icon="tasks" /></span>
+                <span class="nav-item-title">Recipe Builder</span>
+              </b-nav-item>
+              <b-nav-item class="nav-item" to="/mitre">
+                <span class="nav-item-icon"><font-awesome-icon icon="archive" /></span>
+                <span class="nav-item-title">Mitre</span>
               </b-nav-item>
             </ul>
           </b-nav>

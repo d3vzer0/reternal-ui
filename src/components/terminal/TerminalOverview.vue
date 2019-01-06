@@ -39,11 +39,22 @@ export default {
       terminal_host: "reternal",
       terminal_path: "~/# ",
       terminal_output: [],
+      selected_agent: "",
       suggestions: [],
       commands: [
         "help"
       ],
     }
+  },
+  created (){
+    EventBus.$on('alertterminal', output => {
+      this.output_terminal(output)
+    }),
+    EventBus.$on('selectagent', agent => {
+      this.selected_agent = agent;
+      var message = `Changed active agent to: ${agent}`
+      this.output_terminal(message)
+    })
   },
   mounted (){
       var console_element = document.querySelector('#terminalui');
@@ -71,6 +82,9 @@ export default {
           this.suggestions.push(element)
         }
       });
+    },
+    output_terminal(output){
+       this.terminal_output.push(output);
     },
     autocomplete(){
       if(this.suggestions.length > 0){
