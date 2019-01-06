@@ -7,12 +7,16 @@
     </b-card>
     <b-card header="Techniques" class="col-3">
       <b-list-group flush>
-        <b-list-group-item  v-for="mapping_technique in mapping_techniques" v-on:click="get_technique_commands(mapping_technique._id['$oid'])">{{mapping_technique.name}}</b-list-group-item>
+        <b-list-group-item  v-for="mapping_technique in mapping_techniques" v-on:click="get_technique_commands(mapping_technique._id['$oid'])">
+          {{mapping_technique.name}}
+        </b-list-group-item>
       </b-list-group>
     </b-card>
      <b-card header="Commands" class="col-2">
       <b-list-group flush v-if="show_commands">
         <b-list-group-item  v-for="mapping_command in mapping_commands" v-on:click="show_command_details(mapping_command)">{{mapping_command.name}}</b-list-group-item>
+        <b-list-group-item class="addrecipecol"><b-link to="mapping" v-on:click="add_to_recipe">add commands to recipe</b-link></b-list-group-item>
+
       </b-list-group>
     </b-card>
     <b-card header="Input" class="col-5">
@@ -40,19 +44,6 @@
     </b-card>
   </b-card-group>
 
-<!-- 
-  <b-card-group columns>
-    <b-card :header="mapping_phase._id.kill_chain_phase" v-for="mapping_phase in mapping_techniques">
-      <b-list-group flush>
-        <b-list-group-item v-for="mitre_technique in mapping_phase.techniques">
-          <b-row>
-            <b-col cols="10">{{mitre_technique.name}}</b-col>
-            <b-col cols="2"  @click="EventBus.$emit('showmapping', mitre_technique._id['$oid'])" class="awesome-primary"><font-awesome-icon icon="info" /></b-col>
-          </b-row>
-        </b-list-group-item>
-      </b-list-group>
-    </b-card>
-  </b-card-group> -->
 </template>
 
 <script>
@@ -130,7 +121,24 @@ export default {
       this.command_input = command.input;
       this.command_sleep = command.sleep;
       this.command_type = command.type;
+    },
+    add_to_recipe(){
+      this.mapping_commands.forEach(command => {
+        var random_array = new Uint32Array(5);
+        var random_id = window.crypto.getRandomValues(random_array)[2];
+        var command_options = {name: command.name, input: command.input, sleep: command.sleep, rand: random_id, type: command.type}
+        this.$store.commit('task/add_command', command_options);
+      });      
     }
   }
 };
 </script>
+
+<style lang="sass" scoped>
+.addrecipecol
+  background-color: #9d3a3a
+  text-transform: uppercase
+  a
+    color: white
+    text-decoration: none 
+</style>

@@ -1,6 +1,5 @@
 <template>
   <div class="mitre">
-    <MappingModal></MappingModal>
     <b-row class="top-10">
       <b-col cols="12">
         <MappingFilter></MappingFilter>
@@ -17,7 +16,6 @@
 <script>
 import MappingFilter from "@/components/mapping/MappingFilter";
 import MappingOverview from "@/components/mapping/MappingOverview";
-import MappingModal from "@/components/mapping/MappingModal";
 
 export default {
   name: "MitreMapping",
@@ -26,7 +24,6 @@ export default {
     }
   },
   components: {
-    MappingModal,
     MappingOverview,
     MappingFilter
   }

@@ -2,27 +2,27 @@
   <b-card-group class="startuppanel">
     <b-card header="Task" class="col-3">
       <b-list-group flush>
-        <b-list-group-item v-for="startup in startup_list" v-on:click="command_list = startup.commands">
+        <b-list-group-item v-for="startup in startup_list">
           <b-row>
-            <b-col cols="8">
+            <b-col cols="8" v-on:click="command_list = startup.commands, show_commands = true, show_input = false">
               {{startup.name}} 
             </b-col>
             <b-col>
-              <b-badge>delete</b-badge>
+              <b-badge v-on:click="delete_startup(startup._id['$oid'])">delete</b-badge>
             </b-col>
           </b-row>
         </b-list-group-item>
       </b-list-group>
     </b-card>
     <b-card header="Command" class="col-3">
-      <b-list-group flush>
-        <b-list-group-item v-for="command in command_list" v-on:click="command_data = command">
+      <b-list-group flush v-if="show_commands">
+        <b-list-group-item v-for="command in command_list" v-on:click="command_data = command, show_input = true">
           {{command.name}}
         </b-list-group-item>
       </b-list-group>
     </b-card>
     <b-card header="Input">
-      <b-list-group flush>
+      <b-list-group flush v-if="show_input">
         <b-list-group-item>
           <b-row>
             <b-col><b>Type</b></b-col>
@@ -56,6 +56,8 @@ export default {
       startup_list: [],
       command_list: [],
       command_data: {},
+      show_commands: false,
+      show_input: false,
       defaults: {
         platform:"Windows",
         input:""
@@ -70,23 +72,24 @@ export default {
   },
   methods: {
     get_startup_filtered(filters){
+      this.show_input = false;
+      this.show_commands = false;
       this.$http
         .get('startuptasks', {params:{platform: filters.platform}})
         .then(response => this.startup_success(response))
-        // .catch(error => EventBus.$emit('showalert', error.response))
+        .catch(error => EventBus.$emit('showalert', error.response))
     },
     startup_success (response){
       this.startup_list = response.data;
     },
-    remove_startup(command_rand){
-      this.$store.commit('task/remove_command', command_rand);
-      this.task_commands = this.$store.getters['task/commands'];
-      this.show_details_panel = false;
+    delete_startup(startup_id){
+      var delete_url = `startuptask/${startup_id}`;
+      this.$http
+        .delete(delete_url)
+        .then(response => this.get_startup_filtered(this.defaults))
+        .catch(error => EventBus.$emit('showalert', error.response))
     }
   },
-  components: {
-  
-  }
  
 };
 </script>

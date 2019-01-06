@@ -1,11 +1,5 @@
 <template>
   <b-card-group class="executionpanel">
-    <b-card header="Queue" class="col-2">
-      <b-list-group flush>
-        <b-list-group-item v-bind:class="{ active: show_commands_card }" v-on:click="show_commands_card = !show_commands_card, show_techniques_card = false"> Command <b-badge>{{task_commands.length}}</b-badge></b-list-group-item>
-        <b-list-group-item v-bind:class="{ active: show_techniques_card }" v-on:click="show_techniques_card = !show_techniques_card, show_commands_card = false"> Technique <b-badge>{{task_techniques.length}}</b-badge></b-list-group-item>
-      </b-list-group>
-    </b-card>
     <b-card header="Command" class="col-4">
       <b-list-group flush v-if="show_commands_card">
         <b-list-group-item v-for="command in task_commands" v-on:click="show_command_details(command)">{{command.name}}</b-list-group-item>
@@ -13,6 +7,12 @@
     </b-card>
     <b-card header="Input">
       <b-list-group flush v-if="show_details_panel">
+        <b-list-group-item>
+          <b-row>
+            <b-col><b>Type</b></b-col>
+            <b-col>{{selected_command_type}}</b-col>
+          </b-row>
+        </b-list-group-item>
         <b-list-group-item>
           <b-row>
             <b-col><b>Input</b></b-col>
@@ -44,11 +44,11 @@ export default {
       show_details_panel: false,
       show_commands_card: true,
       show_techniques_card: false,
+      selected_command_type: "",
       selected_command_input: "",
       selected_command_sleep: 0,
       selected_command_rand: 0,
       task_commands: this.$store.getters['task/commands'],
-      task_techniques: this.$store.getters['task/techniques']
 
     }
   },
@@ -57,6 +57,7 @@ export default {
       this.selected_command_input = command.input;
       this.selected_command_sleep = command.sleep;
       this.selected_command_rand = command.rand;
+      this.selected_command_type = command.type;
       this.show_details_panel = true;
     },
     remove_command(command_rand){

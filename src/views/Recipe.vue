@@ -7,12 +7,12 @@
       <b-col cols="7">
         <b-row>
           <b-col>
-            <RecipeAddCommand></RecipeAddCommand>
+            <RecipeAddMitre></RecipeAddMitre>
           </b-col>
         </b-row>
         <b-row>
           <b-col>
-            <RecipeAddMitre></RecipeAddMitre>
+            <RecipeAddCommand></RecipeAddCommand>
           </b-col>
         </b-row>
       </b-col>

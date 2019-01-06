@@ -2,7 +2,6 @@ export default {
   namespaced: true,
   state: {
     commands: [],
-    techniques: [],
     selected_date: ""
   },
   getters: {
@@ -17,12 +16,11 @@ export default {
     }
   },
   mutations: {
-    add_command(state, command){
-      command.type = "manual";
+    add_command(state, command) {
+      if (!("type" in command)) {
+        command.type = "manual";
+      }
       state.commands.push(command);
-    },
-    add_technique(state, technique){
-      state.techniques.push(technique);
     },
     remove_command(state, command_rand){
       state.commands = state.commands.filter(cmd => cmd.rand !== command_rand);

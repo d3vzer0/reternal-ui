@@ -7,7 +7,7 @@
       </b-list-group>
     </b-card>
     <b-card header="Input">
-      <b-list-group flush v-if="show_details_panel">
+      <b-list-group flush v-if="show_input">
         <b-list-group-item>
           <b-row>
             <b-col><b>Command</b></b-col>
@@ -43,7 +43,7 @@ export default {
       macro_id: "",
       macro_input: "",
       macro_command: "",
-      show_details_panel: false,
+      show_input: false,
     }
   },
   created (){
@@ -68,13 +68,14 @@ export default {
         .catch(response => this.generic_failed(response))
     },
     parse_macros(response){
+      this.show_input = false;
       this.macro_list = response.data
     },
     show_macro_details (macro){
       this.macro_id = macro["_id"]["$oid"];
       this.macro_command = macro.command;
       this.macro_input = macro.input;
-      this.show_details_panel = true;
+      this.show_input = true;
 
     }
   }
