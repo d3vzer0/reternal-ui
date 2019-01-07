@@ -14,6 +14,7 @@ import Payloads from "./views/Payloads.vue";
 import Startup from "./views/Startup.vue";
 import Terminal from "./views/Terminal.vue";
 import Mapping from "./views/Mapping.vue";
+import AgentTasks from "./views/AgentTasks";
 
 Vue.use(Router);
 
@@ -76,6 +77,11 @@ const router = new Router({
           path: "/agent/:agent_id",
           name: "AgentDetails",
           component: AgentDetails
+        },
+        {
+          path: "/tasks/:agent_id",
+          name: "AgentTasks",
+          component: AgentTasks
         }
       ]
     },

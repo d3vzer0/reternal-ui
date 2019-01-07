@@ -8,7 +8,7 @@
               {{startup.name}} 
             </b-col>
             <b-col>
-              <b-badge v-on:click="delete_startup(startup._id['$oid'])">delete</b-badge>
+              <b-badge href="#" v-on:click="delete_startup(startup._id['$oid'])">DELETE</b-badge>
             </b-col>
           </b-row>
         </b-list-group-item>

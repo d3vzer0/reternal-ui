@@ -3,8 +3,8 @@
     <b-alert :show="dismiss_countDown" variant="primary" @dismissed="dismiss_countDown=0" @dismiss-count-down="countDownChanged"> 
       {{this.alert_message}}      
     </b-alert>
-
     <StartupModal></StartupModal>
+    <RecipeModal></RecipeModal>
     <b-row id="row-main">
       <b-col xl="2" lg="2" md="2" sm="2" cols="1" id="col-sidebar">
         <div id="sidebar-header">
@@ -139,6 +139,7 @@
 
 <script>
 import StartupModal from "@/components/startup/StartupModal";
+import RecipeModal from "@/components/recipe/RecipeModal";
 import EventBus from "@/eventbus";
 
 export default {
@@ -169,35 +170,11 @@ export default {
       this.$router.replace(this.$route.query.redirect || '/login')
     },
     run_recipe(){
-      var selected_date = this.$store.getters['task/date'];
-      var selected_commands = this.filter_commands(this.$store.getters['task/commands']);
-      var selected_techniques = this.$store.getters['task/techniques'];
-      var selected_agents = this.$store.getters['selection/get_agents'];
-      for (var agent_id of selected_agents){
-        this.$http
-          .post('tasks', {beacon_id: agent_id, commands: selected_commands})
-          .then(response => this.schedule_success(response))
-          .catch(response => this.generic_failed(response))
-      }
+        EventBus.$emit('confirmtask');
+
     },
     boot_recipe(){
-      var recipe_data = {
-        date: this.$store.getters['task/date'],
-        commands: this.filter_commands(this.$store.getters['task/commands']),
-        techniques: this.$store.getters['selection/get_agents']
-      }
-      EventBus.$emit('confirmboot', recipe_data);
-    },
-    filter_commands(commands){
-      var command_list = [];
-      commands.forEach(function(command){
-        var details = {type: "manual", input:command.input, name :command.name, sleep: command.sleep}
-        command_list.push(details)
-      })
-      return command_list;
-    },
-    populate_beacons_selection (){
-
+      EventBus.$emit('confirmboot');
     },
     countDownChanged (dismiss_countDown) {
       this.dismiss_countDown = dismiss_countDown
@@ -210,7 +187,8 @@ export default {
     }
   },
   components: {
-    StartupModal
+    StartupModal,
+    RecipeModal
   }
 }
 </script>
