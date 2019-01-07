@@ -13,13 +13,13 @@
           <label class="terminalprot terminalprepend">{{terminal_proto}}</label>
           <label class="terminalhost terminalprepend">{{terminal_host}}</label>
           <label class="terminalpath terminalprepend">{{terminal_path}}</label>
-          <input type="textarea" class="terminalcmd" v-model="terminal_input" @input="search_options" @keydown.tab.prevent="autocomplete" placeholder="cmd"></input>
+          <input type="textarea" class="terminalcmd" v-model="terminal_input" @input="search_options" @keydown.tab.prevent="autocomplete"  @keydown.enter.prevent="submit_command" placeholder="cmd"></input>
       </b-col>
     </b-row>
      <b-row class="top-10 autosuggestrow">
       <b-col cols="12">
         <div class="autosuggestoutput">
-          <label v-for="suggest in suggestions">{{suggest}}</label>
+          <label v-for="suggest in suggestions" class="commandsuggestion">{{suggest}} </label>
         </div>
       </b-col>
     </b-row>
@@ -41,8 +41,13 @@ export default {
       terminal_output: [],
       selected_agent: "",
       suggestions: [],
+      local_commands: {
+        help: this.show_help,
+        details: this.show_details,
+      },
       commands: [
-        "help"
+        "help",
+        "details",
       ],
     }
   },
@@ -52,13 +57,14 @@ export default {
     }),
     EventBus.$on('selectagent', agent => {
       this.selected_agent = agent;
-      var message = `Changed active agent to: ${agent}`
+      var message = `Changed active agent to: ${agent.hostname}`
       this.output_terminal(message)
     })
   },
   mounted (){
       var console_element = document.querySelector('#terminalui');
       console_element.scrollTop = console_element.scrollHeight;
+      this.get_commands();
   },
   updated (){
       var console_element = document.querySelector('#terminalui');
@@ -69,11 +75,53 @@ export default {
       var search_list = this.terminal_input.split(" ");
       var last_word = search_list.pop();
       return last_word;
+    },
+    terminal_prompt: function(){
+      var prompt = `${this.terminal_user}${this.terminal_proto}${this.terminal_host}${this.terminal_path} ${this.terminal_input}`
+      return prompt;
     }
   },
   methods: {
+    get_commands(){
+      this.$http
+        .get("commands")
+        .then(response => this.parse_get_commands(response))
+        .catch(response => this.generic_failed(response))
+    },
+    parse_get_commands(response){
+      var commands = response.data;
+      commands.forEach(command => {
+        this.commands.push(command.name);
+      })
+    },
+    process_command(all_commands){
+      if(!all_commands.length == 0){
+        if (this.selected_agent.beacon_id){
+          this.$http
+            .post('tasks', {beacon_id: this.selected_agent.beacon_id, commands: all_commands})
+            .then(response => this.submit_command_response(response))
+            .catch(error => this.submit_command_failed(error.response))
+        } else {
+          this.output_terminal("No agent currently selected")
+        }
+      }
+    },
     submit_command (value){
-      this.terminal_output.push(this.terminal_input);
+      var terminal_input = this.terminal_input.split("|| ");
+      var all_commands = [];
+      terminal_input.forEach(command => {
+        var split_command = command.split(" ")
+        var command_name = split_command[0];
+        var command_input = split_command.slice(1).join(" ")
+        if(command_name in this.local_commands){
+          this.local_commands[command_name]()
+        } else if(this.commands.includes(command_name)){
+            all_commands.push({name: command_name, input: command_input, type: "terminal", sleep:0})
+          }
+      })
+
+      this.process_command(all_commands)
+      
     },
     search_options(){
       this.suggestions = [];
@@ -84,7 +132,10 @@ export default {
       });
     },
     output_terminal(output){
+       this.terminal_output.push(this.terminal_prompt);
        this.terminal_output.push(output);
+       this.terminal_output.push("-");
+
     },
     autocomplete(){
       if(this.suggestions.length > 0){
@@ -93,6 +144,21 @@ export default {
         search_list.push(this.suggestions[0])
         this.terminal_input = search_list.join(" ")
       }
+    },
+    show_help (){
+      var output = "Directly execute commands via the terminal. Change the active agent via the navigation bar. Type 'details' to display the selected agent details";
+      this.output_terminal(output)
+    },
+    show_details (){
+      var agent_details = `Hostname: ${this.selected_agent.hostname}, Username: ${this.selected_agent.username}, RemoteIP: ${this.selected_agent.remote_ip}, WorkingDir: ${this.selected_agent.working_dir}`;
+      this.output_terminal(agent_details)
+    },
+
+    submit_command_failed (response){
+      this.output_terminal(response.data);
+    },
+    submit_command_response (response){
+      this.output_terminal(response.data.data);
     }
 
   }
@@ -117,7 +183,8 @@ export default {
   overflow-y: auto
   max-height: 900px
 
-
+.commandsuggestion
+  margin-right: 10px
 .terminalcmd
   height: 1.55rem
   background-color: #212d37

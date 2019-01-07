@@ -15,15 +15,18 @@ export default {
       agent_count: 0
     }
   },
+  mounted (){
+    this.get_agent_count();
+  },
   methods: {
-     get_platforms (){
+     get_agent_count (){
       this.$http
         .get('stats/agents')
-        .then(response => this.parse_platforms(response))
+        .then(response => this.parse_agent_count(response))
         .catch(response => this.generic_failed(response))
     },
-    parse_platforms (response){
-        var a = "a";
+    parse_agent_count (response){
+        this.agent_count = response.data[0].beacon_count;
     }
   }
 }

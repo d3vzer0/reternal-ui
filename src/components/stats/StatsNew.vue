@@ -39,7 +39,7 @@ export default {
         this.new_count = response.data.this_week[0].beacon_count;
       }
       if(response.data.last_week.length > 0){
-        this.new_count = response.data.last_week[0].beacon_count;
+        this.old_count = response.data.last_week[0].beacon_count;
       }
     }
   }

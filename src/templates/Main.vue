@@ -92,7 +92,7 @@
                 </template>
 
                 <div v-for="(platform, key, index) in selected_agents">
-                  <b-dropdown-item v-for="agent in platform" href="#">{{agent.hostname}}</b-dropdown-item>
+                  <b-dropdown-item v-for="agent in platform" href="#" v-on:click="change_active_agent(agent)">{{agent.hostname}}</b-dropdown-item>
                   <b-dropdown-divider v-if="platform.agent"></b-dropdown-divider>
                 </div>
               </b-nav-item-dropdown>
@@ -201,6 +201,9 @@ export default {
     },
     countDownChanged (dismiss_countDown) {
       this.dismiss_countDown = dismiss_countDown
+    },
+    change_active_agent (agent){
+      EventBus.$emit('selectagent', agent);
     },
     show_alert () {
       this.dismiss_countDown = this.dismiss_secs
