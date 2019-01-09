@@ -33,7 +33,7 @@
 <script>
 import VueJwtDecode from "vue-jwt-decode"
 
-export default{
+export default {
   name: 'Login',
   data() {
     return {
@@ -51,16 +51,19 @@ export default{
     },
     login_success (response){
       if (!response.data.access_token) {
-        this.login_failed()
+        this.delete_tokens()
         return
       }
-      localStorage.token = response.data.access_token
+      localStorage.access_token = response.data.access_token
+      localStorage.refresh_token = response.data.refresh_token,
       this.$store.commit('auth/update_session', response.data.access_token)
       this.$router.replace(this.$route.query.redirect || '/home')
     },
-    login_failed (response){
+    delete_tokens (response){
       this.error = "Unable to login"
-      delete localStorage.token
+      this.$store.commit('auth/set_refresh', false)
+      delete localStorage.access_token
+      delete localStorage.refresh_token
     }
   }
 }
