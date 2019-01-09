@@ -14,51 +14,54 @@
 </template>
 
 <script>
-import _ from 'lodash'; 
+import _ from "lodash";
 import EventBus from "@/eventbus";
 
 export default {
   name: "MitreOverview",
-  data(){
+  data() {
     return {
-      mitre_techniques: [
-      ],
+      mitre_techniques: [],
       search_technique: "",
       search_phase: "",
-      search_platform: "Windows",
-    }
+      search_platform: "Windows"
+    };
   },
-  created (){
-   EventBus.$on('refreshmitre', filters => {
-     this.change_filters(filters);
-   })
+  created() {
+    EventBus.$on("refreshmitre", filters => {
+      this.change_filters(filters);
+    });
   },
-  mounted (){
-   this.get_techniques_filtered();
+  mounted() {
+    this.get_techniques_filtered();
   },
   methods: {
-    get_techniques_filtered: _.debounce(function (){
+    get_techniques_filtered: _.debounce(function() {
       this.$http
-        .get('mitre/techniques', {params:{name:this.search_technique,
-              phase:this.search_phase,
-              platform:this.search_platform}})
+        .get("mitre/techniques", {
+          params: {
+            name: this.search_technique,
+            phase: this.search_phase,
+            platform: this.search_platform
+          }
+        })
         .then(response => this.parse_mitre(response))
-        .catch(error => EventBus.$emit('showalert', error.response))
-    },200),
-    parse_mitre (response){
-     this.mitre_techniques = response.data;
+        .catch(error => EventBus.$emit("showalert", error.response));
+    }, 200),
+    parse_mitre(response) {
+      this.mitre_techniques = response.data;
     },
-    generic_failed (response){
+    generic_failed(response) {
       this.error = "Unable to perform request";
     },
-    change_filters(filters){
+    change_filters(filters) {
       this.search_technique = filters.technique;
       this.search_platform = filters.platform;
       this.search_phase = filters.phase;
       this.get_techniques_filtered();
     },
-    show_technique(technique_id){
-      EventBus.$emit('showtechnique', technique_id)
+    show_technique(technique_id) {
+      EventBus.$emit("showtechnique", technique_id);
     }
   }
 };

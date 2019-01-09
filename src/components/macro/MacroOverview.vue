@@ -3,7 +3,7 @@
   <b-card-group class="executionpanel">
     <b-card header="Macros" class="col-4">
       <b-list-group flush>
-        <b-list-group-item v-for="macro in macro_list" v-on:click="show_macro_details(macro)">{{macro.name}}</b-list-group-item>
+        <b-list-group-item v-for="macro in macro_list" @click="show_macro_details(macro)">{{macro.name}}</b-list-group-item>
       </b-list-group>
     </b-card>
     <b-card header="Input">
@@ -22,7 +22,7 @@
         </b-list-group-item>
          <b-list-group-item>
           <b-row>
-            <b-col><b-button variant="primary-reversed" class="fullwidth" v-on:click="delete_macro">Remove macro</b-button></b-col>
+            <b-col><b-button variant="primary-reversed" class="fullwidth" @click="delete_macro">Remove macro</b-button></b-col>
           </b-row>
         </b-list-group-item>
       </b-list-group>
@@ -37,48 +37,45 @@ import EventBus from "@/eventbus";
 
 export default {
   name: "MacroOverview",
-  data(){
+  data() {
     return {
       macro_list: [],
       macro_id: "",
       macro_input: "",
       macro_command: "",
-      show_input: false,
-    }
+      show_input: false
+    };
   },
-  created (){
-    EventBus.$on('refreshmacros', this.get_macros);
+  created() {
+    EventBus.$on("refreshmacros", this.get_macros);
   },
-  mounted (){
+  mounted() {
     this.get_macros();
-
   },
   methods: {
-     get_macros (){
+    get_macros() {
       this.$http
-        .get('macros')
+        .get("macros")
         .then(response => this.parse_macros(response))
-        .catch(response => this.generic_failed(response))
+        .catch(response => this.generic_failed(response));
     },
-    delete_macro(){
+    delete_macro() {
       var delete_url = `macro/${this.macro_id}`;
       this.$http
         .delete(delete_url)
         .then(response => this.parse_macros(response))
-        .catch(response => this.generic_failed(response))
+        .catch(response => this.generic_failed(response));
     },
-    parse_macros(response){
+    parse_macros(response) {
       this.show_input = false;
-      this.macro_list = response.data
+      this.macro_list = response.data;
     },
-    show_macro_details (macro){
+    show_macro_details(macro) {
       this.macro_id = macro["_id"]["$oid"];
       this.macro_command = macro.command;
       this.macro_input = macro.input;
       this.show_input = true;
-
     }
   }
-  
 };
 </script>

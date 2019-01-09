@@ -9,13 +9,11 @@ import TerminalOverview from "@/components/terminal/TerminalOverview";
 
 export default {
   name: "Terminal",
-  data(){
-    return {
-    }
+  data() {
+    return {};
   },
   components: {
     TerminalOverview
   }
-  
 };
 </script>

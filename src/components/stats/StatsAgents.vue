@@ -7,29 +7,28 @@
 </template>
 
 <script>
-
 export default {
   name: "StatsAgent",
-  data () {
+  data() {
     return {
       agent_count: 0
-    }
+    };
   },
-  mounted (){
+  mounted() {
     this.get_agent_count();
   },
   methods: {
-     get_agent_count (){
+    get_agent_count() {
       this.$http
-        .get('stats/agents')
+        .get("stats/agents")
         .then(response => this.parse_agent_count(response))
-        .catch(response => this.generic_failed(response))
+        .catch(response => this.generic_failed(response));
     },
-    parse_agent_count (response){
-        this.agent_count = response.data[0].beacon_count;
+    parse_agent_count(response) {
+      this.agent_count = response.data[0].beacon_count;
     }
   }
-}
+};
 </script>
 
 <style lang="sass">

@@ -99,16 +99,16 @@ const router = new Router({
 
 router.beforeEach((to, from, next) => {
   if (to.matched.some(record => record.meta.requiresAuth)) {
-    if (!store.getters['auth/session']){
+    if (!store.getters["auth/session"]) {
       next({
-        path: '/login',
+        path: "/login",
         query: { redirect: to.fillPath }
-      })
+      });
     } else {
-      next()
+      next();
     }
   } else {
-    next()
+    next();
   }
 });
 

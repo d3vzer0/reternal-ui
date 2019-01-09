@@ -19,18 +19,16 @@ import MacroOverview from "@/components/macro/MacroOverview";
 
 export default {
   name: "Macros",
-  data(){
+  data() {
     return {
       create_alias_name: "",
       create_alias_input: ""
-    }
+    };
   },
-  methods: {
-  },
+  methods: {},
   components: {
     MacroCreate,
     MacroOverview
   }
-  
 };
 </script>

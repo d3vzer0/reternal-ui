@@ -15,35 +15,34 @@
 </template>
 
 <script>
-
 export default {
   name: "StatsAgent",
-  data () {
+  data() {
     return {
       old_count: 0,
       new_count: 0
-    }
+    };
   },
   mounted() {
-    this.get_new()
+    this.get_new();
   },
   methods: {
-     get_new (){
+    get_new() {
       this.$http
-        .get('stats/new')
+        .get("stats/new")
         .then(response => this.parse_new(response))
-        .catch(response => this.generic_failed(response))
+        .catch(response => this.generic_failed(response));
     },
-    parse_new (response){
-      if(response.data.this_week.length > 0){
+    parse_new(response) {
+      if (response.data.this_week.length > 0) {
         this.new_count = response.data.this_week[0].beacon_count;
       }
-      if(response.data.last_week.length > 0){
+      if (response.data.last_week.length > 0) {
         this.old_count = response.data.last_week[0].beacon_count;
       }
     }
   }
-}
+};
 </script>
 
 <style lang="sass">

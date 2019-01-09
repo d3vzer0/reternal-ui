@@ -59,7 +59,7 @@ Vue.use(require("vue-moment"));
 
 export default {
   name: "AgentDetails",
-  data(){
+  data() {
     return {
       selected_agent: this.$route.params.agent_id,
       details_search_generic: "",
@@ -67,24 +67,29 @@ export default {
       details_result_count: 0,
       details_current_page: 1,
       fields: {
-        timestamp: {label: "Timestamp"},
-        name: {label: "Task name"},
-        task_status: {label:"Status"},
-        command_count: {label: "Commands in task"},
-        result_count: {label:"Commands executed"},
-        show_details: {label:"Details"}
+        timestamp: { label: "Timestamp" },
+        name: { label: "Task name" },
+        task_status: { label: "Status" },
+        command_count: { label: "Commands in task" },
+        result_count: { label: "Commands executed" },
+        show_details: { label: "Details" }
       }
-
-    }
+    };
   },
   methods: {
-    get_details_filtered (ctx){
-      var skip_results = (this.details_current_page * this.details_search_limit) - this.details_search_limit;
-      let promise = this.$http
-        .get("results", {params:{beacon_id: this.selected_agent, skip: skip_results, 
-            limit: this.details_search_limit,
-            search:this.details_search_generic}})
-      return promise.then((data)=> {
+    get_details_filtered(ctx) {
+      var skip_results =
+        this.details_current_page * this.details_search_limit -
+        this.details_search_limit;
+      let promise = this.$http.get("results", {
+        params: {
+          beacon_id: this.selected_agent,
+          skip: skip_results,
+          limit: this.details_search_limit,
+          search: this.details_search_generic
+        }
+      });
+      return promise.then(data => {
         let items = data.data;
         this.details_result_count = data.data.count;
         var results = [];
@@ -98,23 +103,24 @@ export default {
             result_count: detail.output.length,
             commands: detail.commands,
             _showDetails: false
-          }
+          };
           results.push(result);
         });
-        return(results || [])
-      })
+        return results || [];
+      });
     },
 
-    from_unix(unix_timestamp){
+    from_unix(unix_timestamp) {
       var from_miliseconds = unix_timestamp / 1000;
-      var datetime = this.$moment.unix(from_miliseconds).format('YYYY-MM-DD HH:mm:ss');
+      var datetime = this.$moment
+        .unix(from_miliseconds)
+        .format("YYYY-MM-DD HH:mm:ss");
       return datetime;
     }
   },
-  mounted (){
-    this.get_details_filtered()
+  mounted() {
+    this.get_details_filtered();
   }
-  
 };
 </script>
 

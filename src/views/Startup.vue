@@ -19,20 +19,17 @@ import StartupFilter from "@/components/startup/StartupFilter";
 
 export default {
   name: "Startup",
-  data(){
-    return {
-    
-    }
+  data() {
+    return {};
   },
   methods: {
-    testclick (){
-      console.log(this.$store.getters['task/date'])
+    testclick() {
+      console.log(this.$store.getters["task/date"]);
     }
   },
   components: {
     StartupOverview,
     StartupFilter
   }
-  
 };
 </script>

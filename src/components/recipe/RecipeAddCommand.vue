@@ -25,25 +25,29 @@ import CommandsDropdown from "@/components/commands/CommandsDropdown";
 
 export default {
   name: "RecipeAddCommand",
-  data(){
+  data() {
     return {
       command_input: "",
       command_sleep: 0,
-      command_options: [
-      ]
-    }
+      command_options: []
+    };
   },
   methods: {
-    add_command (){
+    add_command() {
       var random_array = new Uint32Array(5);
       var random_id = window.crypto.getRandomValues(random_array)[2];
-      var command_options = {name: this.$store.getters['selection/command'], input: this.command_input, sleep: this.command_sleep, rand: random_id, type:"manual"}
-      this.$store.commit('task/add_command', command_options);
+      var command_options = {
+        name: this.$store.getters["selection/command"],
+        input: this.command_input,
+        sleep: this.command_sleep,
+        rand: random_id,
+        type: "manual"
+      };
+      this.$store.commit("task/add_command", command_options);
     }
   },
   components: {
-    CommandsDropdown,
+    CommandsDropdown
   }
-  
 };
 </script>

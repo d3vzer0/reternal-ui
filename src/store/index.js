@@ -16,6 +16,6 @@ export const store = new Vuex.Store({
     selection,
     task
   }
-})
+});
 
 export default store;

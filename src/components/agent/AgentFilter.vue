@@ -17,11 +17,11 @@
 
 
 <script>
-import _ from 'lodash'; 
+import _ from "lodash";
 
 export default {
   name: "AgentFilter",
-  data(){
+  data() {
     return {
       agent_list: [],
       search_platform: "",
@@ -30,37 +30,41 @@ export default {
         { text: "Any", value: "" },
         { text: "Windows", value: "Windows" },
         { text: "Mac", value: "macOS" },
-        { text: "Linux", value: 'Linux' },
+        { text: "Linux", value: "Linux" }
       ],
-      error: "",
-    }
+      error: ""
+    };
   },
-  mounted () {
-    this.get_agents_filtered()
+  mounted() {
+    this.get_agents_filtered();
   },
   methods: {
-    get_agents_filtered: _.debounce(function (){
-        this.$http
-          .get('agents', {params:{platform:this.agent_search_platform,
-                search:this.agent_search_generic}})
-          .then(response => this.parse_agents(response))
-          .catch(response => this.generic_failed(response))
-      }, 200),
-    parse_agents (response){
+    get_agents_filtered: _.debounce(function() {
+      this.$http
+        .get("agents", {
+          params: {
+            platform: this.agent_search_platform,
+            search: this.agent_search_generic
+          }
+        })
+        .then(response => this.parse_agents(response))
+        .catch(response => this.generic_failed(response));
+    }, 200),
+    parse_agents(response) {
       this.$parent.agent_list = response.data;
     },
-    generic_failed (response){
+    generic_failed(response) {
       this.error = "Unable to perform request";
     }
   },
   watch: {
-    search_platform: function(value){
+    search_platform: function(value) {
       this.search_platform = value;
-      this.get_agents_filtered()
+      this.get_agents_filtered();
     },
-    search_generic: function(value){
+    search_generic: function(value) {
       this.search_generic = value;
-      this.get_agents_filtered()
+      this.get_agents_filtered();
     }
   }
 };
@@ -79,4 +83,3 @@ export default {
     width: 100%
 
 </style>
-

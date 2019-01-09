@@ -18,25 +18,20 @@ Vue.component("vue-ctk-date-time-picker", VueCtkDateTimePicker);
 
 export default {
   name: "RecipeDatetime",
-  data(){
-    return {
-    }
+  data() {
+    return {};
   },
   computed: {
     date_time: {
-      get: function(){
-        return this.$store.getters['task/date'];
+      get: function() {
+        return this.$store.getters["task/date"];
       },
-      set: function(value){
-        this.$store.commit('task/change_date', value);
+      set: function(value) {
+        this.$store.commit("task/change_date", value);
       }
     }
   },
-  methods: {
-
-  },
-  components: {
-  }
-  
+  methods: {},
+  components: {}
 };
 </script>

@@ -34,29 +34,28 @@ import EventBus from "@/eventbus";
 
 export default {
   name: "MitreModal",
-  data(){
+  data() {
     return {
       mitre_technique_details: false,
       error: false
-    }
+    };
   },
-  created (){
-   EventBus.$on('showtechnique', technique_id => {
-     this.get_technique_details(technique_id);
-   })
+  created() {
+    EventBus.$on("showtechnique", technique_id => {
+      this.get_technique_details(technique_id);
+    });
   },
   methods: {
-    get_technique_details (technique_id){
+    get_technique_details(technique_id) {
       this.$http
-        .get('mitre/technique/' + technique_id)
+        .get("mitre/technique/" + technique_id)
         .then(response => this.parse_technique_details(response))
-        .catch(error => EventBus.$emit('showalert', error.response))
-    
+        .catch(error => EventBus.$emit("showalert", error.response));
     },
-    parse_technique_details (response){
+    parse_technique_details(response) {
       this.mitre_technique_details = response.data;
       this.$refs.techniquedetails.show();
     }
-  },
+  }
 };
 </script>

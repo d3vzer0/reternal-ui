@@ -5,13 +5,13 @@ export default {
     selected_date: ""
   },
   getters: {
-    commands(state){
+    commands(state) {
       return state.commands;
     },
-    techniques(state){
+    techniques(state) {
       return state.techniques;
     },
-    date(state){
+    date(state) {
       return state.selected_date;
     }
   },
@@ -22,11 +22,11 @@ export default {
       }
       state.commands.push(command);
     },
-    remove_command(state, command_rand){
+    remove_command(state, command_rand) {
       state.commands = state.commands.filter(cmd => cmd.rand !== command_rand);
     },
-    change_date(state, date){
+    change_date(state, date) {
       state.selected_date = date;
     }
   }
-}
+};

@@ -31,7 +31,7 @@ import EventBus from "@/eventbus";
 
 export default {
   name: "TerminalOverview",
-  data(){
+  data() {
     return {
       terminal_input: "",
       terminal_user: "joeydreijer",
@@ -43,124 +43,133 @@ export default {
       suggestions: [],
       local_commands: {
         help: this.show_help,
-        details: this.show_details,
+        details: this.show_details
       },
-      commands: [
-        "help",
-        "details",
-      ],
-    }
+      commands: ["help", "details"]
+    };
   },
-  created (){
-    EventBus.$on('alertterminal', output => {
-      this.output_terminal(output)
+  created() {
+    EventBus.$on("alertterminal", output => {
+      this.output_terminal(output);
     }),
-    EventBus.$on('selectagent', agent => {
-      this.selected_agent = agent;
-      var message = `Changed active agent to: ${agent.hostname}`
-      this.output_terminal(message)
-    })
+      EventBus.$on("selectagent", agent => {
+        this.selected_agent = agent;
+        var message = `Changed active agent to: ${agent.hostname}`;
+        this.output_terminal(message);
+      });
   },
-  mounted (){
-      var console_element = document.querySelector('#terminalui');
-      console_element.scrollTop = console_element.scrollHeight;
-      this.get_commands();
+  mounted() {
+    var console_element = document.querySelector("#terminalui");
+    console_element.scrollTop = console_element.scrollHeight;
+    this.get_commands();
   },
-  updated (){
-      var console_element = document.querySelector('#terminalui');
-      console_element.scrollTop = console_element.scrollHeight;
+  updated() {
+    var console_element = document.querySelector("#terminalui");
+    console_element.scrollTop = console_element.scrollHeight;
   },
   computed: {
-    last_word: function(){
+    last_word: function() {
       var search_list = this.terminal_input.split(" ");
       var last_word = search_list.pop();
       return last_word;
     },
-    terminal_prompt: function(){
-      var prompt = `${this.terminal_user}${this.terminal_proto}${this.terminal_host}${this.terminal_path} ${this.terminal_input}`
+    terminal_prompt: function() {
+      var prompt = `${this.terminal_user}${this.terminal_proto}${
+        this.terminal_host
+      }${this.terminal_path} ${this.terminal_input}`;
       return prompt;
     }
   },
   methods: {
-    get_commands(){
+    get_commands() {
       this.$http
         .get("commands")
         .then(response => this.parse_get_commands(response))
-        .catch(response => this.generic_failed(response))
+        .catch(response => this.generic_failed(response));
     },
-    parse_get_commands(response){
+    parse_get_commands(response) {
       var commands = response.data;
       commands.forEach(command => {
         this.commands.push(command.name);
-      })
+      });
     },
-    process_command(all_commands){
-      if(!all_commands.length == 0){
-        if (this.selected_agent.beacon_id){
+    process_command(all_commands) {
+      if (!all_commands.length == 0) {
+        if (this.selected_agent.beacon_id) {
           this.$http
-            .post('tasks', {beacon_id: this.selected_agent.beacon_id, commands: all_commands})
+            .post("tasks", {
+              beacon_id: this.selected_agent.beacon_id,
+              commands: all_commands
+            })
             .then(response => this.submit_command_response(response))
-            .catch(error => this.submit_command_failed(error.response))
+            .catch(error => this.submit_command_failed(error.response));
         } else {
-          this.output_terminal("No agent currently selected")
+          this.output_terminal("No agent currently selected");
         }
       }
     },
-    submit_command (value){
+    submit_command(value) {
       var terminal_input = this.terminal_input.split("|| ");
       var all_commands = [];
       terminal_input.forEach(command => {
-        var split_command = command.split(" ")
+        var split_command = command.split(" ");
         var command_name = split_command[0];
-        var command_input = split_command.slice(1).join(" ")
-        if(command_name in this.local_commands){
-          this.local_commands[command_name]()
-        } else if(this.commands.includes(command_name)){
-            all_commands.push({name: command_name, input: command_input, type: "terminal", sleep:0})
-          }
-      })
+        var command_input = split_command.slice(1).join(" ");
+        if (command_name in this.local_commands) {
+          this.local_commands[command_name]();
+        } else if (this.commands.includes(command_name)) {
+          all_commands.push({
+            name: command_name,
+            input: command_input,
+            type: "terminal",
+            sleep: 0
+          });
+        }
+      });
 
-      this.process_command(all_commands)
-      
+      this.process_command(all_commands);
     },
-    search_options(){
+    search_options() {
       this.suggestions = [];
       this.commands.forEach(element => {
-        if(element.includes(this.last_word)){
-          this.suggestions.push(element)
+        if (element.includes(this.last_word)) {
+          this.suggestions.push(element);
         }
       });
     },
-    output_terminal(output){
-       this.terminal_output.push(this.terminal_prompt);
-       this.terminal_output.push(output);
-       this.terminal_output.push("-");
-
+    output_terminal(output) {
+      this.terminal_output.push(this.terminal_prompt);
+      this.terminal_output.push(output);
+      this.terminal_output.push("-");
     },
-    autocomplete(){
-      if(this.suggestions.length > 0){
+    autocomplete() {
+      if (this.suggestions.length > 0) {
         var search_list = this.terminal_input.split(" ");
         var last_word = search_list.pop();
-        search_list.push(this.suggestions[0])
-        this.terminal_input = search_list.join(" ")
+        search_list.push(this.suggestions[0]);
+        this.terminal_input = search_list.join(" ");
       }
     },
-    show_help (){
-      var output = "Directly execute commands via the terminal. Change the active agent via the navigation bar. Type 'details' to display the selected agent details";
-      this.output_terminal(output)
+    show_help() {
+      var output =
+        "Directly execute commands via the terminal. Change the active agent via the navigation bar. Type 'details' to display the selected agent details";
+      this.output_terminal(output);
     },
-    show_details (){
-      var agent_details = `Hostname: ${this.selected_agent.hostname}, Username: ${this.selected_agent.username}, RemoteIP: ${this.selected_agent.remote_ip}, WorkingDir: ${this.selected_agent.working_dir}`;
-      this.output_terminal(agent_details)
+    show_details() {
+      var agent_details = `Hostname: ${
+        this.selected_agent.hostname
+      }, Username: ${this.selected_agent.username}, RemoteIP: ${
+        this.selected_agent.remote_ip
+      }, WorkingDir: ${this.selected_agent.working_dir}`;
+      this.output_terminal(agent_details);
     },
 
-    submit_command_failed (response){
+    submit_command_failed(response) {
       this.output_terminal(response.data);
     },
-    submit_command_response (response){
+    submit_command_response(response) {
       this.output_terminal(response.data.data);
     }
-
   }
 };
 </script>

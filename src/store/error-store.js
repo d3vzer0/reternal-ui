@@ -6,16 +6,16 @@ export default {
     error_countdown: 0
   },
   actions: {
-    countdown_changed(error_countdown){
+    countdown_changed(error_countdown) {
       this.error_countdown = error_countdown;
     },
-    display_error (){
+    display_error() {
       this.error_countdown = this.error_seconds;
     }
   },
   mutations: {
-    update_error(error_message){
+    update_error(error_message) {
       self.error_message = error_message;
     }
   }
-}
+};

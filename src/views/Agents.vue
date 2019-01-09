@@ -20,15 +20,14 @@ import AgentOverview from "@/components/agent/AgentOverview";
 
 export default {
   name: "Agents",
-  data(){
+  data() {
     return {
-      agent_list: [],
-    }
+      agent_list: []
+    };
   },
   components: {
     AgentFilter,
     AgentOverview
   }
-  
 };
 </script>

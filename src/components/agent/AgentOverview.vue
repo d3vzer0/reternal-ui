@@ -1,6 +1,6 @@
 <template>
   <masonry :cols="3" :gutter="40">
-    <b-card class="agent-card" v-for="agent in $parent.agent_list" :header="agent.hostname" v-on:click="click_agent_tile(agent)" :class="{active: is_selected(agent)}">
+    <b-card class="agent-card" v-for="agent in $parent.agent_list" :header="agent.hostname" @click="click_agent_tile(agent)" :class="{active: is_selected(agent)}">
       <b-row>
         <b-col>State</b-col><b-col>{{agent.state}}</b-col>
       </b-row>
@@ -35,29 +35,33 @@ Vue.use(VueMasonry);
 
 export default {
   name: "AgentOverview",
-  data(){
+  data() {
     return {
       is_active: false,
-      selected_agents: this.$store.getters['selection/get_agents'],
+      selected_agents: this.$store.getters["selection/get_agents"],
       agent_search_platform: "Windows",
       agent_search_generic: "",
       platform_options: [
         { text: "Windows", value: "Windows" },
         { text: "Mac", value: "macOS" },
-        { text: "Linux", value: 'Linux' },
+        { text: "Linux", value: "Linux" }
       ],
-      error: "",
-    }
+      error: ""
+    };
   },
   methods: {
-    generic_failed (response){
+    generic_failed(response) {
       this.error = "Unable to perform request";
     },
-    click_agent_tile (agent_object){
-      this.$store.commit('selection/add_agent', agent_object);
+    click_agent_tile(agent_object) {
+      this.$store.commit("selection/add_agent", agent_object);
     },
-    is_selected (agent_object){
-      if(this.$store.getters['selection/get_agents'].includes(agent_object.beacon_id)){
+    is_selected(agent_object) {
+      if (
+        this.$store.getters["selection/get_agents"].includes(
+          agent_object.beacon_id
+        )
+      ) {
         return true;
       }
     }

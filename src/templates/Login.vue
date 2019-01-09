@@ -31,42 +31,42 @@
 
 
 <script>
-import VueJwtDecode from "vue-jwt-decode"
+import VueJwtDecode from "vue-jwt-decode";
 
 export default {
-  name: 'Login',
+  name: "Login",
   data() {
     return {
       username: "",
       password: "",
       error: false
-    }
+    };
   },
   methods: {
-    login (){
+    login() {
       this.$http
-        .post('login', {username: this.username, password: this.password})
+        .post("login", { username: this.username, password: this.password })
         .then(response => this.login_success(response))
-        .catch(response => this.login_failed(response))
+        .catch(response => this.login_failed(response));
     },
-    login_success (response){
+    login_success(response) {
       if (!response.data.access_token) {
-        this.delete_tokens()
-        return
+        this.delete_tokens();
+        return;
       }
-      localStorage.access_token = response.data.access_token
-      localStorage.refresh_token = response.data.refresh_token,
-      this.$store.commit('auth/update_session', response.data.access_token)
-      this.$router.replace(this.$route.query.redirect || '/home')
+      localStorage.access_token = response.data.access_token;
+      (localStorage.refresh_token = response.data.refresh_token),
+        this.$store.commit("auth/update_session", response.data.access_token);
+      this.$router.replace(this.$route.query.redirect || "/home");
     },
-    delete_tokens (response){
-      this.error = "Unable to login"
-      this.$store.commit('auth/set_refresh', false)
-      delete localStorage.access_token
-      delete localStorage.refresh_token
+    delete_tokens(response) {
+      this.error = "Unable to login";
+      this.$store.commit("auth/set_refresh", false);
+      delete localStorage.access_token;
+      delete localStorage.refresh_token;
     }
   }
-}
+};
 </script>
 
 <style lang="sass">

@@ -21,32 +21,32 @@ import EventBus from "@/eventbus";
 
 export default {
   name: "StartupFilter",
-  data(){
+  data() {
     return {
-       platform_options: [
+      platform_options: [
         { text: "Windows", value: "Windows" },
         { text: "Mac", value: "macOS" },
-        { text: "Linux", value: 'Linux' },
+        { text: "Linux", value: "Linux" }
       ],
       search_platform: "Windows",
       search_input: ""
-    }
+    };
   },
   methods: {
-    get_startup_filtered (){
+    get_startup_filtered() {
       var filter_options = {
         platform: this.search_platform,
         input: this.startup_search_input
-      }
-      EventBus.$emit('getstartup', filter_options);
+      };
+      EventBus.$emit("getstartup", filter_options);
     }
   },
   watch: {
-    search_platform: function(value){
+    search_platform: function(value) {
       this.search_platform = value;
       this.get_startup_filtered();
     },
-    search_input: function(value){
+    search_input: function(value) {
       this.search_input = value;
       this.get_startup_filtered();
     }
@@ -57,4 +57,3 @@ export default {
 <style lang="sass">
 
 </style>
-

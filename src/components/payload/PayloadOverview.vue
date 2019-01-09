@@ -15,32 +15,32 @@ import axios from "axios";
 
 export default {
   name: "PayloadOverview",
-  data(){
+  data() {
     return {
       available_payloads: [],
       selected_platform: "linux",
       selected_arch: ""
-    }
+    };
   },
-  mounted () {
-    this.get_payloads()
+  mounted() {
+    this.get_payloads();
   },
   methods: {
-    get_payloads (){
+    get_payloads() {
       this.$http
-        .get('payloads')
+        .get("payloads")
         .then(response => this.parse_payloads(response))
-        .catch(response => this.generic_failed(response))
+        .catch(response => this.generic_failed(response));
     },
-    parse_payloads (response){
+    parse_payloads(response) {
       this.available_payloads = response.data;
     },
-    download_link (platform, arch){
-      var payload_path = `${axios.defaults.baseURL}payload?platform=${platform}&arch=${arch}`;
+    download_link(platform, arch) {
+      var payload_path = `${
+        axios.defaults.baseURL
+      }payload?platform=${platform}&arch=${arch}`;
       return payload_path;
-   }
+    }
   }
 };
 </script>
-
-

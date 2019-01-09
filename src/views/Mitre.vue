@@ -21,15 +21,13 @@ import MitreModal from "@/components/mitre/MitreModal";
 
 export default {
   name: "Mitre",
-  data(){
-    return {
-    }
+  data() {
+    return {};
   },
   components: {
     MitreModal,
     MitreOverview,
     MitreFilter
   }
-  
 };
 </script>

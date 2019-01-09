@@ -2,7 +2,7 @@
   <b-card-group class="executionpanel">
     <b-card header="Command" class="col-4">
       <b-list-group flush v-if="show_commands_card">
-        <b-list-group-item v-for="command in task_commands" v-on:click="show_command_details(command)">{{command.name}}</b-list-group-item>
+        <b-list-group-item v-for="command in task_commands" @click="show_command_details(command)">{{command.name}}</b-list-group-item>
       </b-list-group>
     </b-card>
     <b-card header="Input">
@@ -27,7 +27,7 @@
         </b-list-group-item>
          <b-list-group-item>
           <b-row>
-            <b-col><b-button variant="primary-reversed" class="fullwidth" v-on:click="remove_command(selected_command_rand)">Remove from recipe</b-button></b-col>
+            <b-col><b-button variant="primary-reversed" class="fullwidth" @click="remove_command(selected_command_rand)">Remove from recipe</b-button></b-col>
           </b-row>
         </b-list-group-item>
       </b-list-group>
@@ -36,10 +36,9 @@
 </template>
 
 <script>
-
 export default {
   name: "ExecutionPanel",
-  data(){
+  data() {
     return {
       show_details_panel: false,
       show_commands_card: true,
@@ -48,28 +47,24 @@ export default {
       selected_command_input: "",
       selected_command_sleep: 0,
       selected_command_rand: 0,
-      task_commands: this.$store.getters['task/commands'],
-
-    }
+      task_commands: this.$store.getters["task/commands"]
+    };
   },
   methods: {
-    show_command_details(command){
+    show_command_details(command) {
       this.selected_command_input = command.input;
       this.selected_command_sleep = command.sleep;
       this.selected_command_rand = command.rand;
       this.selected_command_type = command.type;
       this.show_details_panel = true;
     },
-    remove_command(command_rand){
-      this.$store.commit('task/remove_command', command_rand);
-      this.task_commands = this.$store.getters['task/commands'];
+    remove_command(command_rand) {
+      this.$store.commit("task/remove_command", command_rand);
+      this.task_commands = this.$store.getters["task/commands"];
       this.show_details_panel = false;
     }
   },
-  components: {
-  
-  }
- 
+  components: {}
 };
 </script>
 

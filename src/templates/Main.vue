@@ -83,8 +83,8 @@
           <b-navbar toggleable="md" type="light" variant="platinum" >
             <b-navbar-nav>
               <b-nav-item to="terminal"> <font-awesome-icon icon="terminal" /> Terminal</b-nav-item>
-              <b-nav-item v-on:click="run_recipe"> <font-awesome-icon icon="play-circle" /> Run Recipe</b-nav-item>
-              <b-nav-item v-on:click="boot_recipe"> <font-awesome-icon icon="arrow-alt-circle-down" /> Startup Recipe</b-nav-item>
+              <b-nav-item @click="run_recipe"> <font-awesome-icon icon="play-circle" /> Run Recipe</b-nav-item>
+              <b-nav-item @click="boot_recipe"> <font-awesome-icon icon="arrow-alt-circle-down" /> Startup Recipe</b-nav-item>
 
               <b-nav-item-dropdown right>
                 <template slot="button-content">
@@ -92,7 +92,7 @@
                 </template>
 
                 <div v-for="(platform, key, index) in selected_agents">
-                  <b-dropdown-item v-for="agent in platform" href="#" v-on:click="change_active_agent(agent)">{{agent.hostname}}</b-dropdown-item>
+                  <b-dropdown-item v-for="agent in platform" href="#" @click="change_active_agent(agent)">{{agent.hostname}}</b-dropdown-item>
                   <b-dropdown-divider v-if="platform.agent"></b-dropdown-divider>
                 </div>
               </b-nav-item-dropdown>
@@ -107,7 +107,7 @@
                 <font-awesome-icon icon="cog" />  Settings
                 </template>
                 <b-dropdown-item href="#">Profile</b-dropdown-item>
-                <b-dropdown-item v-on:click="logout" href="#">Signout</b-dropdown-item>
+                <b-dropdown-item @click="logout" href="#">Signout</b-dropdown-item>
               </b-nav-item-dropdown>
             </b-navbar-nav>
 
@@ -143,54 +143,53 @@ import RecipeModal from "@/components/recipe/RecipeModal";
 import EventBus from "@/eventbus";
 
 export default {
-  name: 'Main',
-  data (){
+  name: "Main",
+  data() {
     return {
-      selected_agents: this.$store.getters['selection/get_agents_detailed'],
+      selected_agents: this.$store.getters["selection/get_agents_detailed"],
       alert_message: "",
       alert_type: "primary",
       dismiss_secs: 10,
-      dismiss_countDown: 0,
-    }
+      dismiss_countDown: 0
+    };
   },
-  mounted (){
-    EventBus.$on('showalert', alert_data =>{
+  mounted() {
+    EventBus.$on("showalert", alert_data => {
       var alert_variant = {
-        400:"primary",
+        400: "primary",
         200: "success"
-      }
+      };
       this.alert_type = alert_variant[alert_data.status];
       this.alert_message = alert_data.data;
       this.show_alert();
     });
   },
   methods: {
-    logout (){
+    logout() {
       localStorage.removeItem("token");
-      this.$router.replace(this.$route.query.redirect || '/login')
+      this.$router.replace(this.$route.query.redirect || "/login");
     },
-    run_recipe(){
-        EventBus.$emit('confirmtask');
-
+    run_recipe() {
+      EventBus.$emit("confirmtask");
     },
-    boot_recipe(){
-      EventBus.$emit('confirmboot');
+    boot_recipe() {
+      EventBus.$emit("confirmboot");
     },
-    countDownChanged (dismiss_countDown) {
-      this.dismiss_countDown = dismiss_countDown
+    countDownChanged(dismiss_countDown) {
+      this.dismiss_countDown = dismiss_countDown;
     },
-    change_active_agent (agent){
-      EventBus.$emit('selectagent', agent);
+    change_active_agent(agent) {
+      EventBus.$emit("selectagent", agent);
     },
-    show_alert () {
-      this.dismiss_countDown = this.dismiss_secs
+    show_alert() {
+      this.dismiss_countDown = this.dismiss_secs;
     }
   },
   components: {
     StartupModal,
     RecipeModal
   }
-}
+};
 </script>
 
 <style lang="sass">

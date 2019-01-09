@@ -33,14 +33,12 @@ import RecipeDatetime from "@/components/recipe/RecipeDatetime";
 
 export default {
   name: "Recipe",
-  data(){
-    return {
-    
-    }
+  data() {
+    return {};
   },
   methods: {
-    testclick (){
-      console.log(this.$store.getters['task/date'])
+    testclick() {
+      console.log(this.$store.getters["task/date"]);
     }
   },
   components: {
@@ -49,6 +47,5 @@ export default {
     RecipeOverview,
     RecipeDatetime
   }
-  
 };
 </script>

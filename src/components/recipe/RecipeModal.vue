@@ -20,44 +20,52 @@ import EventBus from "@/eventbus";
 
 export default {
   name: "RecipeModal",
-  data(){
+  data() {
     return {
-      task_name: "",
-    }
+      task_name: ""
+    };
   },
-  mounted (){
-    EventBus.$on('confirmtask', task_data =>{
+  mounted() {
+    EventBus.$on("confirmtask", task_data => {
       this.$refs.confirmtask.show();
     });
   },
   methods: {
-    submit_tasks (){
-      var selected_date = this.$store.getters['task/date'];
-      var selected_commands = this.filter_commands(this.$store.getters['task/commands']);
-      var selected_techniques = this.$store.getters['task/techniques'];
-      var selected_agents = this.$store.getters['selection/get_agents'];
-      for (var agent_id of selected_agents){
+    submit_tasks() {
+      var selected_date = this.$store.getters["task/date"];
+      var selected_commands = this.filter_commands(
+        this.$store.getters["task/commands"]
+      );
+      var selected_techniques = this.$store.getters["task/techniques"];
+      var selected_agents = this.$store.getters["selection/get_agents"];
+      for (var agent_id of selected_agents) {
         this.$http
-          .post('tasks', {beacon_id: agent_id, commands: selected_commands, name: this.task_name})
-          .then(response => this.submit_task_response(response))
+          .post("tasks", {
+            beacon_id: agent_id,
+            commands: selected_commands,
+            name: this.task_name
+          })
+          .then(response => this.submit_task_response(response));
       }
     },
-    submit_task_response(response){
+    submit_task_response(response) {
       this.$refs.confirmtask.hide();
     },
-    filter_commands(commands){
+    filter_commands(commands) {
       var command_list = [];
-      commands.forEach(function(command){
-        var details = {type: "manual", input:command.input, name :command.name, sleep: command.sleep}
-        command_list.push(details)
-      })
+      commands.forEach(function(command) {
+        var details = {
+          type: "manual",
+          input: command.input,
+          name: command.name,
+          sleep: command.sleep
+        };
+        command_list.push(details);
+      });
       return command_list;
-    },
+    }
   },
 
-  components: {
-  }
-  
+  components: {}
 };
 </script>
-

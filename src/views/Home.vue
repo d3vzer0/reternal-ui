@@ -20,21 +20,19 @@
 </template>
 
 <script>
-import StatsPlatform from "@/components/stats/StatsPlatform"
-import StatsAgents from "@/components/stats/StatsAgents"
-import StatsPulse from "@/components/stats/StatsPulse"
-import StatsNew from "@/components/stats/StatsNew"
+import StatsPlatform from "@/components/stats/StatsPlatform";
+import StatsAgents from "@/components/stats/StatsAgents";
+import StatsPulse from "@/components/stats/StatsPulse";
+import StatsNew from "@/components/stats/StatsNew";
 
 export default {
   name: "Home",
-  data(){
-    return {
-    
-    }
+  data() {
+    return {};
   },
   methods: {
-    testclick (){
-      console.log(this.$store.getters['task/date'])
+    testclick() {
+      console.log(this.$store.getters["task/date"]);
     }
   },
   components: {
@@ -43,7 +41,6 @@ export default {
     StatsPulse,
     StatsNew
   }
-  
 };
 </script>
 <style lang="sass">

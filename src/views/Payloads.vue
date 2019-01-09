@@ -13,13 +13,11 @@ import PayloadOverview from "@/components/payload/PayloadOverview";
 
 export default {
   name: "Payloads",
-  data(){
-    return {
-    }
+  data() {
+    return {};
   },
   components: {
     PayloadOverview
   }
-  
 };
 </script>

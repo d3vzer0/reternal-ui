@@ -19,14 +19,12 @@ import MappingOverview from "@/components/mapping/MappingOverview";
 
 export default {
   name: "MitreMapping",
-  data(){
-    return {
-    }
+  data() {
+    return {};
   },
   components: {
     MappingOverview,
     MappingFilter
   }
-  
 };
 </script>

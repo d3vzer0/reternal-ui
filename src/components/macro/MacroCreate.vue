@@ -28,27 +28,30 @@ import EventBus from "@/eventbus";
 
 export default {
   name: "MacroCreate",
-  data(){
+  data() {
     return {
       create_alias_name: "",
-      create_alias_input: "",
-    }
+      create_alias_input: ""
+    };
   },
   methods: {
-    create_macro(){
-      var selected_command = this.$store.getters['selection/command'];
+    create_macro() {
+      var selected_command = this.$store.getters["selection/command"];
       this.$http
-        .post('macros', {command: selected_command, name: this.create_alias_name, input:this.create_alias_input})
+        .post("macros", {
+          command: selected_command,
+          name: this.create_alias_name,
+          input: this.create_alias_input
+        })
         .then(response => this.create_success(response))
-        .catch(response => this.generic_failed(response))
+        .catch(response => this.generic_failed(response));
     },
-    create_success(response){
-      EventBus.$emit('refreshmacros');
+    create_success(response) {
+      EventBus.$emit("refreshmacros");
     }
   },
   components: {
     CommandsDropdown
   }
-  
 };
 </script>

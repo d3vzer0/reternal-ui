@@ -10,24 +10,24 @@ export default {
     role: ""
   },
   mutations: {
-    update_session(state, payload){
+    update_session(state, payload) {
       state.username = VueJwtDecode.decode(payload).identity;
       state.role = VueJwtDecode.decode(payload).user_claims.role;
     },
-    set_refresh (state, payload) {
+    set_refresh(state, payload) {
       state.is_refresh = payload;
     }
   },
   getters: {
-    session (state) {
+    session(state) {
       var result = false;
       if (localStorage.refresh_token) {
         result = { role: state.role, username: state.username };
       }
       return result;
     },
-    is_refresh (state) {
+    is_refresh(state) {
       return state.is_refresh;
     }
   }
-}
+};
