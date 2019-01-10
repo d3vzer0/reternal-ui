@@ -25,7 +25,7 @@
               </b-nav-item>
                <b-nav-item class="nav-item" to="/recipe">
                 <span class="nav-item-icon"><font-awesome-icon icon="tasks" /></span>
-                <span class="nav-item-title">Recipe Builder</span>
+                <span class="nav-item-title">Recipe Builder <b-badge class="recipecount" variant="primary">{{recipe_count}}</b-badge></span>
               </b-nav-item>
 
             </ul>
@@ -88,7 +88,7 @@
           <b-navbar toggleable="md" type="light" variant="platinum" >
             <b-navbar-nav>
               <b-nav-item to="terminal"> <font-awesome-icon icon="terminal" /> Terminal</b-nav-item>
-              <b-nav-item @click="run_recipe"> <font-awesome-icon icon="play-circle" /> Run Recipe</b-nav-item>
+              <b-nav-item @click="run_recipe"> <font-awesome-icon icon="play-circle" /> Run Recipe </b-nav-item>
               <b-nav-item @click="boot_recipe"> <font-awesome-icon icon="arrow-alt-circle-down" /> Startup Recipe</b-nav-item>
               <b-nav-item @click="save_recipe"> <font-awesome-icon icon="save" /> Save Recipe</b-nav-item>
 
@@ -170,6 +170,12 @@ export default {
       this.alert_message = alert_data.data;
       this.show_alert();
     });
+  },
+  computed: {
+    recipe_count: function(){
+      var list_length = this.$store.getters["task/commands"].length;
+      return list_length;
+    }
   },
   methods: {
     logout() {
@@ -259,7 +265,10 @@ export default {
   }
 }
  
-
+.recipecount {
+  float: right;
+  font-size: inherit;
+}
 #row-content {
   background-color: #f4f2f2;
   min-height: 100vh;
