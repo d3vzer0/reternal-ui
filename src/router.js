@@ -15,6 +15,7 @@ import Startup from "./views/Startup.vue";
 import Terminal from "./views/Terminal.vue";
 import Mapping from "./views/Mapping.vue";
 import AgentTasks from "./views/AgentTasks";
+import Recipes from "./views/Recipes.vue";
 
 Vue.use(Router);
 
@@ -82,6 +83,11 @@ const router = new Router({
           path: "/tasks/:agent_id",
           name: "AgentTasks",
           component: AgentTasks
+        },
+        {
+          path: "/recipes",
+          name: "Recipes",
+          component: Recipes
         }
       ]
     },

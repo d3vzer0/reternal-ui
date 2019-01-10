@@ -69,7 +69,7 @@
           </div>
           <b-nav vertical id="sidebar-nav" class="sidebar-nav-links">
             <ul class="nav flex-column">
-              <b-nav-item class="nav-item" to="profile">
+              <b-nav-item class="nav-item" to="recipes">
                 <span class="nav-item-icon"><font-awesome-icon icon="tasks" /></span>
                 <span class="nav-item-title">Saved Recipes</span>
               </b-nav-item>
