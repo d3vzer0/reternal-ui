@@ -55,8 +55,8 @@ export default {
         return;
       }
       localStorage.access_token = response.data.access_token;
-      (localStorage.refresh_token = response.data.refresh_token),
-        this.$store.commit("auth/update_session", response.data.access_token);
+      localStorage.refresh_token = response.data.refresh_token;
+      this.$store.commit("auth/update_session", response.data.access_token);
       this.$router.replace(this.$route.query.redirect || "/home");
     },
     login_failed(response) {
