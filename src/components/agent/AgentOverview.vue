@@ -68,17 +68,3 @@ export default {
   }
 };
 </script>
-
-<style lang="sass">
-.agent-card
-  width: 100%
- 
-.card
-  margin-bottom: 20px
-  &.active
-    border-color: #9e1d1d
-    border-width: 2px
-  .btn
-    width: 100%
-
-</style>

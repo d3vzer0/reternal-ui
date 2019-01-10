@@ -51,7 +51,7 @@ export default {
     },
     login_success(response) {
       if (!response.data.access_token) {
-        this.delete_tokens();
+        this.login_failed();
         return;
       }
       localStorage.access_token = response.data.access_token;
@@ -59,7 +59,7 @@ export default {
         this.$store.commit("auth/update_session", response.data.access_token);
       this.$router.replace(this.$route.query.redirect || "/home");
     },
-    delete_tokens(response) {
+    login_failed(response) {
       this.error = "Unable to login";
       this.$store.commit("auth/set_refresh", false);
       delete localStorage.access_token;
@@ -69,24 +69,28 @@ export default {
 };
 </script>
 
-<style lang="sass">
-@import url('https://fonts.googleapis.com/css?family=Open+Sans')
-@import "@/assets/style.sass"
+<style lang="scss">
+@import url('https://fonts.googleapis.com/css?family=Open+Sans');
+@import "@/assets/style.scss";
 
-body
-  background-color: #eeeeee
+body {
+  background-color: #eeeeee;
+}
 
-#header-image
-  width: 100%
+#header-image {
+  width: 100%;
+}
 
-#card-login
-  #sidebar-header-image
-    width: 80%
+#card-login {
+  #sidebar-header-image {
+    width: 80%;
+  }
+}
   
-#app
-  font-family: 'Open Sans', sans-serif
-  -webkit-font-smoothing: antialiased
-  -moz-osx-font-smoothing: grayscale
-
+#app {
+  font-family: 'Open Sans', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
 
 </style>

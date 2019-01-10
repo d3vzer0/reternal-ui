@@ -93,23 +93,30 @@ export default {
 };
 </script>
 
-<style lang="sass">
+<style lang="scss" scoped>
 
-.startuppanel
-  .list-group-item
-    border-radius: 0px
-    &.active
-      border-color: white
-      background-color: #9d3a3a
-      .badge
-        background-color: white
-        color: black
-  .card
-    padding: 0px
-  .card-body
-    padding: 0px
-  .badge
-    background-color: #9d3a3a
+.startuppanel {
+  .list-group-item {
+    border-radius: 0px;
+    &.active {
+      border-color: white;
+      background-color: #9d3a3a;
+      .badge {
+        background-color: white;
+        color: black;
+      }
+    }
+  }
+  .card {
+    padding: 0px;
+  }
+  .card-body {
+    padding: 0px;
+  }
+  .badge {
+    background-color: #9d3a3a;
+  }
+}
 
 
 </style>

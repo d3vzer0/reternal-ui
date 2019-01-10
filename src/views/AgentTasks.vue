@@ -124,10 +124,12 @@ export default {
 };
 </script>
 
-<style lang="sass">
-.table
-  background-color: white
+<style lang="scss">
+.table {
+  background-color: white;
+}
 
-.details-header
-  font-weight: 600
+.details-header {
+  font-weight: 600;
+}
 </style>

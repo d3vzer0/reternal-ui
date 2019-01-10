@@ -2,12 +2,15 @@
   <b-card-group class="executionpanel">
     <b-card header="Phase" class="col-2">
       <b-list-group flush>
-        <b-list-group-item  v-for="mapping_phase in mapping_phases" @click="show_phase_techniques(mapping_phase)">{{mapping_phase._id.kill_chain_phase}}</b-list-group-item>
+        <b-list-group-item  v-for="mapping_phase in mapping_phases" 
+          @click="show_phase_techniques(mapping_phase)" 
+          :key="mapping_phase._id.kill_chain_phase"
+          :class="{'selectedtechnique': (mapping_phase._id.kill_chain_phase == selected_phase)}">{{mapping_phase._id.kill_chain_phase}}</b-list-group-item>
       </b-list-group>
     </b-card>
     <b-card header="Techniques" class="col-3">
       <b-list-group flush>
-        <b-list-group-item  v-for="mapping_technique in mapping_techniques" @click="get_technique_commands(mapping_technique._id['$oid'])">
+        <b-list-group-item  v-for="mapping_technique in mapping_techniques" :key="mapping_technique._id['$oid']" @click="get_technique_commands(mapping_technique._id['$oid'])">
           {{mapping_technique.name}}
         </b-list-group-item>
       </b-list-group>
@@ -66,7 +69,9 @@ export default {
       search_phase: "",
       search_platform: "Windows",
       mapping_id: "",
-      mapping_name: ""
+      mapping_name: "",
+      selected_phase: "",
+      selected_technique: "",
     };
   },
   created() {
@@ -117,6 +122,7 @@ export default {
     show_phase_techniques(mapping) {
       this.show_commands = false;
       this.show_input = false;
+      this.selected_phase = mapping._id.kill_chain_phase;
       this.mapping_techniques = mapping.techniques;
     },
     show_command_details(command) {
@@ -144,11 +150,18 @@ export default {
 };
 </script>
 
-<style lang="sass" scoped>
-.addrecipecol
-  background-color: #9d3a3a
-  text-transform: uppercase
-  a
-    color: white
-    text-decoration: none 
+<style lang="scss" scoped>
+.addrecipecol {
+  background-color: #9d3a3a;
+  text-transform: uppercase;
+  a {
+    color: white;
+    text-decoration: none;
+  }
+} 
+
+.selectedtechnique {
+  
+}
+  
 </style>

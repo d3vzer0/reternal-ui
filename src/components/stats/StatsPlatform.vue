@@ -47,8 +47,9 @@ export default {
 };
 </script>
 
-<style lang="sass">
-.platformcard
-  height: 230px
+<style lang="scss" scoped>
+.platformcard {
+  height: 230px;
+}
   
 </style>

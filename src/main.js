@@ -16,23 +16,20 @@ import {
   faEye,
   faBullseye,
   faUser,
-  faBookmark
-} from "@fortawesome/free-solid-svg-icons";
-import {
+  faBookmark,
   faHome,
   faDesktop,
   faMap,
   faCalendar,
   faDownload,
   faInfo,
-  faLink
-} from "@fortawesome/free-solid-svg-icons";
-import {
+  faLink,
   faArchive,
   faPlayCircle,
   faTasks,
   faArrowAltCircleDown,
-  faArrowRight
+  faArrowRight,
+  faSave
 } from "@fortawesome/free-solid-svg-icons";
 
 library.add(
@@ -53,7 +50,8 @@ library.add(
   faTasks,
   faArrowAltCircleDown,
   faArrowRight,
-  faLink
+  faLink,
+  faSave
 );
 
 Vue.component("font-awesome-icon", FontAwesomeIcon);

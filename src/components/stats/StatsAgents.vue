@@ -31,10 +31,12 @@ export default {
 };
 </script>
 
-<style lang="sass">
-.agentcard
-  height: 230px
-  font-size: 100px
-  p
-    text-align: center
+<style lang="scss" scoped>
+.agentcard {
+  height: 230px;
+  font-size: 100px;
+  p {
+    text-align: center;
+  }
+}
 </style>

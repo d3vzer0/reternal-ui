@@ -5,6 +5,7 @@
     </b-alert>
     <StartupModal></StartupModal>
     <RecipeModal></RecipeModal>
+    <RecipeSave></RecipeSave>
     <b-row id="row-main">
       <b-col xl="2" lg="2" md="2" sm="2" cols="1" id="col-sidebar">
         <div id="sidebar-header">
@@ -69,6 +70,10 @@
           <b-nav vertical id="sidebar-nav" class="sidebar-nav-links">
             <ul class="nav flex-column">
               <b-nav-item class="nav-item" to="profile">
+                <span class="nav-item-icon"><font-awesome-icon icon="tasks" /></span>
+                <span class="nav-item-title">Saved Recipes</span>
+              </b-nav-item>
+              <b-nav-item class="nav-item" to="profile">
                 <span class="nav-item-icon"><font-awesome-icon icon="user" /></span>
                 <span class="nav-item-title">Profile</span>
               </b-nav-item>
@@ -85,6 +90,7 @@
               <b-nav-item to="terminal"> <font-awesome-icon icon="terminal" /> Terminal</b-nav-item>
               <b-nav-item @click="run_recipe"> <font-awesome-icon icon="play-circle" /> Run Recipe</b-nav-item>
               <b-nav-item @click="boot_recipe"> <font-awesome-icon icon="arrow-alt-circle-down" /> Startup Recipe</b-nav-item>
+              <b-nav-item @click="save_recipe"> <font-awesome-icon icon="save" /> Save Recipe</b-nav-item>
 
               <b-nav-item-dropdown right>
                 <template slot="button-content">
@@ -140,6 +146,7 @@
 <script>
 import StartupModal from "@/components/startup/StartupModal";
 import RecipeModal from "@/components/recipe/RecipeModal";
+import RecipeSave from "@/components/recipe/RecipeSave";
 import EventBus from "@/eventbus";
 
 export default {
@@ -175,6 +182,9 @@ export default {
     boot_recipe() {
       EventBus.$emit("confirmboot");
     },
+    save_recipe() {
+      EventBus.$emit("confirmsave");
+    },
     countDownChanged(dismiss_countDown) {
       this.dismiss_countDown = dismiss_countDown;
     },
@@ -187,102 +197,114 @@ export default {
   },
   components: {
     StartupModal,
-    RecipeModal
+    RecipeModal,
+    RecipeSave
   }
 };
 </script>
 
-<style lang="sass">
-@import url('https://fonts.googleapis.com/css?family=Open+Sans')
-@import "@/assets/style.sass"
+<style lang="scss">
+@import url('https://fonts.googleapis.com/css?family=Open+Sans');
+@import "@/assets/style.scss";
 
-#app
+#app {
   font-family: 'Muli', "Helvetica", Arial, sans-serif;
-  -webkit-font-smoothing: antialiased
-  -moz-osx-font-smoothing: grayscale
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
 
+#row-main {
+  min-height: 100vh;
+}
 
-#row-main
-  min-height: 100vh
+#col-sidebar {
+  background-color: white;
+  border-right-style: solid;
+  border-right-width: 1px;
+  border-right-color: #bbbbbb;
 
-#col-sidebar
-  background-color: white
-  border-right-style: solid
-  border-right-width: 1px
-  border-right-color: #bbbbbb
+  #sidebar-header-image {
+    width: 100%;
+  }
 
-  #sidebar-header-image
-    width: 100%
-
-  #sidebar-content
-    color: #8e8e8e
-    text-transform: uppercase
-    .nav-category
-      margin-left: 20px
-      font-size: 16px
-      font-weight: 200
-      letter-spacing: 2px
-      margin-top: 20px
+  #sidebar-content {
+    color: #8e8e8e;
+    text-transform: uppercase;
+    .nav-category {
+      margin-left: 20px;
+      font-size: 16px;
+      font-weight: 200;
+      letter-spacing: 2px;
+      margin-top: 20px;
       margin-bottom: 10px
+   }
 
-    .active
-      color: #9e1d1d
-    .nav-item-title
-      margin-left: 10px
-    a
-      color: #8e8e8e
-      font-size: 16px
-      font-weight: 400
-      letter-spacing: 1px
-      &:hover
-        .nav-item-icon
-          color: #9e1d1d
+    .active {
+      color: #9e1d1d;
+    }
+    .nav-item-title {
+      margin-left: 10px;
+    }
+    a {
+      color: #8e8e8e;
+      font-size: 16px;
+      font-weight: 400;
+      letter-spacing: 1px;
+      &:hover {
+        .nav-item-icon {
+          color: #9e1d1d;
+        }
+      }
+    }
+  }
+}
  
 
-#row-content
-  background-color: #f4f2f2
-  min-height: 100vh
+#row-content {
+  background-color: #f4f2f2;
+  min-height: 100vh;
+}
 
-#row-navbar
-  border-bottom: 1px
-  border-bottom-color: #bbbbbb
-  border-bottom-style: solid
-  background-color: #eeeeee
-  color: #e8e5e1
+#row-navbar {
+  border-bottom: 1px;
+  border-bottom-color: #bbbbbb;
+  border-bottom-style: solid;
+  background-color: #eeeeee;
+  color: #e8e5e1;
+}
 
-.navbar-nav
-  .nav-item
-    text-transform: uppercase
-    font-size: 12px
-    font-weight: 400
-    letter-spacing: 2px
+.navbar-nav {
+  .nav-item {
+    text-transform: uppercase;
+    font-size: 12px;
+    font-weight: 400;
+    letter-spacing: 2px;
+  }
+}
 
-.col-main
-  width: 100%
+.col-main {
+  width: 100%;
+}
 
-.footer
-  height: 50px
+.footer {
+  height: 50px;
+}
 
-#techniquemodal
-  font-size: 14px
+#techniquemodal {
+  font-size: 14px;
+}
 
-pre 
-  font-family: inherit
-  font-size: inherit
-  font-weight: inherit
-  -webkit-font-smoothing: antialiased
-  -moz-osx-font-smoothing: grayscale
-  white-space: pre-wrap
-  white-space: -moz-pre-wrap
-  white-space: -pre-wrap
-  white-space: -o-pre-wrap
-  word-wrap: break-word
-
-// .fade-enter-active, .fade-leave-active 
-//   transition: opacity .5s
-
-// .fade-enter, .fade-leave-to 
-//   opacity: 0;
-
+pre { 
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: inherit;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  white-space: pre-wrap;
+  white-space: -moz-pre-wrap;
+  white-space: -pre-wrap;
+  white-space: -o-pre-wrap;
+  word-wrap: break-word;
+}
 
 </style>

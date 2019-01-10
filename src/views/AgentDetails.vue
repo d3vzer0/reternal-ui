@@ -114,7 +114,10 @@ export default {
 };
 </script>
 
-<style lang="sass">
-.table
-  background-color: white
+<style lang="scss" scoped>
+
+.table {
+  background-color: white;
+}
+
 </style>

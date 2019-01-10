@@ -70,16 +70,20 @@ export default {
 };
 </script>
 
-<style lang="sass">
-.agent-card
-  width: 100%
+<style lang="scss">
+.agent-card {
+  width: 100%;
 
-  &.active
-    border-color: #9e1d1d
-    border-width: 2px
+  &.active {
+    border-color: #9e1d1d;
+    border-width: 2px;
+  }
+}
 
-.agent-tiles
-  .btn
-    width: 100%
+.agent-tiles {
+  .btn {
+    width: 100%;
+  }
+}
 
 </style>

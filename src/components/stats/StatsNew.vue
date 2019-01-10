@@ -45,24 +45,25 @@ export default {
 };
 </script>
 
-<style lang="sass">
+<style lang="scss" scoped>
 
-.newcard
-  height: 230px
-  font-size: 80px
-  .newcount
-    margin-right: 40%
-    color: green
-    float: right
+.newcard {
+  height: 230px;
+  font-size: 80px;
+  .newcount {
+    margin-right: 40%;
+    color: green;
+    float: right;
+  }
+  .oldcount {
+    float: left;
+    color: red;
+    margin-left: 40%;
+  }
 
-  .oldcount
-    float: left
-    color: red
-    margin-left: 40%
-
-  .newarrow
+  .newarrow {
     text-align: center
-
-    
+  }
+}
 
 </style>

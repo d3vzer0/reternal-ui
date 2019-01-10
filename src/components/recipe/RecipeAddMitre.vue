@@ -6,8 +6,9 @@
   </b-card>
 </template>
 
-<style lang="sass" scoped>
-a
-  color: #9d3a3a
-  text-decoration: none
+<style lang="scss" scoped>
+a {
+  color: #9d3a3a;
+  text-decoration: none;
+}
 </style>

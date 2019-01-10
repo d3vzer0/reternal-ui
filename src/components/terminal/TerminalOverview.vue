@@ -174,59 +174,69 @@ export default {
 };
 </script>
 
-<style lang="sass">
+<style lang="scss">
 
-.terminal
-  background-color: #212d37
-  height: 100%
-  margin-left: -15px
-  margin-right: -15px
-  font-family: monospace
-  &:focus
-    outline: none
+.terminal {
+  background-color: #212d37;
+  height: 100%;
+  margin-left: -15px;
+  margin-right: -15px;
+  font-family: monospace;
+  &:focus {
+    outline: none;
+  }
+}
 
-#terminalui
-  padding-left: 15px
-  padding-right: 15px
-  color: #d1d1d1
-  overflow-y: auto
-  max-height: 900px
+#terminalui {
+  padding-left: 15px;
+  padding-right: 15px;
+  color: #d1d1d1;
+  overflow-y: auto;
+  max-height: 900px;
+}
 
-.commandsuggestion
-  margin-right: 10px
-.terminalcmd
-  height: 1.55rem
-  background-color: #212d37
-  border: 0px
-  color: #d1d1d1
-  font-size: inherit
-  padding: 0px
-  line-height: 1
-  width: 80%
+.commandsuggestion {
+  margin-right: 10px;
+}
 
-  &:focus
-    background-color: inherit
-    color: #d1d1d1
-    border: 0px
-    border-color: none
-    outline: none
-    -webkit-box-shadow: none
-    box-shadow: none
+.terminalcmd {
+  height: 1.55rem;
+  background-color: #212d37;
+  border: 0px;
+  color: #d1d1d1;
+  font-size: inherit;
+  padding: 0px;
+  line-height: 1;
+  width: 80%;
 
-.terminalform 
-  display: flex
+  &:focus {
+    background-color: inherit;
+    color: #d1d1d1;
+    border: 0px;
+    border-color: none;
+    outline: none;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+  }
+}
+
+.terminalform {
+  display: flex;
   flex-direction: row
+}
 
-.terminalprepend
-  font-weight:
-  margin: 0px
-  color: #d1d1d1
+.terminalprepend{
+  margin: 0px;
+  color: #d1d1d1;
+}
 
-.terminalpath
-  margin-right: 10px
+.terminalpath {
+  margin-right: 10px;
+}
 
-.terminalprot
-  color: #b26e63
-  font-weight: 600
+.terminalprot {
+  color: #b26e63;
+  font-weight: 600;
+}
 
 </style>
