@@ -48,11 +48,8 @@ export default {
           commands: all_commands,
           name: this.startup_name
         })
-        .then(response => this.boot_success(response))
+        .then(this.$refs.confirmstartup.hide())
         .catch(error => EventBus.$emit("showalert", error.response));
-    },
-    boot_success(response) {
-      EventBus.$emit("showalert", response);
     },
     filter_commands(commands) {
       var command_list = [];

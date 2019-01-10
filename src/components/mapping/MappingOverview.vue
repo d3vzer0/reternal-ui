@@ -1,23 +1,28 @@
 <template>
-  <b-card-group class="executionpanel">
+  <b-card-group class="mappingpanel">
     <b-card header="Phase" class="col-2">
       <b-list-group flush>
         <b-list-group-item  v-for="mapping_phase in mapping_phases" 
           @click="show_phase_techniques(mapping_phase)" 
           :key="mapping_phase._id.kill_chain_phase"
-          :class="{'selectedtechnique': (mapping_phase._id.kill_chain_phase == selected_phase)}">{{mapping_phase._id.kill_chain_phase}}</b-list-group-item>
+          :class="{'selectedphase': (mapping_phase._id.kill_chain_phase == selected_phase)}">{{mapping_phase._id.kill_chain_phase}}</b-list-group-item>
       </b-list-group>
     </b-card>
     <b-card header="Techniques" class="col-3">
       <b-list-group flush>
-        <b-list-group-item  v-for="mapping_technique in mapping_techniques" :key="mapping_technique._id['$oid']" @click="get_technique_commands(mapping_technique._id['$oid'])">
+        <b-list-group-item  v-for="mapping_technique in mapping_techniques" 
+          :key="mapping_technique._id['$oid']" 
+          :class="{'selectedtechnique': (mapping_technique._id['$oid'] == selected_technique)}" 
+          @click="get_technique_commands(mapping_technique._id['$oid'])">
           {{mapping_technique.name}}
         </b-list-group-item>
       </b-list-group>
     </b-card>
      <b-card header="Commands" class="col-2">
       <b-list-group flush v-if="show_commands">
-        <b-list-group-item  v-for="mapping_command in mapping_commands" @click="show_command_details(mapping_command)">{{mapping_command.name}}</b-list-group-item>
+        <b-list-group-item  v-for="(mapping_command, index) in mapping_commands" 
+        :class="{'selectedcommand': (index == selected_command)}"
+        @click="show_command_details(mapping_command), selected_command = index" :key="index">{{mapping_command.name}}</b-list-group-item>
         <b-list-group-item class="addrecipecol"><b-link to="mapping" @click="add_to_recipe">add commands to recipe</b-link></b-list-group-item>
 
       </b-list-group>
@@ -72,6 +77,7 @@ export default {
       mapping_name: "",
       selected_phase: "",
       selected_technique: "",
+      selected_command: false,
     };
   },
   created() {
@@ -96,6 +102,8 @@ export default {
         .catch(error => EventBus.$emit("showalert", error.response));
     }, 200),
     get_technique_commands(mapping_id) {
+      this.selected_technique = mapping_id;
+      this.selected_command = false;
       var map_url = `mitre/mapping/${mapping_id}`;
       this.$http
         .get(map_url)
@@ -161,7 +169,40 @@ export default {
 } 
 
 .selectedtechnique {
-  
+  background-color: #9d3a3a;
+  color: white;
+}
+
+.selectedphase {
+  background-color: #9d3a3a;
+  color: white;
+}
+
+.selectedcommand {
+  background-color: #9d3a3a;
+  color: white;
 }
   
+.mappingpanel {
+  .list-group-item {
+    border-radius: 0px;
+    &.active {
+      border-color: white;
+      background-color: #9d3a3a;
+      .badge {
+        background-color: white;
+        color: black;
+      }
+    }
+  }
+  .card {
+    padding: 0px;
+  }
+  .card-body {
+    padding: 0px;
+  }
+  .badge {
+    background-color: #9d3a3a;
+  }
+}
 </style>

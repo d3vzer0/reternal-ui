@@ -2,7 +2,9 @@
   <b-card-group class="executionpanel">
     <b-card header="Command" class="col-4">
       <b-list-group flush v-if="show_commands_card">
-        <b-list-group-item v-for="command in task_commands" @click="show_command_details(command)">{{command.name}}</b-list-group-item>
+        <b-list-group-item v-for="command in task_commands" 
+        :key="command.rand" 
+        :class="{'selectedcommand': (command.rand == selected_command)}"  @click="show_command_details(command)">{{command.name}}</b-list-group-item>
       </b-list-group>
     </b-card>
     <b-card header="Input">
@@ -43,15 +45,17 @@ export default {
       show_details_panel: false,
       show_commands_card: true,
       show_techniques_card: false,
+      selected_command: "",
       selected_command_type: "",
       selected_command_input: "",
       selected_command_sleep: 0,
       selected_command_rand: 0,
       task_commands: this.$store.getters["task/commands"]
-    };
+    }
   },
   methods: {
     show_command_details(command) {
+      this.selected_command = command.rand;
       this.selected_command_input = command.input;
       this.selected_command_sleep = command.sleep;
       this.selected_command_rand = command.rand;
@@ -69,6 +73,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+
+.selectedcommand {
+  background-color: #9d3a3a;
+  color: white;
+}
 
 .executionpanel {
   .list-group-item {

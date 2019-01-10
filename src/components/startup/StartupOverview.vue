@@ -2,9 +2,10 @@
   <b-card-group class="startuppanel">
     <b-card header="Task" class="col-3">
       <b-list-group flush>
-        <b-list-group-item v-for="startup in startup_list">
+        <b-list-group-item v-for="startup in startup_list" 
+          :class="{'selectedstartup': (startup._id['$oid'] == selected_startup)}" :key="startup._id['$oid']">
           <b-row>
-            <b-col cols="8" @click="command_list = startup.commands, show_commands = true, show_input = false">
+            <b-col cols="8" @click="command_list = startup.commands, selected_startup = startup._id['$oid'], show_commands = true, show_input = false">
               {{startup.name}} 
             </b-col>
             <b-col>
@@ -16,7 +17,9 @@
     </b-card>
     <b-card header="Command" class="col-3">
       <b-list-group flush v-if="show_commands">
-        <b-list-group-item v-for="command in command_list" @click="command_data = command, show_input = true">
+        <b-list-group-item v-for="(command, index) in command_list" 
+          :key="index" :class="{'selectedcommand': (index == selected_command)}"
+          @click="command_data = command, show_input = true, selected_command = index">
           {{command.name}}
         </b-list-group-item>
       </b-list-group>
@@ -26,7 +29,7 @@
         <b-list-group-item>
           <b-row>
             <b-col><b>Type</b></b-col>
-            <b-col>{{this.command_data.type}}</b-col>
+            <b-col>{{this.command_data.type}}{{selected_command}}</b-col>
           </b-row>  
         </b-list-group-item>
          <b-list-group-item>
@@ -53,6 +56,8 @@ export default {
   name: "StartupOverview",
   data() {
     return {
+      selected_startup: "",
+      selected_command: "",
       startup_list: [],
       command_list: [],
       command_data: {},
@@ -117,6 +122,21 @@ export default {
     background-color: #9d3a3a;
   }
 }
+
+.selectedstartup {
+  background-color: #9d3a3a;
+  color: white;
+  .badge {
+    background-color: white;
+    color: #9d3a3a;
+  }
+}
+
+.selectedcommand {
+  background-color: #9d3a3a;
+  color: white;
+}
+
 
 
 </style>

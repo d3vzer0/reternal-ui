@@ -1,9 +1,12 @@
 <template>
 
-  <b-card-group class="executionpanel">
+  <b-card-group class="macropanel">
     <b-card header="Macros" class="col-4">
       <b-list-group flush>
-        <b-list-group-item v-for="macro in macro_list" @click="show_macro_details(macro)">{{macro.name}}</b-list-group-item>
+        <b-list-group-item v-for="macro in macro_list"
+        :key="macro._id['$oid']" 
+        :class="{'selectedmacro': (macro._id['$oid'] == selected_macro)}"
+        @click="show_macro_details(macro), selected_macro = macro._id['$oid']">{{macro.name}}</b-list-group-item>
       </b-list-group>
     </b-card>
     <b-card header="Input">
@@ -43,6 +46,7 @@ export default {
       macro_id: "",
       macro_input: "",
       macro_command: "",
+      selected_macro: "",
       show_input: false
     };
   },
@@ -57,14 +61,14 @@ export default {
       this.$http
         .get("macros")
         .then(response => this.parse_macros(response))
-        .catch(response => this.generic_failed(response));
+        .catch(error => EventBus.$emit("showalert", error.response));
     },
     delete_macro() {
       var delete_url = `macro/${this.macro_id}`;
       this.$http
         .delete(delete_url)
-        .then(response => this.parse_macros(response))
-        .catch(response => this.generic_failed(response));
+        .then(this.get_macros())
+        .catch(error => EventBus.$emit("showalert", error.response));
     },
     parse_macros(response) {
       this.show_input = false;
@@ -79,3 +83,36 @@ export default {
   }
 };
 </script>
+
+<style lang="scss" scoped>
+
+.selectedmacro {
+  background-color: #9d3a3a;
+  color: white;
+}
+
+.macropanel {
+  .list-group-item {
+    border-radius: 0px;
+    &.active {
+      border-color: white;
+      background-color: #9d3a3a;
+      .badge {
+        background-color: white;
+        color: black;
+      }
+    }
+  }
+  .card {
+    padding: 0px;
+  }
+  .card-body {
+    padding: 0px;
+  }
+  .badge {
+    background-color: #9d3a3a;
+  }
+}
+
+</style>
+
