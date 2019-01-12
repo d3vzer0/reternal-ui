@@ -36,7 +36,6 @@ export default {
       var selected_commands = this.filter_commands(
         this.$store.getters["task/commands"]
       );
-      var selected_techniques = this.$store.getters["task/techniques"];
       var selected_agents = this.$store.getters["selection/get_agents"];
       for (var agent_id of selected_agents) {
         this.$http
@@ -55,7 +54,8 @@ export default {
       var command_list = [];
       commands.forEach(function(command) {
         var details = {
-          type: "manual",
+          type: command.type,
+          reference: command.reference_id,
           input: command.input,
           name: command.name,
           sleep: command.sleep

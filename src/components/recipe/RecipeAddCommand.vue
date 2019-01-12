@@ -41,7 +41,7 @@ export default {
         input: this.command_input,
         sleep: this.command_sleep,
         rand: random_id,
-        type: "manual"
+        type: "Manual"
       };
       this.$store.commit("task/add_command", command_options);
     }

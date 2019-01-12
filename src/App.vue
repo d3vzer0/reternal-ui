@@ -10,11 +10,13 @@ export default {
   created() {
     this.$http.interceptors.response.use(undefined, error => {
       var status = error.response.data.sub_status;
-      if (status === 42 && !this.$store.getters["auth/get_refresh"]) {
+      if (status === 42 && !this.$store.getters["auth/is_refresh"]) {
         this.$store.commit("auth/set_refresh", true);
         const retry_request = new Promise(resolve => {
+          console.log(this.$store.getters["auth/is_refresh"])
           this.refresh_token()
             .then(response => {
+              console.log(1)
               this.save_token(response);
               var new_bearer = "Bearer " + localStorage.access_token;
               error.config.headers["Authorization"] = new_bearer;
@@ -23,7 +25,9 @@ export default {
             .catch(response => this.delete_tokens);
         });
         return retry_request;
-      }
+      } else if (status === 42 && this.$store.getters["auth/is_refresh"]) {
+        this.delete_tokens();
+      } 
     });
   },
   methods: {

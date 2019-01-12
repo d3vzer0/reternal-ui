@@ -13,8 +13,8 @@
         <b-list-group-item  v-for="mapping_technique in mapping_techniques" 
           :key="mapping_technique._id['$oid']" 
           :class="{'selectedtechnique': (mapping_technique._id['$oid'] == selected_technique)}" 
-          @click="get_technique_commands(mapping_technique._id['$oid'])">
-          {{mapping_technique.name}}
+          @click="get_technique_commands(mapping_technique._id['$oid']), reference_name = mapping_technique.name, reference_id = mapping_technique._id['$oid'], selected_technique_name = mapping_technique.technique_name">
+          {{mapping_technique.technique_name}}
         </b-list-group-item>
       </b-list-group>
     </b-card>
@@ -77,6 +77,9 @@ export default {
       mapping_name: "",
       selected_phase: "",
       selected_technique: "",
+      reference_name: "",
+      reference_id: "",
+      selected_technique_name: "",
       selected_command: false,
     };
   },
@@ -142,10 +145,15 @@ export default {
     },
     add_to_recipe() {
       this.mapping_commands.forEach(command => {
+        console.log(this.reference_id)
         var random_array = new Uint32Array(5);
         var random_id = window.crypto.getRandomValues(random_array)[2];
         var command_options = {
           name: command.name,
+          reference_name: this.reference_name,
+          reference_id: this.reference_id,
+          technique_name: this.selected_technique_name,
+          kill_chain_phase: this.selected_phase,
           input: command.input,
           sleep: command.sleep,
           rand: random_id,
