@@ -47,7 +47,8 @@ export default {
       var command_list = [];
       commands.forEach(function(command) {
         var details = {
-          type: "manual",
+          type: command.type,
+          reference: command.reference_id,
           input: command.input,
           name: command.name,
           sleep: command.sleep
