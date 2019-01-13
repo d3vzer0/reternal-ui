@@ -7,6 +7,9 @@
           {{ row.detailsShowing ? 'Hide' : 'Show'}} Details
           </b-button>
         </template>
+        <template slot="show_text" slot-scope="row">
+           <b-button size="sm" @click.stop="display_text(row.item)" variant="primary" class="mr-2">Show</b-button>
+        </template>
         <template slot="row-details" slot-scope="row">
           <b-card>
             <b-row class="">
@@ -43,7 +46,7 @@ import EventBus from "@/eventbus";
 
 export default {
   name: "GenericTable",
-  props: ["filter", "output", "expectedfields", "limit", "target", "countloc", "dataloc", "details", "tabletype"],
+  props: ["filter", "output", "expectedfields", "limit", "target", "countloc", "dataloc", "details", "tabletype", "queryparams"],
   data() {
     return {
       selected_agent: this.$route.params.agent_id,
@@ -57,13 +60,11 @@ export default {
     get_results(page){
       const current_page = page ? page : this.current_page;
       var skip_results = (current_page * this.limit) - this.limit;
-      var query_parameters = {
-        beacon_id: this.$route.params.agent_id,
-        skip: skip_results,
-        limit: this.limit
-      }
+      this.queryparams.beacon_id = this.$route.params.agent_id;
+      this.queryparams.skip = skip_results;
+      this.queryparams.limit = this.limit;
       this.$http
-        .get(this.target, {params:query_parameters})
+        .get(this.target, {params:this.queryparams})
         .then(response => this.parse_results(response))
     },
     parse_results(response){
@@ -73,18 +74,26 @@ export default {
       items.forEach(element => {
         var field_mapping = {}
         for (const [key, value] of Object.entries(this.expectedfields)) {
+          var mapped_value = _.get(element, value)
           if (key == "timestamp"){
-            _.set(element, key, this.to_unix(_.get(element, value)))
+            mapped_value = this.to_unix(_.get(element, value))
           }
           if (key == "command_count" || key == "result_count"){
-            _.set(element, key, _.get(element, value).length)
-          } 
-          field_mapping[key] = _.get(element, key);
+            mapped_value = _.get(element, value).length
+          }
+          field_mapping[key] = mapped_value;
         }
         this.search_results.push(field_mapping)
       })
     },
+    display_text(row){
+      var file_id = row.taskid
+      var file_url = `result/${file_id}`
+      this.$http.get(file_url, {responseType: 'text/plain'}).then( response => {
+        EventBus.$emit('showtasktext', response.data)
+      });
 
+    },
     to_unix(unix_timestamp) {
       var from_miliseconds = unix_timestamp / 1000;
       var datetime = this.$moment

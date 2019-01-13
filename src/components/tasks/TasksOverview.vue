@@ -1,5 +1,5 @@
 <template>
-  <ServerSide :dataloc="data_loc" :countloc="count_loc" :limit="limit" :filter="search_filter" :output="output" :expectedfields="expected_fields" :target="target_url"></ServerSide>
+  <ServerSide :queryparams="query_params" :dataloc="data_loc" :countloc="count_loc" :limit="limit" :filter="search_filter" :output="output" :expectedfields="expected_fields" :target="target_url"></ServerSide>
 </template>
 
 
@@ -16,6 +16,7 @@ export default {
     return {
       search_filter: "",
       count_loc: "count",
+      query_params: {},
       data_loc: "data",
       target_url: "tasks",
       limit: 30,

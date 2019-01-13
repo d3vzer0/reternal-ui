@@ -6,6 +6,7 @@
     <StartupModal></StartupModal>
     <RecipeModal></RecipeModal>
     <RecipeSave></RecipeSave>
+    <TasksModal></TasksModal>
     <b-row id="row-main">
       <b-col xl="2" lg="2" md="2" sm="2" cols="1" id="col-sidebar">
         <div id="sidebar-header">
@@ -18,6 +19,10 @@
               <b-nav-item class="nav-item" to="/home">
                 <span class="nav-item-icon"><font-awesome-icon icon="home" /></span>
                 <span class="nav-item-title">Dashboard</span>
+              </b-nav-item>
+              <b-nav-item class="nav-item" to="/network">
+                <span class="nav-item-icon"><font-awesome-icon icon="globe-europe" /></span>
+                <span class="nav-item-title">Graph</span>
               </b-nav-item>
               <b-nav-item class="nav-item" to="/agents">
                 <span class="nav-item-icon"><font-awesome-icon icon="desktop" /></span>
@@ -147,6 +152,7 @@
 import StartupModal from "@/components/startup/StartupModal";
 import RecipeModal from "@/components/recipe/RecipeModal";
 import RecipeSave from "@/components/recipe/RecipeSave";
+import TasksModal from "@/components/tasks/TasksModal";
 import EventBus from "@/eventbus";
 
 export default {
@@ -204,7 +210,8 @@ export default {
   components: {
     StartupModal,
     RecipeModal,
-    RecipeSave
+    RecipeSave,
+    TasksModal
   }
 };
 </script>

@@ -35,7 +35,7 @@ export default {
         .then(response => this.parse_images(response))
     },
     parse_images(response) {
-      this.images_list = response.data;
+      this.images_list = response.data.data;
       this.get_screenshots();
     },
     get_screenshots(){

@@ -22,6 +22,7 @@
               <tasks-overview></tasks-overview>
             </b-tab>
             <b-tab no-body title="Text Output">
+              <TasksText></TasksText>
             </b-tab>
             <b-tab no-body title="Image Galery" class="taskgalery">
               <b-row class="top-10">
@@ -43,6 +44,7 @@
 
 import TasksOverview from "@/components/tasks/TasksOverview";
 import TasksGalery from "@/components/tasks/TasksGalery";
+import TasksText from "@/components/tasks/TasksText";
 
 export default {
   name: "AgentDetails",
@@ -53,7 +55,8 @@ export default {
   },
   components: {
     TasksOverview,
-    TasksGalery
+    TasksGalery,
+    TasksText
   },
 };
 </script>
