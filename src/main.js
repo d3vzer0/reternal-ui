@@ -5,6 +5,8 @@ import Vue from "vue";
 import App from "./App.vue";
 import axios from "./api";
 import router from "./router";
+import VueSocketio from 'vue-socket.io-extended';
+import io from 'socket.io-client';
 
 import { store } from "./store";
 import { library } from "@fortawesome/fontawesome-svg-core";
@@ -29,10 +31,12 @@ import {
   faTasks,
   faArrowAltCircleDown,
   faArrowRight,
-  faSave
+  faSave,
+  faGlobeEurope,
 } from "@fortawesome/free-solid-svg-icons";
 
 library.add(
+  faGlobeEurope,
   faTerminal,
   faCog,
   faEye,
@@ -54,8 +58,14 @@ library.add(
   faSave
 );
 
+const socket = io('http://localhost:5000', {
+  autoConnect: false
+});
+
+Vue.use(VueSocketio, socket);
 Vue.component("font-awesome-icon", FontAwesomeIcon);
 Vue.config.productionTip = false;
+
 
 new Vue({
   store,

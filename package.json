@@ -20,6 +20,7 @@
     "node-sass": "^4.11.0",
     "npm-font-open-sans": "^1.1.0",
     "sass-loader": "^7.1.0",
+    "socket.io-client": "^2.2.0",
     "style-loader": "^0.23.1",
     "vue": "^2.5.17",
     "vue-axios": "^2.1.4",
@@ -29,6 +30,7 @@
     "vue-masonry-css": "^1.0.3",
     "vue-moment": "^4.0.0",
     "vue-router": "^3.0.1",
+    "vue-socket.io-extended": "^3.2.0",
     "vuex": "^3.0.1"
   },
   "devDependencies": {
