@@ -107,10 +107,8 @@
                   <b-dropdown-divider v-if="platform.agent"></b-dropdown-divider>
                 </div>
               </b-nav-item-dropdown>
-
             </b-navbar-nav>
 
-            
 
             <b-navbar-nav class="ml-auto">
               <b-nav-item-dropdown right>
@@ -121,9 +119,7 @@
                 <b-dropdown-item @click="logout" href="#">Signout</b-dropdown-item>
               </b-nav-item-dropdown>
             </b-navbar-nav>
-
           </b-navbar>
-
           </b-col>
         </b-row>
 
@@ -166,6 +162,19 @@ export default {
       dismiss_countDown: 0
     };
   },
+  created (){
+    this.$socket.open();
+    this.$options.sockets.connect = () => {
+      console.log("Authenticating socket")
+      this.$socket.emit("authenticate", {"access_token":localStorage.access_token})
+    }
+    this.$options.sockets.disconnect = () => {
+      console.log("Disconnected socket")
+    },
+    this.$options.sockets.emit_result = (result) => {
+      this.output_result(result);
+    }
+  },
   mounted() {
     EventBus.$on("showalert", alert_data => {
       var alert_variant = {
@@ -205,6 +214,14 @@ export default {
     },
     show_alert() {
       this.dismiss_countDown = this.dismiss_secs;
+    },
+    output_result(result) {
+      this.$store.commit('terminal/add_output', `Task ID: ${result.data.task_id}`);
+      this.$store.commit('terminal/add_output', `Magic: ${result.data.magic}`);
+      if ('data' in result.data){
+        this.$store.commit('terminal/add_output', result.data.data);
+      }
+      this.$store.commit('terminal/add_output', '-');
     }
   },
   components: {

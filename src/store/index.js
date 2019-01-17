@@ -5,6 +5,7 @@ import auth from "@/store/auth-store";
 import error from "@/store/error-store";
 import selection from "@/store/selection-store";
 import task from "@/store/task-store";
+import terminal from "@/store/terminal-store";
 
 Vue.use(Vuex);
 
@@ -14,7 +15,8 @@ export const store = new Vuex.Store({
     auth,
     error,
     selection,
-    task
+    task,
+    terminal
   }
 });
 

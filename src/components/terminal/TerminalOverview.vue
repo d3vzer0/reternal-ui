@@ -38,7 +38,6 @@ export default {
       terminal_proto: "@",
       terminal_host: "reternal",
       terminal_path: "~/# ",
-      terminal_output: [],
       selected_agent: "",
       suggestions: [],
       local_commands: {
@@ -78,6 +77,9 @@ export default {
         this.terminal_host
       }${this.terminal_path} ${this.terminal_input}`;
       return prompt;
+    },
+    terminal_output: function() {
+      return this.$store.getters['terminal/output']
     }
   },
   methods: {
@@ -98,6 +100,7 @@ export default {
         if (this.selected_agent.beacon_id) {
           this.$http
             .post("tasks", {
+              name: 'terminal',
               beacon_id: this.selected_agent.beacon_id,
               commands: all_commands
             })
@@ -121,7 +124,7 @@ export default {
           all_commands.push({
             name: command_name,
             input: command_input,
-            type: "terminal",
+            type: "Manual",
             sleep: 0
           });
         }
@@ -138,9 +141,9 @@ export default {
       });
     },
     output_terminal(output) {
-      this.terminal_output.push(this.terminal_prompt);
-      this.terminal_output.push(output);
-      this.terminal_output.push("-");
+      this.$store.commit('terminal/add_output', this.terminal_prompt);
+      this.$store.commit('terminal/add_output', output);
+      this.$store.commit('terminal/add_output', "-");
     },
     autocomplete() {
       if (this.suggestions.length > 0) {
