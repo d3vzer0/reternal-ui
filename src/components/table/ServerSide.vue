@@ -33,7 +33,7 @@
       </b-table>
       <b-row>
         <b-col md="8" offset-md="1">
-          <b-pagination :total-rows="search_count" :per-page="limit" v-model="current_page" @click.native="get_results"/>
+          <b-pagination :total-rows="search_count" :per-page="limit" v-model="current_page"/>
         </b-col>
       </b-row>
     </b-col>
@@ -56,10 +56,28 @@ export default {
       search_results: []
     };
   },
+  watch: {
+    current_page: function(current_page){
+      this.current_page = current_page
+      this.get_results()
+    }
+  },
+  created (){
+    EventBus.$on('changestartdate', date => this.change_start_date(date));
+    EventBus.$on('changeenddate', date => this.change_end_date(date));
+  },
   methods: {
-    get_results(page){
-      const current_page = page ? page : this.current_page;
-      var skip_results = (current_page * this.limit) - this.limit;
+    change_start_date(date){
+      this.queryparams.start_date = date;
+      this.get_results()
+    },
+    change_end_date(date){
+      this.queryparams.end_date = date;
+      this.get_results()
+    },
+    get_results(){
+      this.search_results = [];
+      var skip_results = (this.current_page * this.limit) - this.limit;
       this.queryparams.beacon_id = this.$route.params.agent_id;
       this.queryparams.skip = skip_results;
       this.queryparams.limit = this.limit;
