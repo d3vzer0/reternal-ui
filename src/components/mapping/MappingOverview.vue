@@ -4,7 +4,7 @@
     <b-card header="Phase" class="col-2">
       <b-list-group flush>
         <b-list-group-item  v-for="(phase, index) in phases_list" 
-          @click="get_techniques(phase), selected_phase = phase"
+          @click="get_techniques(phase), selected_phase = phase, mapping_list = [], command_list = [], show_input = false"
           :key="index"
           :class="{'selectedphase': (phase == selected_phase)}">{{phase}}</b-list-group-item>
       </b-list-group>
@@ -15,7 +15,7 @@
         <b-list-group-item v-for="(technique, index) in technique_list" 
           :key="index" 
           :class="{'selectedtechnique': (technique == selected_technique)}" 
-          @click="get_mapping(technique), selected_technique = technique">
+          @click="get_mapping(technique), selected_technique = technique, command_list = [], show_input = false">
           {{technique}}
         </b-list-group-item>
       </b-list-group>
@@ -26,7 +26,7 @@
         <b-list-group-item v-for="(mapping, index) in mapping_list" 
           :key="index" 
           :class="{'selectedmapping': (mapping == selected_mapping)}" 
-          @click="selected_mapping = mapping, command_list = mapping.commands">
+          @click="selected_mapping = mapping, command_list = mapping.commands, show_input = false">
           {{mapping.name}}
         </b-list-group-item>
       </b-list-group>
@@ -92,13 +92,12 @@ export default {
       selected_mapping: "",
       selected_phase: "",
       selected_technique: "",
+      selected_command: "",
 
  
       command_input: "",
       command_sleep: 0,
       command_type: "",
-      selected_command: false,
-      show_commands: false,
       show_input: false,
     };
   },
@@ -125,7 +124,7 @@ export default {
         .catch(error => EventBus.$emit("showalert", error.response));
     }, 200),
     get_techniques(phase) {
-      this.selected_command = false;
+
       this.$http
         .get("mapping", {
           params: {
@@ -139,7 +138,6 @@ export default {
         .catch(response => this.generic_failed(response));
     },
     get_mapping(technique) {
-      this.selected_command = false;
       this.$http
         .get("mapping", {
           params: {
@@ -165,7 +163,7 @@ export default {
         var random_id = window.crypto.getRandomValues(random_array)[2];
         var command_options = {
           reference_name: this.selected_mapping.name,
-          reference_id: this.selected_mapping.name,
+          reference_id: this.selected_mapping._id['$oid'],
           technique_name: this.selected_mapping.technique_name,
           kill_chain_phase: this.selected_mapping.kill_chain_phase,
           technique_id: this.selected_mapping.technique_id,
