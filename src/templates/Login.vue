@@ -55,16 +55,15 @@ export default {
         return;
       }
 
-      localStorage.access_token = response.data.access_token;
-      localStorage.refresh_token = response.data.refresh_token;
-      this.$store.commit("auth/update_session", response.data.access_token);
-      this.$router.push('/')
+      this.$store.commit("auth/set_access_token", response.data.access_token);
+      this.$store.commit("auth/set_refresh_token", response.data.refresh_token)
+      this.$store.commit("auth/set_claims", response.data.access_token);
+      this.$router.push("/")
     },
     login_failed(response) {
       this.error = "Unable to login";
-      this.$store.commit("auth/set_refresh", false);
-      delete localStorage.access_token;
-      delete localStorage.refresh_token;
+      this.$store.commit("auth/delete_access_token");
+      this.$store.commit("auth/delete_refresh_token");
     }
   }
 };
