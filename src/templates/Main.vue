@@ -166,7 +166,7 @@ export default {
     this.$socket.open();
     this.$options.sockets.connect = () => {
       console.log("Authenticating socket")
-      this.$socket.emit("authenticate", {"access_token":localStorage.access_token})
+      this.$socket.emit("authenticate", {"access_token": this.$store.getters['auth/access_token']})
     }
     this.$options.sockets.disconnect = () => {
       console.log("Disconnected socket")
