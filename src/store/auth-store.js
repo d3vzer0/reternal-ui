@@ -21,7 +21,8 @@ export default {
   getters: {
     session(state) {
       var result = false;
-      if (localStorage.refresh_token) {
+      console.log(localStorage.access_token)
+      if (localStorage.refresh_token && localStorage.access_token) {
         result = { role: state.role, username: state.username };
       }
       return result;
