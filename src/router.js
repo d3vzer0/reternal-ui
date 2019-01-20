@@ -16,6 +16,7 @@ import Terminal from "./views/Terminal.vue";
 import Mapping from "./views/Mapping.vue";
 import AgentTasks from "./views/AgentTasks";
 import Recipes from "./views/Recipes.vue";
+import Network from "./views/Network.vue";
 
 Vue.use(Router);
 
@@ -88,6 +89,11 @@ const router = new Router({
           path: "/recipes",
           name: "Recipes",
           component: Recipes
+        },
+        {
+          path: "/network",
+          name: "Network",
+          component: Network
         }
       ]
     },
@@ -105,7 +111,7 @@ const router = new Router({
 
 router.beforeEach((to, from, next) => {
   if (to.matched.some(record => record.meta.requiresAuth)) {
-    if (!store.getters["auth/session"]) {
+    if (!store.getters["auth/access_token"]) {
       next({
         path: "/login",
         query: { redirect: to.fillPath }
