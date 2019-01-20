@@ -16,7 +16,7 @@ import Terminal from "./views/Terminal.vue";
 import Mapping from "./views/Mapping.vue";
 import AgentTasks from "./views/AgentTasks";
 import Recipes from "./views/Recipes.vue";
-import Network from "./views/Network.vue";
+// import Network from "./views/Network.vue";
 
 Vue.use(Router);
 
@@ -90,11 +90,11 @@ const router = new Router({
           name: "Recipes",
           component: Recipes
         },
-        {
-          path: "/network",
-          name: "Network",
-          component: Network
-        }
+        // {
+        //   path: "/network",
+        //   name: "Network",
+        //   component: Network
+        // }
       ]
     },
     {

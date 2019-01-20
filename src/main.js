@@ -5,10 +5,9 @@ import Vue from "vue";
 import App from "./App.vue";
 import axios from "./api";
 import router from "./router";
-import VueSocketio from 'vue-socket.io-extended';
-import io from 'socket.io-client';
-
-import { store } from "./store";
+import VueSocketio from "vue-socket.io-extended";
+import io from "socket.io-client";
+import { store } from "@/store";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
@@ -58,7 +57,7 @@ library.add(
   faSave
 );
 
-const socket = io('http://localhost:5000', {
+const socket = io("http://localhost:5000", {
   autoConnect: false
 });
 
