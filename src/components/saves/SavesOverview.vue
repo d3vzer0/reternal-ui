@@ -5,43 +5,66 @@
         <b-list-group-item v-for="recipe in recipe_list" 
           :class="{'selectedrecipe': (recipe._id['$oid'] == selected_recipe)}" :key="recipe._id['$oid']">
           <b-row>
-            <b-col cols="8" @click="command_list = recipe.commands, selected_recipe = recipe._id['$oid'], show_commands = true, show_input = false">
+            <b-col cols="8" @click="get_commands(recipe.name), command_list = recipe.commands, selected_recipe = recipe._id['$oid'], show_commands = true, show_input = false">
               {{recipe.name}} 
             </b-col>
             <b-col>
-              <b-badge href="#" @click="delete_recipe(recipe._id['$oid'])">DELETE</b-badge>
+              <b-badge href="#" @click="delete_recipe(recipe.name)">DELETE</b-badge>
             </b-col>
           </b-row>
         </b-list-group-item>
       </b-list-group>
     </b-card>
+    
     <b-card header="Command" class="col-3">
       <b-list-group flush v-if="show_commands">
         <b-list-group-item v-for="(command, index) in command_list" 
           :key="index" :class="{'selectedcommand': (index == selected_command)}"
           @click="command_data = command, show_input = true, selected_command = index">
-          {{command.name}}
+
+          <div v-if="command.metadata">{{command.metadata.name}}</div>
+          <div v-else-if="command.commands">{{command.commands.name}}</div>
+
         </b-list-group-item>
       </b-list-group>
     </b-card>
+
     <b-card header="Input">
       <b-list-group flush v-if="show_input">
+        <b-list-group-item v-if="this.command_data.metadata">
+          <b-row>
+            <b-col><b>Phase</b></b-col>
+            <b-col>{{this.command_data.metadata.kill_chain_phase}}</b-col>
+          </b-row>  
+        </b-list-group-item>
+        <b-list-group-item v-if="this.command_data.metadata">
+          <b-row>
+            <b-col><b>Technique</b></b-col>
+            <b-col>{{this.command_data.metadata.technique_name}}</b-col>
+          </b-row>  
+        </b-list-group-item>
+        <b-list-group-item>
+          <b-row>
+            <b-col><b>Command</b></b-col>
+            <b-col>{{this.command_data.commands.name}}</b-col>
+          </b-row>  
+        </b-list-group-item>
         <b-list-group-item>
           <b-row>
             <b-col><b>Type</b></b-col>
-            <b-col>{{this.command_data.type}}{{selected_command}}</b-col>
+            <b-col>{{this.command_data.commands.type}}</b-col>
           </b-row>  
         </b-list-group-item>
          <b-list-group-item>
           <b-row>
             <b-col><b>Input</b></b-col>
-            <b-col>{{this.command_data.input}}</b-col>
+            <b-col>{{this.command_data.commands.input}}</b-col>
           </b-row>
         </b-list-group-item>
         <b-list-group-item>
           <b-row>
             <b-col><b>Sleep</b></b-col>
-            <b-col>{{this.command_data.sleep}}</b-col>
+            <b-col>{{this.command_data.commands.sleep}}</b-col>
           </b-row>
         </b-list-group-item>
       </b-list-group>
@@ -82,7 +105,13 @@ export default {
     },
     recipes_success(response) {
       this.recipe_list = response.data;
-      console.log(response.data)
+    },
+    get_commands(recipe) {
+      var recipe_url = `recipe/${recipe}`;
+        this.$http
+          .get(recipe_url)
+          .then(response => this.command_list = response.data)
+          // .catch(error => EventBus.$emit("showalert", error.response));
     },
     delete_recipe(recipe_id) {
       var delete_url = `recipe/${recipe_id}`;
