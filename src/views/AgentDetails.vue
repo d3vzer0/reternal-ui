@@ -27,14 +27,12 @@
 </template>
 
 <script>
+import VueCtkDateTimePicker from "vue-ctk-date-time-picker";
+import "vue-ctk-date-time-picker/dist/vue-ctk-date-time-picker.css";
 import ServerSide from "@/components/table/ServerSide";
 import EventBus from "@/eventbus";
 import Vue from "vue";
-import VueCtkDateTimePicker from "vue-ctk-date-time-picker";
-import "vue-ctk-date-time-picker/dist/vue-ctk-date-time-picker.css";
-
 Vue.use(require("vue-moment"));
-Vue.component("vue-ctk-date-time-picker", VueCtkDateTimePicker);
 
 export default {
   name: "AgentDetails",
@@ -74,16 +72,15 @@ export default {
     start_date: function(start_date){
       this.start_date = start_date;
       EventBus.$emit('changestartdate', start_date);
-      // this.get_details_filtered();
     },
     end_date: function(end_date){
       this.end_date = end_date;
       EventBus.$emit('changeenddate', end_date);
-      // this.get_details_filtered();
     }
   },
   components: {
-    ServerSide
+    ServerSide,
+    VueCtkDateTimePicker
   },
   methods: {
       from_unix(unix_timestamp) {

@@ -65,6 +65,7 @@ export default {
   created (){
     EventBus.$on('changestartdate', date => this.change_start_date(date));
     EventBus.$on('changeenddate', date => this.change_end_date(date));
+    EventBus.$on('changetaskfilter', name => this.change_task_filter(name));
   },
   methods: {
     change_start_date(date){
@@ -74,6 +75,10 @@ export default {
     change_end_date(date){
       this.queryparams.end_date = date;
       this.get_results()
+    },
+    change_task_filter(name){
+      this.queryparams.name = name;
+      this.get_results();
     },
     get_results(){
       this.search_results = [];
