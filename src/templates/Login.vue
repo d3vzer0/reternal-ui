@@ -1,9 +1,10 @@
 <template>
   <b-container fluid>
     <b-row class="justify-content-md-center top-50">
-      <b-col cols="3" md="4" class="center-block">
+      <b-col xl="3" lg="3" md="4" sm="5" col="6" class="center-block">
         <b-card header="Authentication" header-tag="header" id="card-login">
           <div id="card-login-header">
+            <img src="@/assets/reternal.png" id="header-image">
             <div class="alert alert-danger" v-if="error">{{ error }}</div>
           </div>
           <b-form method="post" @submit.prevent="login">
@@ -74,7 +75,7 @@ export default {
 @import "@/assets/style.scss";
 
 body {
-  background-color: #eeeeee;
+  background-color: #110404;
 }
 
 #header-image {

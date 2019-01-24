@@ -5,43 +5,36 @@
 </template>
 
 <script>
+import createAuthRefreshInterceptor from "axios-auth-refresh";
+
 export default {
   name: "BaseApp",
   created() {
-    this.$http.interceptors.response.use(undefined, error => {
-      var status = error.response.data.sub_status;
-      if (status === 42){
-        if (this.$store.getters["auth/access_token"]) {
-          this.$store.commit("auth/delete_access_token");
-          const retry_request = new Promise(resolve => {
-            this.refresh_token()
-              .then(response => {
-                this.$store.commit("auth/set_access_token", response.data.access_token);
-                this.$store.commit("auth/set_claims", response.data.access_token)
-                var new_bearer = "Bearer " + response.data.access_token;
-                error.config.headers["Authorization"] = new_bearer;
-                resolve(this.$http(error.config));
-              })
-            });
-          return retry_request;
-        } else {
-          this.$store.commit("auth/delete_access_token");
-          this.$store.commit("auth/delete_refresh_token");
-        }
+    createAuthRefreshInterceptor(this.$http, this.refresh_access_token, {statusCodes: [ 401, 422 ]});
+    this.$http.interceptors.request.use((config ) => {
+      if (!("Authorization in config.headers")) {
+        var auth_header = "Bearer " + this.$store.getters["auth/access_token"];
+        config.headers["Authorization"] = auth_header;
       }
-    });
+      return config
+    })
+   
   },
   methods: {
-    refresh_token() {
-      var refresh_bearer = "Bearer " + this.$store.getters['auth/refresh_token'];
-      const refresh_request = new Promise(resolve => {
-        resolve(
-          this.$http.get("refresh", {
-            headers: { Authorization: refresh_bearer }
-          })
-        );
-      });
-      return refresh_request;
+    refresh_access_token(original_request) {
+      var refresh_header = "Bearer " + this.$store.getters["auth/refresh_token"];
+      this.$http.get("refresh", {headers: { Authorization: refresh_header }})
+        .then(refresh_response => {
+          this.$store.commit("set_access_token", refresh_response.data.access_token);
+          original_request.response.config.headers["Authorization"] = refresh_response.data.access_token;
+          return Promise.resolve()
+        })
+        .catch(error => {
+          if (error.response.status === 401 || error.response.status === 422) {
+            this.$store.commit("auth/delete_access_token");
+            this.$store.commit("auth/delete_refresh_token");
+          }
+        })
     }
   }
 };
