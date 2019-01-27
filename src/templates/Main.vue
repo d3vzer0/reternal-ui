@@ -3,10 +3,11 @@
     <b-alert :show="dismiss_countDown" variant="primary" @dismissed="dismiss_countDown=0" @dismiss-count-down="countDownChanged"> 
       {{this.alert_message}}      
     </b-alert>
-    <StartupModal></StartupModal>
-    <RecipeModal></RecipeModal>
-    <RecipeSave></RecipeSave>
-    <TasksModal></TasksModal>
+    <startup-modal></startup-modal>
+    <recipe-modal></recipe-modal>
+    <recipe-save></recipe-save>
+    <tasks-modal></tasks-modal>
+    <user-change-modal></user-change-modal>
     <b-row id="row-main">
       <b-col xl="2" lg="2" md="2" sm="2" cols="1" id="col-sidebar">
         <div id="sidebar-header">
@@ -78,9 +79,9 @@
                 <span class="nav-item-icon"><font-awesome-icon icon="tasks" /></span>
                 <span class="nav-item-title">Saved Recipes</span>
               </b-nav-item>
-              <b-nav-item class="nav-item" to="profile">
+              <b-nav-item class="nav-item" to="Users">
                 <span class="nav-item-icon"><font-awesome-icon icon="user" /></span>
-                <span class="nav-item-title">Profile</span>
+                <span class="nav-item-title">Users</span>
               </b-nav-item>
             </ul>
           </b-nav>
@@ -149,6 +150,7 @@ import StartupModal from "@/components/startup/StartupModal";
 import RecipeModal from "@/components/recipe/RecipeModal";
 import RecipeSave from "@/components/recipe/RecipeSave";
 import TasksModal from "@/components/tasks/TasksModal";
+import UserChangeModal from "@/components/user/UserChangeModal";
 import EventBus from "@/eventbus";
 
 export default {
@@ -206,6 +208,9 @@ export default {
     save_recipe() {
       EventBus.$emit("confirmsave");
     },
+    change_pass() {
+      EventBus.$emit("changepass");
+    },
     countDownChanged(dismiss_countDown) {
       this.dismiss_countDown = dismiss_countDown;
     },
@@ -228,7 +233,8 @@ export default {
     StartupModal,
     RecipeModal,
     RecipeSave,
-    TasksModal
+    TasksModal,
+    UserChangeModal
   }
 };
 </script>

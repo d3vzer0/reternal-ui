@@ -25,7 +25,7 @@ export default {
       var refresh_header = "Bearer " + this.$store.getters["auth/refresh_token"];
       this.$http.get("refresh", {headers: { Authorization: refresh_header }})
         .then(refresh_response => {
-          this.$store.commit("set_access_token", refresh_response.data.access_token);
+          this.$store.commit("auth/set_access_token", refresh_response.data.access_token);
           original_request.response.config.headers["Authorization"] = refresh_response.data.access_token;
           return Promise.resolve()
         })

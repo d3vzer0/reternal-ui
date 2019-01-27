@@ -16,6 +16,7 @@ import Terminal from "./views/Terminal.vue";
 import Mapping from "./views/Mapping.vue";
 import AgentTasks from "./views/AgentTasks";
 import Recipes from "./views/Recipes.vue";
+import Users from "./views/Users.vue";
 // import Network from "./views/Network.vue";
 
 Vue.use(Router);
@@ -39,6 +40,11 @@ const router = new Router({
           path: "/terminal",
           name: "Terminal",
           component: Terminal
+        },
+        {
+          path: "/users",
+          name: "Users",
+          component: Users
         },
         {
           path: "/payloads",

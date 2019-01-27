@@ -74,10 +74,6 @@ export default {
 @import url('https://fonts.googleapis.com/css?family=Open+Sans');
 @import "@/assets/style.scss";
 
-body {
-  background-color: #110404;
-}
-
 #header-image {
   width: 100%;
 }

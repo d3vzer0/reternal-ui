@@ -7,9 +7,20 @@
           {{ row.detailsShowing ? 'Hide' : 'Show'}} Details
           </b-button>
         </template>
+
+   
+        <template slot="change_user" slot-scope="row">
+          <b-button size="sm" variant="primary" @click="change_user(row.item)">Change</b-button>
+        </template>
+
+        <template slot="delete_user" slot-scope="row">
+          <b-button size="sm" variant="primary" @click="delete_user(row.item.username)" class="mr-2">Delete</b-button>
+        </template>
+
         <template slot="show_text" slot-scope="row">
            <b-button size="sm" @click.stop="display_text(row.item)" variant="primary" class="mr-2">Show</b-button>
         </template>
+
         <template slot="row-details" slot-scope="row">
           <b-card>
             <b-row class="">
@@ -53,7 +64,7 @@ export default {
       search_value: "",
       search_count: 0,
       current_page: 1,
-      search_results: []
+      search_results: [],
     };
   },
   watch: {
@@ -68,6 +79,12 @@ export default {
     EventBus.$on('changetaskfilter', name => this.change_task_filter(name));
   },
   methods: {
+    delete_user(username){
+      EventBus.$emit("deleteuser", username);
+    },
+    change_user(user){
+      EventBus.$emit("changeuser", user);
+    },
     change_start_date(date){
       this.queryparams.start_date = date;
       this.get_results()
