@@ -44,7 +44,7 @@ export default {
       if (this.confirm_password === this.password ) {
         var post_data = {username:this.username, password:this.password, role:this.role}
         this.$http.post("users", post_data)
-          .then(response => EventBus.$emit('changetaskfilter', ""))
+          .then(response => EventBus.$emit('changetaskfilter', ""), EventBus.$emit('otpuser', this.username))
       }
     }
   }

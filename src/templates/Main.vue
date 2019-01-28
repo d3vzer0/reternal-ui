@@ -8,6 +8,7 @@
     <recipe-save></recipe-save>
     <tasks-modal></tasks-modal>
     <user-change-modal></user-change-modal>
+    <user-otp-modal></user-otp-modal>
     <b-row id="row-main">
       <b-col xl="2" lg="2" md="2" sm="2" cols="1" id="col-sidebar">
         <div id="sidebar-header">
@@ -150,7 +151,9 @@ import StartupModal from "@/components/startup/StartupModal";
 import RecipeModal from "@/components/recipe/RecipeModal";
 import RecipeSave from "@/components/recipe/RecipeSave";
 import TasksModal from "@/components/tasks/TasksModal";
+import UserOtpModal from "@/components/user/UserOtpModal";
 import UserChangeModal from "@/components/user/UserChangeModal";
+
 import EventBus from "@/eventbus";
 
 export default {
@@ -234,7 +237,8 @@ export default {
     RecipeModal,
     RecipeSave,
     TasksModal,
-    UserChangeModal
+    UserChangeModal,
+    UserOtpModal
   }
 };
 </script>

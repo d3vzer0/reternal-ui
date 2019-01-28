@@ -20,6 +20,7 @@
     "lodash": "^4.17.11",
     "node-sass": "^4.11.0",
     "npm-font-open-sans": "^1.1.0",
+    "qrcode.vue": "^1.6.1",
     "sass-loader": "^7.1.0",
     "socket.io-client": "^2.2.0",
     "style-loader": "^0.23.1",
