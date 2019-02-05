@@ -6,7 +6,8 @@ export default {
     access_token: localStorage.access_token || false,
     refresh_token: localStorage.refresh_token || false,
     username: "",
-    role: ""
+    role: "",
+    refreshing_state: ""
   },
   mutations: {
     set_claims(state, payload) {
@@ -28,20 +29,29 @@ export default {
     delete_access_token(state){
       state.access_token = false;
       delete localStorage.access_token;
+    },
+    set_refreshing_state(state, value) {
+      state.refreshing_state = value;
     }
   },
   getters: {
     claims(state) {
       return { role: state.role, username: state.username };
     },
-    is_refresh(state) {
-      return state.is_refresh;
+    refreshing_state(state) {
+      return state.refreshing_state;
     },
-    access_token(state){
+    access_token(state) {
       return state.access_token;
     },
-    refresh_token(state){
+    refresh_token(state) {
       return state.refresh_token;
+    },
+    expiry_state(state) {
+      return {
+        access: VueJwtDecode.decode(state.access_token).exp,
+        refresh: VueJwtDecode.decode(state.refresh_token).exp
+      }
     }
   }
 };
