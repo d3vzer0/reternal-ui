@@ -3,7 +3,6 @@
       <b-row class="top-10">
       <b-col>
         <b-card header="filter output" header-tag="header">
-          <p class="card-text">Filter beacon history depending on the task output</p>
           <b-form method="get" @submit.prevent="filter_mite">
             <b-row>
               <b-col cols="3">
@@ -122,11 +121,11 @@ export default {
   }
 }
 
-.nav-item {
-  a {
-    color: #495057;
-  }
-}
+// .nav-item {
+//   a {
+//     color: #495057;
+//   }
+// }
 
 .tabs {
   .nav-link {

@@ -1,65 +1,70 @@
 <template>
-  <b-card-group class="executionpanel">
-    <b-card header="Command" class="col-4">
-      <b-list-group flush v-if="show_commands_card">
-        <b-list-group-item v-for="command in task_commands" 
-        :key="command.rand" 
-        :class="{'selectedcommand': (command.rand == selected_command_rand)}"  @click="show_command_details(command)">
-          <p v-if="command.type == 'Mitre'">{{command.reference_name}}</p>
-          <p v-if="command.type == 'Manual'">{{command.name}}</p>
-        </b-list-group-item>
-      </b-list-group>
-    </b-card>
-    <b-card header="Input">
-      <b-list-group flush v-if="show_details_panel">
-        <b-list-group-item>
+  <div id="recipe-overview">
+    <draggable v-model="task_commands" group="people" @start="drag=true" @end="drag=false">
+      <transition-group>
+        <div v-for="command in task_commands" :key="command.rand">
           <b-row>
-            <b-col><b>Type</b></b-col>
-            <b-col>{{selected_command_type}}</b-col>
-          </b-row>
-        </b-list-group-item>
-        <b-list-group-item v-if="selected_command_type == 'Mitre'">
-          <b-row>
-            <b-col><b>Command</b></b-col>
-            <b-col>{{selected_command}}</b-col>
-          </b-row>
-        </b-list-group-item>
-        <b-list-group-item v-if="selected_command_type == 'Mitre'">
-          <b-row>
-            <b-col><b>Technique</b></b-col>
-            <b-col>{{selected_mitre_name}}</b-col>
-          </b-row>
-        </b-list-group-item>
-        <b-list-group-item v-if="selected_command_type == 'Mitre'">
-          <b-row>
-            <b-col><b>Phase</b></b-col>
-            <b-col>{{selected_mitre_phase}}</b-col>
-          </b-row>
-        </b-list-group-item>
+            <b-col offset="2" cols="1" class="command-seperator">
+              <div class="seperator-line">
+              </div>
+              <div class="seperator-circle">
+                <div class="seperator-time">
+                  {{ command.sleep }}
+                </div>
+              </div>
+            </b-col>
+            <b-col cols="5">
+              <b-card class="agent-card" :header="command.name">
+                <b-list-group flush>
+                  <b-list-group-item>
+                    <b-row>
+                      <b-col><b>Type</b></b-col>
+                      <b-col>{{command.type}}</b-col>
+                    </b-row>
+                  </b-list-group-item>
+                  <b-list-group-item v-if="command.type == 'Mitre'">
+                    <b-row>
+                      <b-col><b>Command</b></b-col>
+                      <b-col>{{command.reference_name}}</b-col>
+                    </b-row>
+                  </b-list-group-item>
+                  <b-list-group-item v-if="command.type == 'Mitre'">
+                    <b-row>
+                      <b-col><b>Technique</b></b-col>
+                      <b-col>{{command.technique_name}}</b-col>
+                    </b-row>
+                  </b-list-group-item>
+                  <b-list-group-item v-if="command.type == 'Mitre'">
+                    <b-row>
+                      <b-col><b>Phase</b></b-col>
+                      <b-col>{{command.kill_chain_phase}}</b-col>
+                    </b-row>
+                  </b-list-group-item>
 
-        <b-list-group-item>
-          <b-row>
-            <b-col><b>Input</b></b-col>
-            <b-col>{{selected_command_input}}</b-col>
+                  <b-list-group-item>
+                    <b-row>
+                      <b-col><b>Input</b></b-col>
+                      <b-col>{{command.input}}</b-col>
+                    </b-row>
+                  </b-list-group-item>
+                  <b-list-group-item>
+                    <b-row>
+                      <b-col><b-button variant="primary-reversed" class="fullwidth" @click="remove_command(command.rand)">Remove from recipe</b-button></b-col>
+                    </b-row>
+                  </b-list-group-item>
+                </b-list-group>
+              </b-card>
+            </b-col>
           </b-row>
-        </b-list-group-item>
-        <b-list-group-item>
-          <b-row>
-            <b-col><b>Sleep</b></b-col>
-            <b-col>{{selected_command_sleep}}</b-col>
-          </b-row>
-        </b-list-group-item>
-         <b-list-group-item>
-          <b-row>
-            <b-col><b-button variant="primary-reversed" class="fullwidth" @click="remove_command(selected_command_rand)">Remove from recipe</b-button></b-col>
-          </b-row>
-        </b-list-group-item>
-      </b-list-group>
-    </b-card>
-  </b-card-group>
+        </div>
+      </transition-group>
+    </draggable>
+  </div>
 </template>
 
 <script>
+import draggable from 'vuedraggable'
+
 export default {
   name: "ExecutionPanel",
   data() {
@@ -89,7 +94,6 @@ export default {
         this.selected_mitre_name = command.technique_name;
         this.selected_mitre_phase = command.kill_chain_phase;
         this.reference_name = command.reference_name;
-
       }
       this.show_details_panel = true;
     },
@@ -99,7 +103,9 @@ export default {
       this.show_details_panel = false;
     }
   },
-  components: {}
+  components: {
+    draggable
+  }
 };
 </script>
 
@@ -110,26 +116,33 @@ export default {
   color: white;
 }
 
-.executionpanel {
-  .list-group-item {
-    border-radius: 0px;
-    &.active {
-      border-color: white;
-      background-color: #9d3a3a;
-      .badge {
-        background-color: white;
-        color: black;
-      }
+.command-seperator {
+  .seperator-line {
+    width: 100%;
+    height: 100%;
+    border-left: 5px;
+    border-left-style: solid;
+    border-left-color: #9d3a3a;
+    position: relative;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    margin-left: 6px;
+  }
+  .seperator-circle{
+    content: "";
+    width: 16px;
+    height: 16px;
+    background: #9d3a3a;
+    border-radius: 8px;
+    position: absolute;
+    .seperator-time {
+      font-size: 24px;
+      font-weight: bold;
+      margin-left: 30px;
+      margin-top: -10px;
+      } 
     }
-  }
-  .card {
-    padding: 0px;
-  }
-  .card-body {
-    padding: 0px;
-  }
-  .badge {
-    background-color: #9d3a3a;
-  }
 }
+
 </style>

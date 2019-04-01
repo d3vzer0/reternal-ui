@@ -12,7 +12,9 @@ import { library } from "@fortawesome/fontawesome-svg-core";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
 import {
+  faSearch,
   faTerminal,
+  faKey,
   faCog,
   faEye,
   faBullseye,
@@ -32,9 +34,22 @@ import {
   faArrowRight,
   faSave,
   faGlobeEurope,
+  faEthernet,
 } from "@fortawesome/free-solid-svg-icons";
 
+import {
+  faWindows,
+  faLinux,
+  faApple
+} from '@fortawesome/free-brands-svg-icons'
+
 library.add(
+  faSearch,
+  faWindows,
+  faLinux,
+  faEthernet,
+  faApple,
+  faKey,
   faGlobeEurope,
   faTerminal,
   faCog,

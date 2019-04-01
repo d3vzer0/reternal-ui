@@ -1,13 +1,13 @@
 <template>
-  <b-card>
+  <div id="recipe-submit">
     <b-form method="post" @submit.prevent="add_command">
       <b-row>
         <b-col cols="12">
-        <vue-ctk-date-time-picker inline without-header v-model="date_time" time-format="HH:mm" format="X" color="#9d3a3a"></vue-ctk-date-time-picker>
+          <vue-ctk-date-time-picker inline without-header v-model="date_time" time-format="HH:mm" format="X" color="#9d3a3a"></vue-ctk-date-time-picker>
         </b-col>
       </b-row>
     </b-form>
-  </b-card>
+  </div>
 </template>
 
 <script>
@@ -35,3 +35,14 @@ export default {
   components: {}
 };
 </script>
+
+
+<style lang="scss" scoped>
+
+#recipe-datefilter {
+  height: 100%;
+}
+
+</style>
+
+

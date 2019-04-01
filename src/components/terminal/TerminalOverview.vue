@@ -13,7 +13,7 @@
           <label class="terminalprot terminalprepend">{{terminal_proto}}</label>
           <label class="terminalhost terminalprepend">{{terminal_host}}</label>
           <label class="terminalpath terminalprepend">{{terminal_path}}</label>
-          <input type="textarea" class="terminalcmd" v-model="terminal_input" @input="search_options" @keydown.tab.prevent="autocomplete"  @keydown.enter.prevent="submit_command" placeholder="cmd"></input>
+          <input type="textarea" class="terminalcmd" v-model="terminal_input" @input="search_options" @keydown.tab.prevent="autocomplete"  @keydown.enter.prevent="submit_command" placeholder="cmd"/>
       </b-col>
     </b-row>
      <b-row class="top-10 autosuggestrow">

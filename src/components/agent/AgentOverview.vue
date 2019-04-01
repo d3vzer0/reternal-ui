@@ -1,29 +1,41 @@
 <template>
-  <masonry :cols="3" :gutter="40">
-    <b-card class="agent-card" v-for="agent in $parent.agent_list" :header="agent.hostname" @click="click_agent_tile(agent)" :class="{active: is_selected(agent)}">
-      <b-row>
-        <b-col>State</b-col><b-col>{{agent.state}}</b-col>
-      </b-row>
-      <b-row>
-        <b-col>Username</b-col><b-col>{{agent.username}}</b-col>
-      </b-row>
-      <b-row>
-        <b-col>Platform</b-col><b-col>{{agent.platform}}</b-col>
-      </b-row>
-      <b-row>
-        <b-col>Remote IP</b-col><b-col>{{agent.remote_ip}}</b-col>
-      </b-row>
-      <b-row>
-        <b-col>Last Pulse</b-col><b-col>{{agent.last_beacon}}</b-col>
-      </b-row><br/>
-      <b-row>
-        <b-col cols="6">
-          <router-link :to="{ name: 'AgentDetails', params: {agent_id: agent.beacon_id} }"> <b-button size="sm" variant="primary">History</b-button></router-link>
-          </b-col>
-        <b-col cols="6">
-          <router-link :to="{ name: 'AgentTasks', params: {agent_id: agent.beacon_id} }"> <b-button size="sm" variant="primary">Tasks</b-button></router-link>
+  <masonry :cols="3" :gutter="40" >
+    <b-card class="agent-card" v-for="agent in $parent.agent_list"
+      @click="click_agent_tile(agent)" :class="{active: is_selected(agent)}">
+      <b-row class="agent-card-container">
+        <b-col cols="5" class="agent-card-platform">
+          <div class="platform-body">
+            <span>
+              <font-awesome-icon :icon="['fab', 'windows']" v-if="agent.platform == 'Windows'"/>
+              <font-awesome-icon :icon="['fab', 'apple']" v-if="agent.platform == 'macOS'"/>
+              <font-awesome-icon :icon="['fab', 'linux']" v-if="agent.platform == 'Linux'"/>
+            </span>
+          </div>
+        </b-col>
+        <b-col class="agent-card-content">
+          <!-- <b-row>
+            <b-col>State</b-col><b-col>{{agent.state}}</b-col>
+          </b-row> -->
+          <b-row>
+            <b-col cols="1"><font-awesome-icon icon="user" /></b-col><b-col>{{agent.username}}</b-col>
+          </b-row>
+          <b-row>
+             <b-col cols="1"><font-awesome-icon icon="ethernet" /></b-col><b-col>{{agent.remote_ip}}</b-col>
+          </b-row>
+          <b-row>
+            <b-col>{{agent.last_beacon}}</b-col>
+          </b-row><br/>
+          <b-row>
+            <b-col cols="12">
+              <b-button-group class="agent-buttons">
+                <router-link :to="{ name: 'AgentDetails', params: {agent_id: agent.beacon_id} }"><b-button variant="primary-reversed">History</b-button></router-link>
+                <router-link :to="{ name: 'AgentTasks', params: {agent_id: agent.beacon_id} }"><b-button variant="primary-reversed">Tasks</b-button></router-link>
+              </b-button-group>
+            </b-col>
+          </b-row>
         </b-col>
       </b-row>
+      
     </b-card>
   </masonry>
 </template>
@@ -68,3 +80,47 @@ export default {
   }
 };
 </script>
+
+
+<style lang="scss" scoped>
+.agent-card-container {
+  margin: 0px;
+}
+.agent-card {
+  width: 100%;
+  &.active {
+    border-color: #343a40;
+    border-width: 3px;
+  }
+  .card-body {
+    padding: 0px;
+  }
+  .agent-card-platform {
+    background-color: #343a40;
+    .platform-body {
+      text-align: center;
+      margin: auto;
+      font-size: 90px;
+      color:white;
+      span {
+        display: inline-block;
+        vertical-align: middle;
+        line-height: normal;
+      }
+    }
+  }
+  .agent-card-content {
+    padding: 1.25rem;
+    // font-weight: bold;
+    font-family: monospace;
+    .agent-buttons {
+      width: 100%;
+      .btn {
+        border-radius: 0px;
+      }
+    }
+  }
+}
+
+
+</style>

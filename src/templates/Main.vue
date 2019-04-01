@@ -18,15 +18,15 @@
           <hr>
           <b-nav vertical id="sidebar-nav" class="sidebar-nav-links">
             <ul class="nav flex-column">
-              <b-nav-item class="nav-item" to="/home">
+              <!-- <b-nav-item class="nav-item" to="/home">
                 <span class="nav-item-icon"><font-awesome-icon icon="home" /></span>
                 <span class="nav-item-title">Dashboard</span>
               </b-nav-item>
               <b-nav-item class="nav-item" to="/network">
                 <span class="nav-item-icon"><font-awesome-icon icon="globe-europe" /></span>
                 <span class="nav-item-title">Graph</span>
-              </b-nav-item>
-              <b-nav-item class="nav-item" to="/agents">
+              </b-nav-item> -->
+              <b-nav-item class="nav-item" to="/home">
                 <span class="nav-item-icon"><font-awesome-icon icon="desktop" /></span>
                 <span class="nav-item-title">Agents</span>
               </b-nav-item>
@@ -89,19 +89,24 @@
         </div>
       </b-col>
 
-      <b-col id="col-main" xl="10" lg="10" md="10" sm="10" cols="11">
+      <b-col id="col-main"> 
         <b-row id="row-navbar">
           <b-col cols="12">
-          <b-navbar toggleable="md" type="light" variant="platinum" >
+           <b-navbar toggleable="md" type="light" variant="platinum" >
             <b-navbar-nav>
-              <b-nav-item to="terminal"> <font-awesome-icon icon="terminal" /> Terminal</b-nav-item>
+              <!-- <b-nav-item to="terminal"> <font-awesome-icon icon="terminal" /> Terminal</b-nav-item>
               <b-nav-item @click="run_recipe"> <font-awesome-icon icon="play-circle" /> Run Recipe </b-nav-item>
               <b-nav-item @click="boot_recipe"> <font-awesome-icon icon="arrow-alt-circle-down" /> Startup Recipe</b-nav-item>
-              <b-nav-item @click="save_recipe"> <font-awesome-icon icon="save" /> Save Recipe</b-nav-item>
+              <b-nav-item @click="save_recipe"> <font-awesome-icon icon="save" /> Save Recipe</b-nav-item> -->
+
+              <b-nav-item to="terminal"> <font-awesome-icon icon="terminal" /></b-nav-item>
+              <b-nav-item @click="run_recipe"> <font-awesome-icon icon="play-circle" /> </b-nav-item>
+              <b-nav-item @click="boot_recipe"> <font-awesome-icon icon="arrow-alt-circle-down" /></b-nav-item>
+              <b-nav-item @click="save_recipe"> <font-awesome-icon icon="save" /></b-nav-item>
 
               <b-nav-item-dropdown right>
                 <template slot="button-content">
-                 <font-awesome-icon icon="desktop" />  Agents
+                 <font-awesome-icon icon="desktop" />
                 </template>
 
                 <div v-for="(platform, key, index) in selected_agents">
@@ -115,31 +120,24 @@
             <b-navbar-nav class="ml-auto">
               <b-nav-item-dropdown right>
                 <template slot="button-content">
-                <font-awesome-icon icon="cog" />  Settings
+                <font-awesome-icon icon="cog" />
                 </template>
                 <b-dropdown-item href="#">Profile</b-dropdown-item>
                 <b-dropdown-item @click="logout" href="#">Signout</b-dropdown-item>
               </b-nav-item-dropdown>
             </b-navbar-nav>
           </b-navbar>
-          </b-col>
-        </b-row>
+        </b-col>
+      </b-row>
 
         <b-row id="row-content">
-          <b-col cols="12">
+          <b-col cols="12" class="column-content">
             <transition>
               <router-view></router-view>
             </transition>
           </b-col>
         </b-row>
 
-        <b-row id="row-footer">
-          <b-col cols="12">
-            <b-row>
-              <b-col class="text-right">Created by: Joey Dreijer</b-col>
-            </b-row>
-          </b-col>
-        </b-row>
       </b-col>
     </b-row>
   </b-container>
@@ -247,6 +245,10 @@ export default {
 @import url('https://fonts.googleapis.com/css?family=Open+Sans');
 @import "@/assets/style.scss";
 
+body {
+  background-color: #343a40;
+}
+
 #app {
   font-family: 'Muli', "Helvetica", Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -262,6 +264,12 @@ export default {
   border-right-style: solid;
   border-right-width: 1px;
   border-right-color: #bbbbbb;
+  max-width:270px;
+
+  .recipecount {
+    float: right;
+    font-size: inherit;
+  }
 
   #sidebar-header-image {
     width: 100%;
@@ -298,40 +306,39 @@ export default {
     }
   }
 }
- 
-.recipecount {
-  float: right;
-  font-size: inherit;
-}
+
 #row-content {
-  background-color: #f4f2f2;
+  // background-color: #f4f2f2;
+  background: linear-gradient(180deg, #343a40 300px, #f4f2f2 300px);
   min-height: 100vh;
+  .column-content {
+    margin-top: 50px;
+  }
 }
 
 #row-navbar {
   border-bottom: 1px;
-  border-bottom-color: #bbbbbb;
-  border-bottom-style: solid;
-  background-color: #eeeeee;
   color: #e8e5e1;
-}
-
-.navbar-nav {
-  .nav-item {
-    text-transform: uppercase;
-    font-size: 12px;
-    font-weight: 400;
-    letter-spacing: 2px;
+  .navbar-nav {
+    .nav-item {
+      margin-left: 24px;
+      margin-right: 20px;
+      text-transform: uppercase;
+      font-size: 20px;
+      font-weight: 400;
+      letter-spacing: 2px;
+    }
+    .nav-link {
+      color: #dddddd !important;
+    }
   }
 }
+
 
 .col-main {
   width: 100%;
 }
 
-.footer {
-  height: 50px;
-}
 
 #techniquemodal {
   font-size: 14px;

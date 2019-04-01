@@ -1,17 +1,12 @@
 <template>
   <div class="home">
-    <b-row class="top-10">
-      <b-col cols="5">
-        <RecipeDatetime></RecipeDatetime>
-      </b-col>
-      <b-col cols="7">
+    <b-row class="top-10" id="recipe-builder-editor">
+      <b-col cols="12">
         <b-row>
-          <b-col>
+          <b-col cols="6">
             <RecipeAddMitre></RecipeAddMitre>
           </b-col>
-        </b-row>
-        <b-row>
-          <b-col>
+          <b-col cols="6">
             <RecipeAddCommand></RecipeAddCommand>
           </b-col>
         </b-row>
@@ -29,7 +24,6 @@
 import RecipeAddCommand from "@/components/recipe/RecipeAddCommand";
 import RecipeAddMitre from "@/components/recipe/RecipeAddMitre";
 import RecipeOverview from "@/components/recipe/RecipeOverview";
-import RecipeDatetime from "@/components/recipe/RecipeDatetime";
 
 export default {
   name: "Recipe",
@@ -45,7 +39,14 @@ export default {
     RecipeAddCommand,
     RecipeAddMitre,
     RecipeOverview,
-    RecipeDatetime
   }
 };
 </script>
+
+
+<style lang="scss" scoped>
+
+#recipe-builder-editor {
+  height: 300px;
+}
+</style>

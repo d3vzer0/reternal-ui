@@ -1,6 +1,5 @@
 <template>
-  <b-card header="command selection" header-tag="header">
-    <p class="card-text">Add manual command to recipe</p>
+  <b-card header="Add manual command" header-tag="header" id="recipe-add-command">
     <b-form method="post" @submit.prevent="add_command">
       <b-row>
         <b-col cols="3">
@@ -104,3 +103,12 @@ export default {
   }
 };
 </script>
+
+
+
+<style lang="scss" scoped>
+#recipe-add-command {
+  height: 100%;
+}
+
+</style>

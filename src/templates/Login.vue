@@ -1,21 +1,23 @@
 <template>
-  <b-container fluid>
+  <b-container fluid id="login-container">
     <b-row class="justify-content-md-center top-50">
-      <b-col xl="3" lg="3" md="4" sm="5" col="6" class="center-block">
+      <b-col xl="3" lg="4" md="7" sm="8" cols="10" class="center-block">
         <b-card header="Authentication" header-tag="header" id="card-login">
           <div id="card-login-header">
             <img src="@/assets/reternal.png" id="header-image">
             <div class="alert alert-danger" v-if="error">{{ error }}</div>
           </div>
           <b-form method="post" @submit.prevent="login">
-            <b-row>
-              <b-col cols="12" class="top-10">
-                <b-form-input type="text" v-model="username" required placeholder="Username"></b-form-input>
+            <b-row class="top-10">
+              <b-col cols="12">
+                <!-- <i class="icon"><font-awesome-icon icon="user" /></i> -->
+                <b-form-input type="text" class="input-field" v-model="username" required placeholder="Username"></b-form-input>
               </b-col>
             </b-row>
-            <b-row>
-              <b-col cols="12" class="top-10">
-                <b-form-input type="password" v-model="password" required placeholder="Password"></b-form-input>
+            <b-row class="top-10">
+              <b-col cols="12">
+                <!-- <i class="icon"><font-awesome-icon icon="key" /></i> -->
+                <b-form-input type="password" class="input-field" v-model="password" required placeholder="Password"></b-form-input>
               </b-col>
             </b-row>
             <b-row>
@@ -58,7 +60,6 @@ export default {
 
       this.$store.commit("auth/set_access_token", response.data.access_token);
       this.$store.commit("auth/set_refresh_token", response.data.refresh_token)
-      this.$store.commit("auth/set_claims", response.data.access_token);
       this.$router.push("/")
     },
     login_failed(response) {
@@ -70,15 +71,47 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 @import url('https://fonts.googleapis.com/css?family=Open+Sans');
 @import "@/assets/style.scss";
+
+body {
+  background-color: #343a40;
+}
 
 #header-image {
   width: 100%;
 }
 
+* {box-sizing: border-box;}
+
+#login-container {
+  max-width: 80%;
+}
 #card-login {
+  .input-container {
+    display: flex;
+    width: 100%;
+    margin-bottom: 15px;
+  }
+  .icon {
+    padding: 10px;
+    background: #9d3a3a;
+    color: white;
+    min-width: 50px;
+    text-align: center;
+  }
+  .input-field {
+    box-sizing:border-box;
+    border-radius: 0px;
+    width: 100%;
+    padding: 10px;
+    outline: none;
+    height: 100%;
+  }
+  .input-field:focus {
+    border: 2px solid #9d3a3a;
+  }
   #sidebar-header-image {
     width: 80%;
   }

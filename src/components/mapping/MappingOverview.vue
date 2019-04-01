@@ -1,100 +1,86 @@
 <template>
-  <b-card-group class="mappingpanel">
+ <div id="recipe-overview">
+   <b-row>
+      <b-col offset="2" cols="1" class="command-seperator">
+        </b-col>
+        <b-col cols="5">
+          <b-card class="agent-card" header="Details">
+            <b-list-group flush>
+              <b-list-group-item>
+                <b-row>
+                  <b-col><b>ID</b></b-col>
+                  <b-col>{{mapping_details.details.external_id}}</b-col>
+                </b-row>
+              </b-list-group-item>
+              <b-list-group-item>
+                <b-row>
+                  <b-col><b>Platform</b></b-col>
+                  <b-col>{{mapping_details.details.platform}}</b-col>
+                </b-row>
+              </b-list-group-item>
+              <b-list-group-item>
+                <b-row>
+                  <b-col><b>Phase</b></b-col>
+                  <b-col>{{mapping_details.details.kill_chain_phase}}</b-col>
+                </b-row>
+              </b-list-group-item>
+              <b-list-group-item>
+                <b-row>
+                  <b-col><b>Technique</b></b-col>
+                  <b-col>{{mapping_details.details.technique_name}}</b-col>
+                </b-row>
+              </b-list-group-item>
+              <b-list-group-item >
+                <b-row>
+                  <b-col><b>Description</b></b-col>
+                  <b-col>{{mapping_details.details.description}}</b-col>
+                </b-row>
+              </b-list-group-item>
+               <b-list-group-item v-if="mapping_details.commands.length > 0"><b-button @click="add_to_recipe" variant="primary">Add commands to recipe</b-button></b-list-group-item>
+            </b-list-group>
+          </b-card>
+        </b-col>
+      </b-row>
 
-    <b-card header="Phase" class="col-2">
-      <b-list-group flush>
-        <b-list-group-item  v-for="(phase, index) in phases_list" 
-          @click="get_techniques(phase), selected_phase = phase, mapping_list = [], command_list = [], show_input = false"
-          :key="index"
-          :class="{'selectedphase': (phase == selected_phase)}">{{phase}}</b-list-group-item>
-      </b-list-group>
-    </b-card>
-
-    <b-card header="Techniques" class="col-3">
-      <b-list-group flush>
-        <b-list-group-item v-for="(technique, index) in technique_list" 
-          :key="index" 
-          :class="{'selectedtechnique': (technique == selected_technique)}" 
-          @click="get_mapping(technique), selected_technique = technique, command_list = [], show_input = false">
-          {{technique}}
-        </b-list-group-item>
-      </b-list-group>
-    </b-card> 
-
-    <b-card header="Mapping" class="col-3">
-      <b-list-group flush>
-        <b-list-group-item v-for="(mapping, index) in mapping_list" 
-          :key="index" 
-          :class="{'selectedmapping': (mapping == selected_mapping)}" 
-          @click="selected_mapping = mapping, command_list = mapping.commands, show_input = false">
-          {{mapping.name}}
-        </b-list-group-item>
-      </b-list-group>
-    </b-card> 
-
-    <b-card header="Commands" class="col-3">
-      <b-list-group flush>
-        <b-list-group-item v-for="(command, index) in command_list" 
-          :key="index"
-          :class="{'selectedcommand': (index == selected_command)}"
-           @click="selected_command = index,  command_type = command.name, command_input = command.input,
-           show_input = true, command_sleep = command.sleep">
-          {{command.name}}
-        </b-list-group-item>
-        <b-list-group-item class="addrecipecol"><b-link to="mapping" @click="add_to_recipe">add commands to recipe</b-link></b-list-group-item>
-      </b-list-group>
-    </b-card> 
-
-    <b-card header="Input" class="col-5">
-      <b-list-group flush v-if="show_input">
-        <b-list-group-item>
-          <b-row>
-            <b-col><b>Type</b></b-col>
-            <b-col>{{command_type}}</b-col>
-          </b-row>
-        </b-list-group-item>
-        <b-list-group-item>
-          <b-row>
-            <b-col><b>Input</b></b-col>
-            <b-col>{{command_input}}</b-col>
-          </b-row>
-        </b-list-group-item>
-        <b-list-group-item>
-          <b-row>
-            <b-col><b>Sleep</b></b-col>
-            <b-col>{{command_sleep}}</b-col>
-          </b-row>
-        </b-list-group-item>
-
-      </b-list-group>
-    </b-card>
-  </b-card-group>
-
+    <div v-for="command in mapping_details.commands">
+      <b-row>
+        <b-col offset="2" cols="1" class="command-seperator">
+          <div class="seperator-line">
+          </div>
+          <div class="seperator-circle">
+            <div class="seperator-time">
+              {{ command.sleep }}
+            </div>
+          </div>
+        </b-col>
+        <b-col cols="5">
+          <b-card class="agent-card" :header="command.name">
+            <b-list-group flush>
+              <b-list-group-item>
+                <b-row>
+                  <b-col><b>Input</b></b-col>
+                  <b-col>{{command.input}}</b-col>
+                </b-row>
+              </b-list-group-item>
+            </b-list-group>
+          </b-card>
+        </b-col>
+      </b-row>
+    </div>
+  </div>
 </template>
 
 <script>
-import _ from "lodash";
 import EventBus from "@/eventbus";
 
 export default {
   name: "MappingOverview",
   data() {
     return {
-      search_technique: "",
-      search_phase: "",
-      search_platform: "Windows",
-      search_name: "",
-
-      phases_list: [],
-      technique_list: [],
-      mapping_list: [],
-      command_list: [],
-      selected_mapping: "",
-      selected_phase: "",
-      selected_technique: "",
-      selected_command: "",
-
- 
+      mapping_details: {
+        commands: [],
+        details: {},
+      },
       command_input: "",
       command_sleep: 0,
       command_type: "",
@@ -102,71 +88,38 @@ export default {
     };
   },
   created() {
-    EventBus.$on("refreshmapping", filters => {
-      this.change_filters(filters);
+    EventBus.$on("get_mapping_flow", filters => {
+      this.get_mapping_flow(filters);
     });
   },
-  mounted() {
-    this.get_mapping_filtered();
-  },
   methods: {
-    get_mapping_filtered: _.debounce(function() {
+    get_mapping_flow(filters) {
       this.$http
         .get("mapping", {
           params: {
-            name: this.search_technique,
-            phase: this.search_phase,
-            platform: this.search_platform,
-            distinct: "kill_chain_phase"
+            name: filters.mapping,
+            phase: filters.phase,
+            platform: filters.platform,
+            technique: filters.technique,
           }
         })
-        .then(response => this.phases_list = response.data)
-        .catch(error => EventBus.$emit("showalert", error.response));
-    }, 200),
-    get_techniques(phase) {
-
-      this.$http
-        .get("mapping", {
-          params: {
-            name: this.search_technique,
-            phase: phase,
-            platform: this.search_platform,
-            distinct: "technique_name"
-          }
-        })
-        .then(response => this.technique_list = response.data)
-        .catch(response => this.generic_failed(response));
+        .then(response => this.display_mapping_flow(response.data))
     },
-    get_mapping(technique) {
-      this.$http
-        .get("mapping", {
-          params: {
-            name: this.search_name,
-            phase: this.selected_phase,
-            platform: this.search_platform,
-            technique: technique
-          }
-        })
-        .then(response => this.mapping_list = response.data)
-        .catch(response => this.generic_failed(response));
+    display_mapping_flow(result) {
+      this.mapping_details.details = result[0];
+      this.$set(this.mapping_details, 'commands', result[0].commands);
     },
-    change_filters(filters) {
-      this.search_technique = filters.technique;
-      this.search_platform = filters.platform;
-      this.search_phase = filters.phase;
-      this.get_mapping_filtered();
-    },
-
+    
     add_to_recipe() {
-      this.command_list.forEach(command => {
+      this.mapping_details.commands.forEach(command => {
         var random_array = new Uint32Array(5);
         var random_id = window.crypto.getRandomValues(random_array)[2];
         var command_options = {
-          reference_name: this.selected_mapping.name,
-          reference_id: this.selected_mapping._id['$oid'],
-          technique_name: this.selected_mapping.technique_name,
-          kill_chain_phase: this.selected_mapping.kill_chain_phase,
-          technique_id: this.selected_mapping.technique_id,
+          reference_name: this.mapping_details.details.name,
+          reference_id: this.mapping_details.details._id['$oid'],
+          technique_name: this.mapping_details.details.technique_name,
+          kill_chain_phase: this.mapping_details.details.kill_chain_phase,
+          technique_id: this.mapping_details.details.technique_id,
           name: command.name,
           input: command.input,
           sleep: command.sleep,
@@ -232,4 +185,41 @@ export default {
     background-color: #9d3a3a;
   }
 }
+
+
+
+.selectedcommand {
+  background-color: #9d3a3a;
+  color: white;
+}
+
+.command-seperator {
+  .seperator-line {
+    width: 100%;
+    height: 100%;
+    border-left: 5px;
+    border-left-style: solid;
+    border-left-color: #9d3a3a;
+    position: relative;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    margin-left: 6px;
+  }
+  .seperator-circle{
+    content: "";
+    width: 16px;
+    height: 16px;
+    background: #9d3a3a;
+    border-radius: 8px;
+    position: absolute;
+    .seperator-time {
+      font-size: 24px;
+      font-weight: bold;
+      margin-left: 30px;
+      margin-top: -10px;
+      } 
+    }
+}
+
 </style>

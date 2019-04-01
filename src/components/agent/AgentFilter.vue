@@ -1,18 +1,26 @@
 <template>
-  <b-card header="filter mitre" header-tag="header">
-    <p class="card-text">Filter tiles to only display specific agents based on hostname, username or platform</p>
-    <b-form method="get" @submit.prevent="filter_mite">
-      <b-row>
-        <b-col xl="3" lg="4" md="4" sm="6">
-          <b-form-radio-group id="platform-select" v-model="search_platform" buttons :options="platform_options" button-variant="primary-reversed">
-          </b-form-radio-group>
-        </b-col>
-        <b-col xl="9" lg="8" md="8" sm="6">
-          <b-form-input type="text" v-model="search_generic" placeholder="Username or Hostname"></b-form-input>
-        </b-col>
-      </b-row>
-    </b-form>
-  </b-card>
+  <b-row class="justify-content-center">
+    <b-col cols="3">
+      <div class="card mapping-card">
+        <div class="card-header mapping-card-header">
+           <font-awesome-icon icon="desktop" />
+        </div>
+        <div class="card-body mapping-card-body">
+          <b-form-select v-model="search_platform" :options="platform_options" class="platform-select"></b-form-select>
+        </div>
+      </div>
+    </b-col> 
+    <b-col>
+      <div class="card mapping-card">
+        <div class="card-header mapping-card-header">
+           <font-awesome-icon icon="search" />
+        </div>
+        <div class="card-body mapping-card-body">
+          <b-form-input type="text" v-model.lazy="search_generic" placeholder="Hostname or username"></b-form-input>
+        </div>
+      </div>
+    </b-col>
+  </b-row>
 </template>
 
 
@@ -43,8 +51,8 @@ export default {
       this.$http
         .get("agents", {
           params: {
-            platform: this.agent_search_platform,
-            search: this.agent_search_generic
+            platform: this.search_platform,
+            search: this.search_generic
           }
         })
         .then(response => this.parse_agents(response))
@@ -71,19 +79,40 @@ export default {
 </script>
 
 <style lang="scss">
-.agent-card {
-  width: 100%;
 
-  &.active {
-    border-color: #9e1d1d;
-    border-width: 2px;
-  }
+#platform-select-column {
+  max-width: 300px;
 }
-
+#agent-filter-card {
+  // border-top-left-radius: 0px;
+  // border-top-color:#343a40;
+  // border-top-width: 4px;
+}
 .agent-tiles {
   .btn {
     width: 100%;
   }
 }
 
+
+.mapping-card {
+  .mapping-card-body {
+    padding: 0;
+    input {
+      border-radius: 0px;
+    }
+    .platform-select {
+      border-radius: 0px;
+    }
+  }
+  .mapping-card-header{
+    border-radius: 0px;
+    border: 2px;
+    border-width: 3px;
+    text-align: center;
+    background-color: #f4f2f2;
+    color: #4c5c68;
+    font-size: 60px;
+  }
+}
 </style>

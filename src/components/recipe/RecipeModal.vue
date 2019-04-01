@@ -1,14 +1,15 @@
 <template>
-  <b-modal ref="confirmtask" id="confirmtask" size="md" hide-footer title="Insert name and schedule task for recipe">
+  <b-modal ref="confirmtask" id="confirmtask" size="md" hide-footer title="Execution date and name">
+    <RecipeDatetime></RecipeDatetime>
     <b-form method="post" @submit.prevent="submit_tasks">
       <b-row>
         <b-col cols="12" class="top-10">
-          <b-form-input type="text" v-model="task_name" required placeholder="Name"></b-form-input>
+          <b-form-input type="text" v-model="task_name" required placeholder="Task name"></b-form-input>
         </b-col>
       </b-row>
       <b-row class="top-10">
         <b-col cols="12">
-          <b-button type="submit" variant="primary">Confirm</b-button>
+          <b-button type="submit" variant="primary">Schedule task</b-button>
         </b-col>
       </b-row>
     </b-form>
@@ -17,6 +18,7 @@
 
 <script>
 import EventBus from "@/eventbus";
+import RecipeDatetime from "@/components/recipe/RecipeDatetime";
 
 export default {
   name: "RecipeModal",
@@ -66,6 +68,8 @@ export default {
     }
   },
 
-  components: {}
+  components: {
+    RecipeDatetime
+  }
 };
 </script>

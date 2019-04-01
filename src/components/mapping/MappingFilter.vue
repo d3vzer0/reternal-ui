@@ -1,22 +1,46 @@
 <template>
-
-  <b-card header="filter mitre" header-tag="header">
-  <p class="card-text">Filter the MITRE table to find mapped techniques</p>
-    <b-form method="get" @submit.prevent="filter_mite">
-      <b-row>
-          <b-col xl="3" lg="3" md="4" sm="6">
-          <b-form-radio-group id="platform-select" v-model="search_platform"  buttons :options="platform_options" button-variant="primary-reversed">
-          </b-form-radio-group>
-          </b-col>
-          <b-col xl="4" lg="5" md="4" sm="2">
-          <b-form-select :options="technique_options" v-model="search_phase" required />
-          </b-col>
-          <b-col xl="5" lg="4" md="4" sm="4">
-          <b-form-input type="text" v-model.lazy="search_technique" placeholder="Technique name"></b-form-input>
-          </b-col>
-      </b-row>
-    </b-form>
-  </b-card>
+  <b-row class="justify-content-center">
+    <b-col cols="2">
+      <div class="card mapping-card">
+        <div class="card-header mapping-card-header">
+           <font-awesome-icon icon="desktop" />
+        </div>
+        <div class="card-body mapping-card-body">
+          <b-form-select v-model="search_platform" :options="platform_options" class="platform-select"></b-form-select>
+        </div>
+      </div>
+    </b-col>
+    <b-col cols="2">
+      <div class="card mapping-card">
+        <div class="card-header mapping-card-header">
+           123
+        </div>
+        <div class="card-body mapping-card-body">
+          <b-form-select v-model="search_phase" :options="phase_options" class="platform-select"></b-form-select>
+        </div>
+      </div>
+    </b-col>
+    <b-col cols="3">
+      <div class="card mapping-card">
+        <div class="card-header mapping-card-header">
+           <font-awesome-icon icon="bullseye" />
+        </div>
+        <div class="card-body mapping-card-body">
+          <b-form-select v-model="search_technique" :options="technique_options" class="platform-select"></b-form-select>
+        </div>
+      </div>
+    </b-col>
+    <b-col cols="3">
+      <div class="card mapping-card">
+        <div class="card-header mapping-card-header">
+           <font-awesome-icon icon="save" />
+        </div>
+        <div class="card-body mapping-card-body">
+          <b-form-select v-model="search_name" :options="mapping_options" class="platform-select"></b-form-select>
+        </div>
+      </div>
+    </b-col>
+  </b-row>
 
 </template>
 
@@ -32,31 +56,25 @@ export default {
         { text: "Mac", value: "macOS" },
         { text: "Linux", value: "Linux" }
       ],
-      technique_options: [
-        { text: "Any", value: "" },
-        { text: "initial-access", value: "initial-access" },
-        { text: "execution", value: "execution" },
-        { text: "persistences", value: "persistence" },
-        { text: "privilege-escalation", value: "privilege-escalation" },
-        { text: "defense-evasion", value: "defense-evasion" },
-        { text: "credential-access", value: "credential-access" },
-        { text: "discovery", value: "discovery" },
-        { text: "lateral-movement", value: "lateral-movement" },
-        { text: "exfiltration", value: "exfiltration" },
-        { text: "collection", value: "collection" },
-        { text: "command-and-control", value: "command-and-control" }
-      ],
+      phase_options: [],
+      technique_options: [],
+      mapping_options: [],
       search_technique: "",
       search_phase: "",
+      search_name: "",
       search_platform: "Windows"
     };
+  },
+  created (){
+    this.get_phases(this.search_platform)
   },
   computed: {
     search_filters: function() {
       var filters = {
         technique: this.search_technique,
         platform: this.search_platform,
-        phase: this.search_phase
+        phase: this.search_phase,
+        mapping: this.search_name,
       };
       return filters;
     }
@@ -64,16 +82,80 @@ export default {
   watch: {
     search_phase: function(value) {
       this.search_phase = value;
-      EventBus.$emit("refreshmapping", this.search_filters);
+      this.get_techniques(value)
     },
     search_platform: function(value) {
       this.search_platform = value;
-      EventBus.$emit("refreshmapping", this.search_filters);
+      this.get_phases(value)
     },
     search_technique: function(value) {
       this.search_technique = value;
-      EventBus.$emit("refreshmapping", this.search_filters);
+      this.get_mapping(value)
+    },
+    search_name: function(value) {
+      this.search_name = value;
+      EventBus.$emit('get_mapping_flow', this.search_filters)
     }
+  },
+  methods: {
+    get_phases(platform){
+       this.$http
+        .get("mapping", {
+          params: {
+            platform: platform,
+            distinct: "kill_chain_phase"
+          }
+        })
+        .then(response => this.phase_options = response.data)
+    },
+    get_techniques(phase) {
+      this.$http
+        .get("mapping", {
+          params: {
+            phase: phase,
+            platform: this.search_platform,
+            distinct: "technique_name"
+          }
+        })
+        .then(response => this.technique_options = response.data)
+    },
+    get_mapping(technique) {
+      this.$http
+        .get("mapping", {
+          params: {
+            phase: this.selected_phase,
+            platform: this.search_platform,
+            technique: technique,
+            distinct: 'name'
+          }
+        })
+        .then(response => this.mapping_options = response.data)
+    },
   }
 };
 </script>
+
+<style lang="scss" scoped>
+#platform-filter {
+  max-width: 250px;
+}
+
+.mapping-card {
+  .mapping-card-body {
+    padding: 0;
+    .platform-select {
+      border-radius: 0px;
+    }
+  }
+  .mapping-card-header{
+    border-radius: 0px;
+    border: 2px;
+    border-width: 3px;
+    text-align: center;
+    background-color: #f4f2f2;
+    color: #4c5c68;
+    font-size: 60px;
+  }
+}
+
+</style>

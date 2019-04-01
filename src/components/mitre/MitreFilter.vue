@@ -1,22 +1,36 @@
 <template>
-
-  <b-card header="filter mitre" header-tag="header">
-  <p class="card-text">Find details regarding specific MITRE techniques</p>
-    <b-form method="get" @submit.prevent="filter_mite">
-      <b-row>
-          <b-col xl="3" lg="3" md="4" sm="6">
-          <b-form-radio-group id="platform-select" v-model="search_platform"  buttons :options="platform_options" button-variant="primary-reversed">
-          </b-form-radio-group>
-          </b-col>
-          <b-col xl="4" lg="5" md="4" sm="2">
-          <b-form-select :options="technique_options" v-model="search_phase" required />
-          </b-col>
-          <b-col xl="5" lg="4" md="4" sm="4">
+  <b-row class="justify-content-center">
+    <b-col cols="2">
+      <div class="card mapping-card">
+        <div class="card-header mapping-card-header">
+           <font-awesome-icon icon="desktop" />
+        </div>
+        <div class="card-body mapping-card-body">
+          <b-form-select v-model="search_platform" :options="platform_options" class="platform-select"></b-form-select>
+        </div>
+      </div>
+    </b-col>
+    <b-col cols="3">
+      <div class="card mapping-card">
+        <div class="card-header mapping-card-header">
+           123
+        </div>
+        <div class="card-body mapping-card-body">
+          <b-form-select v-model="search_phase" :options="technique_options" class="platform-select"></b-form-select>
+        </div>
+      </div>
+    </b-col>
+    <b-col cols="">
+      <div class="card mapping-card">
+        <div class="card-header mapping-card-header">
+           <font-awesome-icon icon="search" />
+        </div>
+        <div class="card-body mapping-card-body">
           <b-form-input type="text" v-model.lazy="search_technique" placeholder="Technique name"></b-form-input>
-          </b-col>
-      </b-row>
-    </b-form>
-  </b-card>
+        </div>
+      </div>
+    </b-col>
+  </b-row>
 
 </template>
 
@@ -77,3 +91,30 @@ export default {
   }
 };
 </script>
+
+<style lang="scss" scoped>
+#platform-select {
+  max-width: 250px;
+}
+
+.mapping-card {
+  .mapping-card-body {
+    padding: 0;
+    input {
+      border-radius: 0px;
+    }
+    .platform-select {
+      border-radius: 0px;
+    }
+  }
+  .mapping-card-header{
+    border-radius: 0px;
+    border: 2px;
+    border-width: 3px;
+    text-align: center;
+    background-color: #f4f2f2;
+    color: #4c5c68;
+    font-size: 60px;
+  }
+}
+</style>

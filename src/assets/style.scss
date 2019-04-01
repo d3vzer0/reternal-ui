@@ -2,9 +2,9 @@
   background-color: white;
   color: #8e8e8e;
   text-transform: uppercase;
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 400;
-  letter-spacing: 1px;
+  letter-spacing: 2px;
 }
 
 .top-10 {
@@ -65,9 +65,10 @@
 
 .card {
   margin-bottom: 20px;
+  border-radius: 0px;
   &.active {
     border-color: #9e1d1d;
-    border-width: 2px;
+    border-width: 3px;
   }
   .btn {
     width: 100%;

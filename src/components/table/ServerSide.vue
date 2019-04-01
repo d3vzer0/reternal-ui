@@ -171,11 +171,11 @@ export default {
   }
 }
 
-.nav-item {
-  a {
-    color: #495057;
-  }
-}
+// .nav-item {
+//   a {
+//     color: #495057;
+//   }
+// }
 
 .tabs {
   .nav-link {

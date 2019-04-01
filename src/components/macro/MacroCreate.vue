@@ -1,7 +1,6 @@
 <template>
 
   <b-card header="create macro" header-tag="header">
-    <p class="card-text">Create custom macros based on existing/default commands</p>
     <b-form method="post" @submit.prevent="create_macro">
       <b-row>
           <b-col cols="2">

@@ -1,7 +1,6 @@
 
 <template>
   <b-card header="filter startup" header-tag="header">
-    <p class="card-text">Filter the startup tasks for specific platforms, commands etc</p>
     <b-form method="get" @submit.prevent="filter_startup">
       <b-row>
         <b-col xl="3" lg="3" md="4" sm="6">
