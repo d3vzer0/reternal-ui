@@ -2,7 +2,7 @@
 # https://vuejs.org/v2/cookbook/dockerize-vuejs-app.html
 
 # Builds the reternal-ui project during initial build-stage
-FROM node:9.11.1 as build-stage
+FROM node:11.13.0 as build-stage
 WORKDIR /app
 COPY package*.json ./
 RUN npm install
