@@ -1,11 +1,20 @@
 # Dockerfile as described on
 # https://vuejs.org/v2/cookbook/dockerize-vuejs-app.html
 
-# Builds the reternal-ui project during initial build-stage
-FROM node:11.13.0 as build-stage
+# Installs the reternal-ui project deps during initial dep-stage
+FROM node:11.13.0 as dependency-stage
 WORKDIR /app
 COPY package*.json ./
 RUN npm install
+
+# Stage building the Vue app
+FROM dependency-stage as build-stage
+ARG VUE_APP_SOCKETHOST
+ENV VUE_APP_SOCKETHOST ${VUE_APP_SOCKETHOST}
+
+ARG VUE_APP_BASEAPI
+ENV VUE_APP_BASEAPI ${VUE_APP_BASEAPI}
+
 COPY . .
 RUN npm run build
 

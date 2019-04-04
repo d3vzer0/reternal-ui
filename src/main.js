@@ -72,7 +72,7 @@ library.add(
   faSave
 );
 
-const socket = io("http://localhost:5000", {
+const socket = io(process.env.VUE_APP_SOCKETHOST, {
   autoConnect: false
 });
 
