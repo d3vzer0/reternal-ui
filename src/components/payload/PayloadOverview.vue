@@ -1,13 +1,23 @@
 <template>
-  <b-card-group columns>
-    <b-card :header="payload.platform" v-for="payload in available_payloads">
-      <b-list-group flush>
-        <b-list-group-item v-for="type in payload.types">
-          <b-button variant="primary" @click="download_link(payload.platform, type.arch)">{{type.name}}</b-button>
-        </b-list-group-item>
-      </b-list-group>
-    </b-card>
-  </b-card-group>
+  <b-row class="justify-content-center">  
+    <b-col v-for="payload in available_payloads" :key="payload.platform">
+      <div class="card mapping-card">
+        <div class="card-header mapping-card-header">
+          <font-awesome-icon :icon="['fab', 'windows']" v-if="payload.platform == 'windows'"/>
+          <font-awesome-icon :icon="['fab', 'apple']" v-if="payload.platform == 'darwin'"/>
+          <font-awesome-icon :icon="['fab', 'linux']" v-if="payload.platform == 'linux'"/>
+        </div>
+        <div class="card-body mapping-card-body">
+          <b-list-group flush>
+            <b-list-group-item v-for="type in payload.types" button @click="download_link(payload.platform, type.arch)">
+              {{type.name}}
+            </b-list-group-item>
+          </b-list-group>
+        </div>
+      </div>
+    </b-col>  
+  </b-row>
+
 </template>
 
 <script>
@@ -36,6 +46,7 @@ export default {
       this.available_payloads = response.data;
     },
     download_link(platform, arch) {
+      console.log(1)
       this.$http
         .get("payload", { responseType: 'blob', params: { 'platform': platform, 'arch':arch } })
         .then(response => {
