@@ -3,10 +3,7 @@
     <b-row class="top-10" id="recipe-builder-editor">
       <b-col cols="12">
         <b-row>
-          <b-col cols="6">
-            <RecipeAddMitre></RecipeAddMitre>
-          </b-col>
-          <b-col cols="6">
+          <b-col >
             <RecipeAddCommand></RecipeAddCommand>
           </b-col>
         </b-row>

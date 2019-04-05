@@ -56,10 +56,13 @@ export default {
           }
         })
         .then(response => this.parse_agents(response))
-        .catch(response => this.generic_failed(response));
+        .catch(response => this.generic_failed(response))
     }, 200),
     parse_agents(response) {
-      this.$parent.agent_list = response.data;
+      this.$parent.agent_list = response.data
+      response.data.forEach(element => {
+        this.$store.commit('agents/add_agent', element)
+      });
     },
     generic_failed(response) {
       this.error = "Unable to perform request";
@@ -68,11 +71,11 @@ export default {
   watch: {
     search_platform: function(value) {
       this.search_platform = value;
-      this.get_agents_filtered();
+      this.get_agents_filtered()
     },
     search_generic: function(value) {
       this.search_generic = value;
-      this.get_agents_filtered();
+      this.get_agents_filtered()
     }
   }
 };

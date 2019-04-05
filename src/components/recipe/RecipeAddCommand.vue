@@ -1,9 +1,14 @@
 <template>
-  <b-card header="Add manual command" header-tag="header" id="recipe-add-command">
-    <b-form method="post" @submit.prevent="add_command">
-      <b-row>
-        <b-col cols="3">
-          <b-form-select  required v-model="command">
+  <b-row class="justify-content-center">
+    <b-form method="post" @submit.prevent="add_command" id="add-command">
+    </b-form>
+     <b-col cols="2">
+      <div class="card mapping-card">
+        <div class="card-header mapping-card-header">
+           <font-awesome-icon icon="terminal" />
+        </div>
+        <div class="card-body mapping-card-body">
+          <b-form-select  required v-model="command" form="add-command">
             <optgroup label="Manual commands">
               <option v-for="command in command_options" :key="command.id" :value="command.value">{{command.text}}</option>
             </optgroup>
@@ -11,19 +16,40 @@
               <option v-for="macro in macro_options" :key="macro.id" :value="macro.value">{{macro.text}}</option>
             </optgroup>
          </b-form-select>
-        </b-col>
-        <b-col cols="5">
-         <b-form-input type="text" placeholder="Command input" v-model="input"></b-form-input>
-        </b-col>
-        <b-col cols="2">
-          <b-form-input type="text" placeholder="Sleep" v-model="command_sleep"></b-form-input>
-        </b-col>
-        <b-col cols="2">
-         <b-button type="submit" variant="primary" class="fullwidth">Add</b-button>
-        </b-col>
-      </b-row>
-    </b-form>
-  </b-card>
+        </div>
+      </div>
+    </b-col>
+    <b-col>
+      <div class="card mapping-card">
+        <div class="card-header mapping-card-header">
+           <font-awesome-icon icon="keyboard" />
+        </div>
+        <div class="card-body mapping-card-body">
+          <b-form-input type="text" placeholder="Command input" v-model="input" form="add-command"></b-form-input>
+        </div>
+      </div>
+    </b-col>
+    <b-col cols="2">
+      <div class="card mapping-card">
+        <div class="card-header mapping-card-header">
+           <font-awesome-icon icon="clock" />
+        </div>
+        <div class="card-body mapping-card-body">
+          <b-form-input type="text" placeholder="Sleep" v-model="command_sleep" form="add-command"></b-form-input>
+        </div>
+      </div>
+    </b-col>
+    <b-col cols="2">
+      <div class="card mapping-card">
+        <div class="card-header mapping-card-header">
+           <font-awesome-icon icon="plus" />
+        </div>
+        <div class="card-body mapping-card-body">
+          <b-button type="submit" variant="primary" class="fullwidth" form="add-command">Add</b-button>
+        </div>
+      </div>
+    </b-col>
+  </b-row>
 </template>
 
 <script>
@@ -108,7 +134,7 @@ export default {
 
 <style lang="scss" scoped>
 #recipe-add-command {
-  height: 100%;
+  height: 85%;
 }
 
 </style>

@@ -89,7 +89,7 @@ export default {
 .agent-card {
   width: 100%;
   &.active {
-    border-color: #343a40;
+    border-color: #00a5d69e;
     border-width: 3px;
   }
   .card-body {
