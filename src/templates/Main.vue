@@ -327,6 +327,9 @@ body {
       font-size: 20px;
       font-weight: 400;
       letter-spacing: 2px;
+      .dropdown-item {
+        font-size: 14px;
+      }
     }
     .nav-link {
       color: #dddddd !important;

@@ -13,14 +13,17 @@
           </div>
         </b-col>
         <b-col class="agent-card-content">
-          <!-- <b-row>
-            <b-col>State</b-col><b-col>{{agent.state}}</b-col>
-          </b-row> -->
           <b-row>
             <b-col cols="1"><font-awesome-icon icon="user" /></b-col><b-col>{{agent.username}}</b-col>
           </b-row>
           <b-row>
              <b-col cols="1"><font-awesome-icon icon="ethernet" /></b-col><b-col>{{agent.remote_ip}}</b-col>
+          </b-row>
+           <b-row>
+             <b-col cols="1"><font-awesome-icon icon="plug" /></b-col><b-col>{{agent.state}}</b-col>
+          </b-row>
+           <b-row>
+             <b-col cols="1"><font-awesome-icon icon="clock" /></b-col><b-col>{{to_unix(agent.timestamp.$date)}}</b-col>
           </b-row>
           <b-row>
             <b-col>{{agent.last_beacon}}</b-col>
@@ -64,6 +67,13 @@ export default {
   methods: {
     generic_failed(response) {
       this.error = "Unable to perform request";
+    },
+    to_unix(unix_timestamp) {
+      var from_miliseconds = unix_timestamp / 1000;
+      var datetime = this.$moment
+        .unix(from_miliseconds)
+        .format("YYYY-MM-DD HH:mm:ss");
+      return datetime;
     },
     click_agent_tile(agent_object) {
       this.$store.commit("selection/add_agent", agent_object);
