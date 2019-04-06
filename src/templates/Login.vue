@@ -75,9 +75,6 @@ export default {
 @import url('https://fonts.googleapis.com/css?family=Open+Sans');
 @import "@/assets/style.scss";
 
-body {
-  background-color: #343a40;
-}
 
 #header-image {
   width: 100%;
@@ -87,6 +84,8 @@ body {
 
 #login-container {
   max-width: 80%;
+  min-height: 100vh;
+
 }
 #card-login {
   .input-container {
