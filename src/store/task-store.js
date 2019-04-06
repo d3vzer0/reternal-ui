@@ -16,6 +16,9 @@ export default {
     }
   },
   mutations: {
+    set_commands(state, commands) {
+      state.commands = commands;
+    },
     add_command(state, command) {
       if (!("type" in command)) {
         command.type = "Manual";

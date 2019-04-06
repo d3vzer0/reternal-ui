@@ -1,10 +1,10 @@
 <template>
  <div id="recipe-overview">
    <b-row>
-      <b-col offset="2" cols="1" class="command-seperator">
+      <b-col offset="1" cols="1" class="command-seperator">
         </b-col>
-        <b-col cols="5">
-          <b-card class="agent-card" header="Details">
+        <b-col cols="6">
+          <b-card class="mapping-card-mitre" header="Details">
             <b-list-group flush>
               <b-list-group-item>
                 <b-row>
@@ -44,17 +44,8 @@
 
     <div v-for="command in mapping_details.commands">
       <b-row>
-        <b-col offset="2" cols="1" class="command-seperator">
-          <div class="seperator-line">
-          </div>
-          <div class="seperator-circle">
-            <div class="seperator-time">
-              {{ command.sleep }}
-            </div>
-          </div>
-        </b-col>
-        <b-col cols="5">
-          <b-card class="agent-card" :header="command.name">
+        <b-col offset="2" cols="6">
+          <b-card class="mapping-card-technique" :header="command.name" header-bg-variant="dark" header-text-variant="white">
             <b-list-group flush>
               <b-list-group-item>
                 <b-row>
@@ -64,6 +55,15 @@
               </b-list-group-item>
             </b-list-group>
           </b-card>
+        </b-col>
+        <b-col offset="1" cols="1" class="command-seperator">
+          <div class="seperator-line">
+          </div>
+          <div class="seperator-circle">
+            <div class="seperator-time">
+              {{ command.sleep }}
+            </div>
+          </div>
         </b-col>
       </b-row>
     </div>
@@ -186,40 +186,9 @@ export default {
   }
 }
 
-
-
 .selectedcommand {
   background-color: #9d3a3a;
   color: white;
-}
-
-.command-seperator {
-  .seperator-line {
-    width: 100%;
-    height: 100%;
-    border-left: 5px;
-    border-left-style: solid;
-    border-left-color: #9d3a3a;
-    position: relative;
-    box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    -webkit-box-sizing: border-box;
-    margin-left: 6px;
-  }
-  .seperator-circle{
-    content: "";
-    width: 16px;
-    height: 16px;
-    background: #9d3a3a;
-    border-radius: 8px;
-    position: absolute;
-    .seperator-time {
-      font-size: 24px;
-      font-weight: bold;
-      margin-left: 30px;
-      margin-top: -10px;
-      } 
-    }
 }
 
 </style>

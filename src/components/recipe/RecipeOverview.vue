@@ -99,15 +99,19 @@ export default {
       selected_mitre_name: "",
       selected_mitre_phase: "",
       reference_name: "",
-      // task_commands: this.$store.getters["task/commands"]
     }
   },
   computed: {
     all_agents: function () {
       return this.$store.getters["agents/get_agents"]
     },
-    task_commands: function () {
-      return this.$store.getters['task/commands']
+    task_commands:  {
+      get: function () {
+        return this.$store.getters['task/commands']
+      },
+      set: function (value) {
+        this.$store.commit('task/set_commands', value)
+      }
     }
   },
   methods: {
@@ -157,34 +161,9 @@ export default {
   color: white;
 }
 
-.command-seperator {
-  .seperator-line {
-    width: 100%;
-    height: 90%;
-    border-left: 5px;
-    border-left-style: solid;
-    border-left-color: #9d3a3a;
-    position: relative;
-    box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    -webkit-box-sizing: border-box;
-    margin-left: 6px;
-  }
-  .seperator-circle{
-    content: "";
-    width: 16px;
-    background: #9d3a3a;
-    border-radius: 8px;
-    position: absolute;
-    .seperator-time {
-      font-size: 24px;
-      font-weight: bold;
-      margin-left: 30px;
-      margin-top: -10px;
-      } 
-    }
+.recipe-card {
+  word-break: break-all;
 }
-
 .mapping-card-dark {
   .mapping-card-body {
     padding: 0;
