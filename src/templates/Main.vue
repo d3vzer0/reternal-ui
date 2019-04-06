@@ -338,8 +338,6 @@ body {
 }
 
 #row-content {
-  // background-color: #f4f2f2;
-  // background: linear-gradient(180deg, #343a40 300px, #f4f2f2 300px);
   min-height: 100vh;
   .column-content {
     margin-top: 50px;

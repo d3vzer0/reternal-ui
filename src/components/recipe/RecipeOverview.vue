@@ -160,7 +160,7 @@ export default {
 .command-seperator {
   .seperator-line {
     width: 100%;
-    height: 100%;
+    height: 90%;
     border-left: 5px;
     border-left-style: solid;
     border-left-color: #9d3a3a;
@@ -173,7 +173,6 @@ export default {
   .seperator-circle{
     content: "";
     width: 16px;
-    height: 16px;
     background: #9d3a3a;
     border-radius: 8px;
     position: absolute;
