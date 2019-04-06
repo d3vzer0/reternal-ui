@@ -2,7 +2,7 @@
   <div class="agent-details top-10">
       <b-row class="top-10">
       <b-col>
-        <b-card header="filter output" header-tag="header">
+        <b-card >
           <b-form method="get" @submit.prevent="filter_mite">
             <b-row>
               <b-col cols="3">
@@ -129,6 +129,10 @@ export default {
 
 .tabs {
   .nav-link {
+    color:#9d3a3a8a;
+    font-size: 12px;
+    font-weight: bold;
+
     &.active {
       color: #9d3a3a;
     }
