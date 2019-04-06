@@ -176,6 +176,10 @@ export default {
     },
     this.$options.sockets.emit_result = (result) => {
       this.output_result(result);
+    },
+    this.$options.sockets.emit_buildstate = (result) => {
+      result.data.state = 'SUCCESS'
+      this.$store.commit('payloads/change_state', result.data)
     }
   },
   mounted() {

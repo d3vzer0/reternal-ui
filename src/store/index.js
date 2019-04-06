@@ -7,12 +7,14 @@ import selection from '@/store/selection-store'
 import task from '@/store/task-store'
 import terminal from '@/store/terminal-store'
 import agents from '@/store/agents-store'
+import payloads from '@/store/payloads-store'
 
 Vue.use(Vuex);
 
 export const store = new Vuex.Store({
   modules: {
     template,
+    payloads,
     auth,
     error,
     selection,

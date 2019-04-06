@@ -1,23 +1,39 @@
 <template>
-  <b-row class="justify-content-center">  
-    <b-col v-for="payload in available_payloads" :key="payload.platform">
-      <div class="card mapping-card">
-        <div class="card-header mapping-card-header">
-          <font-awesome-icon :icon="['fab', 'windows']" v-if="payload.platform == 'windows'"/>
-          <font-awesome-icon :icon="['fab', 'apple']" v-if="payload.platform == 'darwin'"/>
-          <font-awesome-icon :icon="['fab', 'linux']" v-if="payload.platform == 'linux'"/>
+  <div id="payloads">
+    <b-row>
+      <b-col>
+        <b-card>
+          <b-row>
+            <b-col cols="1">
+              <b-button @click="build_payloads()" variant="dark"><font-awesome-icon icon="hammer"/></b-button>
+            </b-col>
+            <b-col>
+                <b-progress :value="build_count" :max="payload_count" show-progress animated></b-progress>
+            </b-col>
+          </b-row>
+        </b-card>
+      </b-col>
+    </b-row>
+    <b-row class="justify-content-center top-10">  
+      <b-col v-for="(types, platform) in available_payloads" :key="platform">
+        <div class="card mapping-card">
+          <div class="card-header mapping-card-header">
+            <font-awesome-icon :icon="['fab', 'windows']" v-if="platform == 'windows'"/>
+            <font-awesome-icon :icon="['fab', 'apple']" v-if="platform == 'darwin'"/>
+            <font-awesome-icon :icon="['fab', 'linux']" v-if="platform == 'linux'"/>
+          </div>
+          <div class="card-body mapping-card-body">
+            <b-list-group flush>
+              <b-list-group-item :disabled="context.build_state != 'SUCCESS'" v-for="(context, arch) in types" button @click="download_link(platform, arch)">
+                {{context.name}}
+                <span v-if="context.build_state != 'SUCCESS'">(not available)</span>  
+              </b-list-group-item>
+            </b-list-group> 
+          </div>
         </div>
-        <div class="card-body mapping-card-body">
-          <b-list-group flush>
-            <b-list-group-item v-for="type in payload.types" button @click="download_link(payload.platform, type.arch)">
-              {{type.name}}
-            </b-list-group-item>
-          </b-list-group>
-        </div>
-      </div>
-    </b-col>  
-  </b-row>
-
+      </b-col>  
+    </b-row>
+  </div>
 </template>
 
 <script>
@@ -27,26 +43,54 @@ export default {
   name: "PayloadOverview",
   data() {
     return {
-      available_payloads: [],
       selected_platform: "linux",
-      selected_arch: ""
+      selected_arch: "",
     };
   },
-  mounted() {
+  created() {
     this.get_payloads();
+  },
+  computed: {
+    available_payloads: function () {
+      return this.$store.getters['payloads/get_payloads']
+    },
+    payload_count: function () {
+      return this.$store.getters['payloads/payload_count']
+    },
+    build_count: function () {
+      return this.$store.getters['payloads/build_count']
+    }
   },
   methods: {
     get_payloads() {
       this.$http
         .get("payloads")
-        .then(response => this.parse_payloads(response))
+        .then(response => this.parse_payloads(response.data))
         .catch(response => this.generic_failed(response));
     },
-    parse_payloads(response) {
-      this.available_payloads = response.data;
+    parse_payloads(payloads){
+      this.$store.commit('payloads/add_payloads', payloads)
+      this.get_states()
+    },
+    build_payloads () {
+      this.$store.commit('payloads/clear_state')
+      for (const [platform, types] of Object.entries(this.available_payloads)) {
+        for (const [arch, context] of Object.entries(types)) {
+          this.$http
+            .post("payload",  { 'platform': platform, 'arch': arch })
+        }
+      }
+    },
+    get_states(){
+      for (const [platform, types] of Object.entries(this.available_payloads)) {
+        for (const [arch, context] of Object.entries(types)) {
+          this.$http
+            .get("payload",  { params: { 'platform': platform, 'arch': arch }})
+            .then(response => this.$store.commit('payloads/change_state', response.data))
+        }
+      }
     },
     download_link(platform, arch) {
-      console.log(1)
       this.$http
         .get("payload", { responseType: 'blob', params: { 'platform': platform, 'arch':arch } })
         .then(response => {
@@ -61,3 +105,16 @@ export default {
   }
 };
 </script>
+
+<style lang="scss" scoped>
+
+.progress {
+  margin-top: 10px;
+  .progress-bar {
+    background-color: red !important;
+  }
+}
+
+
+</style>
+

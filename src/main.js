@@ -35,6 +35,11 @@ import {
   faSave,
   faGlobeEurope,
   faEthernet,
+  faClock,
+  faPlus,
+  faKeyboard,
+  faHammer,
+  faPlug
 } from "@fortawesome/free-solid-svg-icons";
 
 import {
@@ -45,6 +50,7 @@ import {
 
 library.add(
   faSearch,
+  faPlug,
   faWindows,
   faLinux,
   faEthernet,
@@ -69,7 +75,11 @@ library.add(
   faArrowAltCircleDown,
   faArrowRight,
   faLink,
-  faSave
+  faKeyboard,
+  faSave,
+  faHammer,
+  faPlus,
+  faClock
 );
 
 const socket = io(process.env.VUE_APP_SOCKETHOST, {
