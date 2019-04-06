@@ -26,13 +26,18 @@
                 <span class="nav-item-icon"><font-awesome-icon icon="globe-europe" /></span>
                 <span class="nav-item-title">Graph</span>
               </b-nav-item> -->
-              <b-nav-item class="nav-item" to="/home">
-                <span class="nav-item-icon"><font-awesome-icon icon="desktop" /></span>
-                <span class="nav-item-title">Agents</span>
+              <b-nav-item class="nav-item">
+                <b-link to="home" active-class="active">
+                  <span class="nav-item-icon"><font-awesome-icon icon="desktop" /></span>
+                  <span class="nav-item-title">Agents</span>
+                </b-link>
               </b-nav-item>
-               <b-nav-item class="nav-item" to="/recipe">
-                <span class="nav-item-icon"><font-awesome-icon icon="tasks" /></span>
-                <span class="nav-item-title">Recipe Builder <b-badge class="recipecount" variant="primary">{{recipe_count}}</b-badge></span>
+
+               <b-nav-item class="nav-item">
+                <b-link to="recipe" active-class="active">
+                  <span class="nav-item-icon"><font-awesome-icon icon="tasks" /></span>
+                  <span class="nav-item-title">Recipe Builder <b-badge class="recipecount" variant="primary">{{recipe_count}}</b-badge></span>
+                </b-link>
               </b-nav-item>
 
             </ul>
@@ -42,13 +47,17 @@
           </div>
           <b-nav vertical id="sidebar-nav" class="sidebar-nav-links">
             <ul class="nav flex-column">
-              <b-nav-item class="nav-item" to="/mapping">
-                <span class="nav-item-icon"><font-awesome-icon icon="link" /></span>
-                <span class="nav-item-title">Linked techniques</span>
+              <b-nav-item class="nav-item">
+                <b-link to="mapping" active-class="active">
+                  <span class="nav-item-icon"><font-awesome-icon icon="link" /></span>
+                  <span class="nav-item-title">Linked techniques</span>
+                </b-link>
               </b-nav-item>
-              <b-nav-item class="nav-item" to="/mitre">
-                <span class="nav-item-icon"><font-awesome-icon icon="archive" /></span>
-                <span class="nav-item-title">Mitre Archive</span>
+              <b-nav-item class="nav-item">
+                <b-link to="mitre" active-class="active">
+                  <span class="nav-item-icon"><font-awesome-icon icon="archive" /></span>
+                  <span class="nav-item-title">Mitre Archive</span>
+                </b-link>
               </b-nav-item>
             </ul>
           </b-nav>
@@ -57,17 +66,26 @@
           </div>
           <b-nav vertical id="sidebar-nav" class="sidebar-nav-links">
             <ul class="nav flex-column">
-              <b-nav-item class="nav-item" to="/payloads">
-                <span class="nav-item-icon"><font-awesome-icon icon="download" /></span>
-                <span class="nav-item-title">payloads</span>
+
+              <b-nav-item class="nav-item">
+                <b-link to="payloads" active-class="active">
+                  <span class="nav-item-icon"><font-awesome-icon icon="download" /></span>
+                  <span class="nav-item-title">payloads</span>
+                </b-link>
               </b-nav-item>
-              <b-nav-item class="nav-item" to="/macros">
-                <span class="nav-item-icon"><font-awesome-icon icon="bookmark" /></span>
-                <span class="nav-item-title">macros</span>
+
+              <b-nav-item class="nav-item">
+                <b-link to="macros" active-class="active">
+                  <span class="nav-item-icon"><font-awesome-icon icon="bookmark" /></span>
+                  <span class="nav-item-title">macros</span>
+                </b-link>
               </b-nav-item>
-              <b-nav-item class="nav-item" to="/startup">
-                <span class="nav-item-icon"><font-awesome-icon icon="calendar" /></span>
-                <span class="nav-item-title">startup tasks</span>
+
+              <b-nav-item class="nav-item">
+                <b-link to="startup" active-class="active">
+                  <span class="nav-item-icon"><font-awesome-icon icon="calendar" /></span>
+                  <span class="nav-item-title">startup tasks</span>
+                </b-link>
               </b-nav-item>
             </ul>
           </b-nav>
@@ -76,13 +94,17 @@
           </div>
           <b-nav vertical id="sidebar-nav" class="sidebar-nav-links">
             <ul class="nav flex-column">
-              <b-nav-item class="nav-item" to="recipes">
-                <span class="nav-item-icon"><font-awesome-icon icon="tasks" /></span>
-                <span class="nav-item-title">Saved Recipes</span>
+              <b-nav-item class="nav-item">
+                <b-link to="recipes" active-class="active">
+                  <span class="nav-item-icon"><font-awesome-icon icon="tasks" /></span>
+                  <span class="nav-item-title">Saved Recipes</span>
+                </b-link>
               </b-nav-item>
-              <b-nav-item class="nav-item" to="Users">
-                <span class="nav-item-icon"><font-awesome-icon icon="user" /></span>
-                <span class="nav-item-title">Users</span>
+              <b-nav-item class="nav-item">
+                <b-link to="users" active-class="active">
+                  <span class="nav-item-icon"><font-awesome-icon icon="user" /></span>
+                  <span class="nav-item-title">Users</span>
+                  </b-link>
               </b-nav-item>
             </ul>
           </b-nav>
@@ -250,7 +272,7 @@ export default {
 @import "@/assets/style.scss";
 
 body {
-  background-color: #343a40;
+  background: linear-gradient(180deg, #343a40 350px, #f4f2f2 350px);
 }
 
 #app {
@@ -292,7 +314,9 @@ body {
    }
 
     .active {
-      color: #9e1d1d;
+      .nav-item-icon {
+        color: #9e1d1d;
+      }
     }
     .nav-item-title {
       margin-left: 10px;
@@ -301,6 +325,8 @@ body {
       color: #8e8e8e;
       font-size: 16px;
       font-weight: 400;
+      text-decoration: none;
+
       letter-spacing: 1px;
       &:hover {
         .nav-item-icon {
@@ -313,10 +339,12 @@ body {
 
 #row-content {
   // background-color: #f4f2f2;
-  background: linear-gradient(180deg, #343a40 300px, #f4f2f2 300px);
+  // background: linear-gradient(180deg, #343a40 300px, #f4f2f2 300px);
   min-height: 100vh;
   .column-content {
     margin-top: 50px;
+    padding-left: 50px;
+    padding-right: 50px;
   }
 }
 

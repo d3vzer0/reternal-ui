@@ -21,7 +21,7 @@
           <transition-group>
             <div v-for="command in task_commands" :key="command.rand">
               <b-row>
-                <b-col offset="1" cols="8">
+                <b-col cols="8">
                   <b-card class="recipe-card" header-bg-variant="dark" header-text-variant="white" :header="command.name">
                     <b-list-group flush>
                       <b-list-group-item>

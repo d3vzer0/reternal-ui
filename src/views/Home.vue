@@ -30,11 +30,6 @@ export default {
   data() {
     return {};
   },
-  methods: {
-    testclick() {
-      console.log(this.$store.getters["task/date"]);
-    }
-  },
   components: {
     StatsPlatform,
     StatsAgents,
