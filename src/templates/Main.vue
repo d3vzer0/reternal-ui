@@ -116,12 +116,7 @@
           <b-col cols="12">
            <b-navbar toggleable="md" type="light" variant="platinum" >
             <b-navbar-nav>
-              <!-- <b-nav-item to="terminal"> <font-awesome-icon icon="terminal" /> Terminal</b-nav-item>
-              <b-nav-item @click="run_recipe"> <font-awesome-icon icon="play-circle" /> Run Recipe </b-nav-item>
-              <b-nav-item @click="boot_recipe"> <font-awesome-icon icon="arrow-alt-circle-down" /> Startup Recipe</b-nav-item>
-              <b-nav-item @click="save_recipe"> <font-awesome-icon icon="save" /> Save Recipe</b-nav-item> -->
-
-              <b-nav-item to="terminal"> <font-awesome-icon icon="terminal" /></b-nav-item>
+              <b-nav-item to="/terminal"> <font-awesome-icon icon="terminal" /></b-nav-item>
               <b-nav-item @click="run_recipe"> <font-awesome-icon icon="play-circle" /> </b-nav-item>
               <b-nav-item @click="boot_recipe"> <font-awesome-icon icon="arrow-alt-circle-down" /></b-nav-item>
               <b-nav-item @click="save_recipe"> <font-awesome-icon icon="save" /></b-nav-item>
@@ -223,7 +218,8 @@ export default {
   },
   methods: {
     logout() {
-      localStorage.removeItem("token");
+      this.$store.commit('delete_refresh_token')
+      this.$store.commit('delete_access_token')
       this.$router.replace(this.$route.query.redirect || "/login");
     },
     run_recipe() {

@@ -60,7 +60,7 @@ export default {
 
       this.$store.commit("auth/set_access_token", response.data.access_token);
       this.$store.commit("auth/set_refresh_token", response.data.refresh_token)
-      this.$router.push("/")
+      this.$router.push("/home")
     },
     login_failed(response) {
       this.error = "Unable to login";
