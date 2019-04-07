@@ -27,14 +27,14 @@
                 <span class="nav-item-title">Graph</span>
               </b-nav-item> -->
               <b-nav-item class="nav-item">
-                <b-link to="home" active-class="active">
+                <b-link to="/home" active-class="active">
                   <span class="nav-item-icon"><font-awesome-icon icon="desktop" /></span>
                   <span class="nav-item-title">Agents</span>
                 </b-link>
               </b-nav-item>
 
                <b-nav-item class="nav-item">
-                <b-link to="recipe" active-class="active">
+                <b-link to="/recipe" active-class="active">
                   <span class="nav-item-icon"><font-awesome-icon icon="tasks" /></span>
                   <span class="nav-item-title">Recipe Builder <b-badge class="recipecount" variant="primary">{{recipe_count}}</b-badge></span>
                 </b-link>
@@ -48,13 +48,13 @@
           <b-nav vertical id="sidebar-nav" class="sidebar-nav-links">
             <ul class="nav flex-column">
               <b-nav-item class="nav-item">
-                <b-link to="mapping" active-class="active">
+                <b-link to="/mapping" active-class="active">
                   <span class="nav-item-icon"><font-awesome-icon icon="link" /></span>
                   <span class="nav-item-title">Linked techniques</span>
                 </b-link>
               </b-nav-item>
               <b-nav-item class="nav-item">
-                <b-link to="mitre" active-class="active">
+                <b-link to="/mitre" active-class="active">
                   <span class="nav-item-icon"><font-awesome-icon icon="archive" /></span>
                   <span class="nav-item-title">Mitre Archive</span>
                 </b-link>
@@ -68,21 +68,21 @@
             <ul class="nav flex-column">
 
               <b-nav-item class="nav-item">
-                <b-link to="payloads" active-class="active">
+                <b-link to="/payloads" active-class="active">
                   <span class="nav-item-icon"><font-awesome-icon icon="download" /></span>
                   <span class="nav-item-title">payloads</span>
                 </b-link>
               </b-nav-item>
 
               <b-nav-item class="nav-item">
-                <b-link to="macros" active-class="active">
+                <b-link to="/macros" active-class="active">
                   <span class="nav-item-icon"><font-awesome-icon icon="bookmark" /></span>
                   <span class="nav-item-title">macros</span>
                 </b-link>
               </b-nav-item>
 
               <b-nav-item class="nav-item">
-                <b-link to="startup" active-class="active">
+                <b-link to="/startup" active-class="active">
                   <span class="nav-item-icon"><font-awesome-icon icon="calendar" /></span>
                   <span class="nav-item-title">startup tasks</span>
                 </b-link>
@@ -95,13 +95,13 @@
           <b-nav vertical id="sidebar-nav" class="sidebar-nav-links">
             <ul class="nav flex-column">
               <b-nav-item class="nav-item">
-                <b-link to="recipes" active-class="active">
+                <b-link to="/recipes" active-class="active">
                   <span class="nav-item-icon"><font-awesome-icon icon="tasks" /></span>
                   <span class="nav-item-title">Saved Recipes</span>
                 </b-link>
               </b-nav-item>
               <b-nav-item class="nav-item">
-                <b-link to="users" active-class="active">
+                <b-link to="/users" active-class="active">
                   <span class="nav-item-icon"><font-awesome-icon icon="user" /></span>
                   <span class="nav-item-title">Users</span>
                   </b-link>

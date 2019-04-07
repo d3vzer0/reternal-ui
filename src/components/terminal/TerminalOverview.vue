@@ -182,8 +182,8 @@ export default {
 .terminal {
   background-color: #212d37;
   height: 100%;
-  margin-left: -15px;
-  margin-right: -15px;
+  margin-left: -50px;
+  margin-right: -50px;
   font-family: monospace;
   &:focus {
     outline: none;

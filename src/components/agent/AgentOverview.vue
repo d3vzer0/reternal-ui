@@ -33,6 +33,7 @@
               <b-button-group class="agent-buttons">
                 <router-link :to="{ name: 'AgentDetails', params: {agent_id: agent.beacon_id} }"><b-button variant="primary-reversed">History</b-button></router-link>
                 <router-link :to="{ name: 'AgentTasks', params: {agent_id: agent.beacon_id} }"><b-button variant="primary-reversed">Tasks</b-button></router-link>
+                <router-link :to="{ name: 'AgentTasks', params: {agent_id: agent.beacon_id} }"><b-button variant="primary-reversed">Mitre</b-button></router-link>
               </b-button-group>
             </b-col>
           </b-row>
@@ -127,6 +128,7 @@ export default {
       width: 100%;
       .btn {
         border-radius: 0px;
+        font-size: 11px;
       }
     }
   }
