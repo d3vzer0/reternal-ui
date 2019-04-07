@@ -8,6 +8,7 @@ import task from '@/store/task-store'
 import terminal from '@/store/terminal-store'
 import agents from '@/store/agents-store'
 import payloads from '@/store/payloads-store'
+import iframe from '@/store/iframe-store'
 
 Vue.use(Vuex);
 
@@ -20,7 +21,8 @@ export const store = new Vuex.Store({
     selection,
     task,
     agents,
-    terminal
+    terminal,
+    iframe
   }
 });
 
