@@ -26,7 +26,7 @@
             <b-list-group flush>
               <b-list-group-item :disabled="context.build_state != 'SUCCESS'" v-for="(context, arch) in types" button @click="download_link(platform, arch)">
                 {{context.name}}
-                <span v-if="context.build_state != 'SUCCESS'">(not available)</span>  
+                <span :v-if="context.build_state != 'SUCCESS'">(not availa l</span>  
               </b-list-group-item>
             </b-list-group> 
           </div>
@@ -43,8 +43,11 @@ export default {
   name: "PayloadOverview",
   data() {
     return {
-      selected_platform: "linux",
-      selected_arch: "",
+      file_names: {
+        'windows': 'payload-win.exe',
+        'linux': 'payload-linux.bin',
+        'darwin': 'payload-darwin.bin'
+      }
     };
   },
   created() {
@@ -92,12 +95,12 @@ export default {
     },
     download_link(platform, arch) {
       this.$http
-        .get("payload", { responseType: 'blob', params: { 'platform': platform, 'arch':arch } })
+        .get("payload/get", { responseType: 'blob', params: { 'platform': platform, 'arch':arch } })
         .then(response => {
           const url = window.URL.createObjectURL(new Blob([response.data]));
           const link = document.createElement('a');
           link.href = url;
-          link.setAttribute('download', 'payload.bin');
+          link.setAttribute('download', this.file_names[platform]);
           document.body.appendChild(link);
           link.click();
         })
