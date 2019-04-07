@@ -17,6 +17,7 @@ import Mapping from "./views/Mapping.vue";
 import AgentTasks from "./views/AgentTasks";
 import Recipes from "./views/Recipes.vue";
 import Users from "./views/Users.vue";
+import Navigator from './views/Navigator.vue'
 // import Network from "./views/Network.vue";
 
 Vue.use(Router);
@@ -35,6 +36,11 @@ const router = new Router({
           path: "/home",
           name: "Home",
           component: Agents
+        },
+        {
+          path: "/navigator",
+          name: "Navigator",
+          component: Navigator
         },
         {
           path: "/terminal",

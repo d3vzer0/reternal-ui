@@ -18,14 +18,6 @@
           <hr>
           <b-nav vertical id="sidebar-nav" class="sidebar-nav-links">
             <ul class="nav flex-column">
-              <!-- <b-nav-item class="nav-item" to="/home">
-                <span class="nav-item-icon"><font-awesome-icon icon="home" /></span>
-                <span class="nav-item-title">Dashboard</span>
-              </b-nav-item>
-              <b-nav-item class="nav-item" to="/network">
-                <span class="nav-item-icon"><font-awesome-icon icon="globe-europe" /></span>
-                <span class="nav-item-title">Graph</span>
-              </b-nav-item> -->
               <b-nav-item class="nav-item">
                 <b-link to="/home" active-class="active">
                   <span class="nav-item-icon"><font-awesome-icon icon="desktop" /></span>
@@ -116,6 +108,7 @@
           <b-col cols="12">
            <b-navbar toggleable="md" type="light" variant="platinum" >
             <b-navbar-nav>
+              <b-nav-item to="/navigator"> <font-awesome-icon icon="map-marked" /></b-nav-item>
               <b-nav-item to="/terminal"> <font-awesome-icon icon="terminal" /></b-nav-item>
               <b-nav-item @click="run_recipe"> <font-awesome-icon icon="play-circle" /> </b-nav-item>
               <b-nav-item @click="boot_recipe"> <font-awesome-icon icon="arrow-alt-circle-down" /></b-nav-item>
