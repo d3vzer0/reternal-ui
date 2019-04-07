@@ -9,5 +9,8 @@ install:
   - docker build -t reternal-ui .
   - docker run -d -p 127.0.0.1:80:80 --name reternal-ui reternal-ui
 
+before_script:
+  - sleep 10
+
 script:
   - docker ps | grep -q reternal-ui
