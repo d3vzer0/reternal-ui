@@ -26,7 +26,7 @@
             <b-list-group flush>
               <b-list-group-item :disabled="context.build_state != 'SUCCESS'" v-for="(context, arch) in types" button @click="download_link(platform, arch)">
                 {{context.name}}
-                <span :v-if="context.build_state != 'SUCCESS'">(not availa l</span>  
+                <span v-if="context.build_state != 'SUCCESS'">(not available)</span>  
               </b-list-group-item>
             </b-list-group> 
           </div>
