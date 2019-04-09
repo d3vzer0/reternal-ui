@@ -128,6 +128,9 @@
 
 
             <b-navbar-nav class="ml-auto">
+              <b-nav-form>
+                <b-form-input id="c2-destination" placeholder="Enter C2 Destination"></b-form-input>
+              </b-nav-form>
               <b-nav-item-dropdown right>
                 <template slot="button-content">
                 <font-awesome-icon icon="cog" />
@@ -207,6 +210,14 @@ export default {
     recipe_count: function(){
       var list_length = this.$store.getters["task/commands"].length;
       return list_length;
+    },
+    c2_dest: {
+      get: function() {
+        return this.$store.getters['agents/get_dest']
+      },
+      set: function(destination) {
+        this.$store.commit('agents/set_dest', destination)
+      }
     }
   },
   methods: {
@@ -339,6 +350,12 @@ body {
   border-bottom: 1px;
   color: #e8e5e1;
   .navbar-nav {
+    #c2-destination {
+      background: transparent;
+      border: none;
+      color: #ddddddab;
+      font-family: menlo;
+    }
     .nav-item {
       margin-left: 24px;
       margin-right: 20px;

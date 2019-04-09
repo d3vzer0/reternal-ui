@@ -62,6 +62,9 @@ export default {
     },
     build_count: function () {
       return this.$store.getters['payloads/build_count']
+    },
+    c2_dest: function () {
+      return this.$store.getters['agents/get_dest']
     }
   },
   methods: {
@@ -80,7 +83,8 @@ export default {
       for (const [platform, types] of Object.entries(this.available_payloads)) {
         for (const [arch, context] of Object.entries(types)) {
           this.$http
-            .post("payload",  { 'platform': platform, 'arch': arch })
+            .post("payload",  { 'platform': platform, 'arch': arch,
+              'base_url': this.c2_dest})
         }
       }
     },
@@ -88,7 +92,7 @@ export default {
       for (const [platform, types] of Object.entries(this.available_payloads)) {
         for (const [arch, context] of Object.entries(types)) {
           this.$http
-            .get("payload",  { params: { 'platform': platform, 'arch': arch }})
+            .get("payload",  { params: { 'platform': platform, 'arch': arch, 'base_url': this.c2_dest}})
             .then(response => this.$store.commit('payloads/change_state', response.data))
         }
       }

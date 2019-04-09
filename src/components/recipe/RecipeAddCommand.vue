@@ -25,7 +25,7 @@
            <font-awesome-icon icon="keyboard" />
         </div>
         <div class="card-body mapping-card-body">
-          <b-form-input type="text" placeholder="Command input" v-model="input" form="add-command"></b-form-input>
+          <b-form-input disabled type="text" placeholder="Command input" v-model="input" form="add-command"></b-form-input>
         </div>
       </div>
     </b-col>

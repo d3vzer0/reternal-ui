@@ -184,7 +184,8 @@ export default {
   height: 100%;
   margin-left: -50px;
   margin-right: -50px;
-  font-family: monospace;
+  font-family: menlo;
+  font-size: 12px;
   &:focus {
     outline: none;
   }
