@@ -129,7 +129,7 @@
 
             <b-navbar-nav class="ml-auto">
               <b-nav-form>
-                <b-form-input id="c2-destination" placeholder="Enter C2 Destination"></b-form-input>
+                <b-form-input v-model="c2_dest" id="c2-destination" placeholder="Enter C2 Destination"></b-form-input>
               </b-nav-form>
               <b-nav-item-dropdown right>
                 <template slot="button-content">
@@ -353,6 +353,7 @@ body {
     #c2-destination {
       background: transparent;
       border: none;
+      width: 400px;
       color: #ddddddab;
       font-family: menlo;
     }

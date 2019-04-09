@@ -2,7 +2,7 @@ export default {
     namespaced: true,
     state: {
         all_agents: [],
-        c2_dest: ''
+        c2_dest: 'http://localhost:9000/api/v1/ping'
     },
     getters: {
       get_agents(state) {
