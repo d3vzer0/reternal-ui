@@ -8,7 +8,7 @@
            <font-awesome-icon icon="terminal" />
         </div>
         <div class="card-body mapping-card-body">
-          <b-form-select  required v-model="command" form="add-command">
+          <b-form-select required v-model="command" form="add-command">
             <optgroup label="Manual commands">
               <option v-for="command in command_options" :key="command.id" :value="command.value">{{command.text}}</option>
             </optgroup>
@@ -25,7 +25,11 @@
            <font-awesome-icon icon="keyboard" />
         </div>
         <div class="card-body mapping-card-body">
-          <b-form-input disabled type="text" placeholder="Command input" v-model="input" form="add-command"></b-form-input>
+          <b-form-input v-if="command.input_type == 'text' || command.input" type="text" placeholder="Command input" v-model="input" form="add-command"></b-form-input>
+          <b-form-input v-if="command.input_type == 'none'" disabled type="text" placeholder="Command does not accept input"></b-form-input>
+          <b-form-select v-if="command.input_type == 'agent'" form="add-command" v-model="input">
+            <option v-for="agent in all_agents" :key="agent.beacon_id" :value="agent.beacon_id">{{agent.hostname}}</option>
+          </b-form-select>
         </div>
       </div>
     </b-col>
@@ -40,12 +44,12 @@
       </div>
     </b-col>
     <b-col cols="2">
-      <div class="card mapping-card">
+      <div class="card mapping-card mapping-card-button">
         <div class="card-header mapping-card-header">
-           <font-awesome-icon icon="plus" />
+         <font-awesome-icon icon="plus" />
         </div>
         <div class="card-body mapping-card-body">
-          <b-button type="submit" variant="primary" class="fullwidth" form="add-command">Add</b-button>
+          <b-button type="submit" variant="transparant" class="fullwidth" form="add-command">Add to recipe</b-button> 
         </div>
       </div>
     </b-col>
@@ -61,6 +65,7 @@ export default {
     return {
       command_sleep: 0,
       command_options: [],
+      default_commands: {},
       macro_options: [],
     };
   },
@@ -95,7 +100,8 @@ export default {
     parse_macros(response) {
       var macro_list = [];
       response.data.forEach(function(macro) {
-        var macro_data = { value: {name:macro.command, input:macro.input}, text: macro.name, id: macro._id['$oid'] };
+        var macro_data = { value: {name:macro.command, input:macro.input},
+          text: macro.name, id: macro._id['$oid'] };
         macro_list.push(macro_data)
       });
       this.macro_options = macro_list;
@@ -103,7 +109,8 @@ export default {
     parse_commands(response) {
       var command_list = [];
       response.data.forEach(function(command) {
-        var command_data = { value: {name:command.name}, text: command.name, id: command._id['$oid']};
+        var command_data = { value: {name:command.name, input_type:command.input_type,
+          input_values:command.input_values}, text: command.name, id: command._id['$oid']};
         command_list.push(command_data);
       });
       this.command_options = command_list;
@@ -125,6 +132,9 @@ export default {
       set: function(value) {
         this.$store.commit("selection/change_input", value);
       }
+    },
+     all_agents: function () {
+      return this.$store.getters["agents/get_agents"]
     }
   }
 };

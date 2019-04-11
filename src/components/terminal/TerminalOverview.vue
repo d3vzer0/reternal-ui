@@ -51,17 +51,20 @@ export default {
     EventBus.$on("alertterminal", output => {
       this.output_terminal(output);
     }),
-      EventBus.$on("selectagent", agent => {
-        this.selected_agent = agent;
-        var message = `Changed active agent to: ${agent.hostname}`;
-        this.output_terminal(message);
-      });
+    EventBus.$on("selectagent", agent => {
+      this.selected_agent = agent;
+      var message = `Changed active agent to: ${agent.hostname}`;
+      this.output_terminal(message);
+    });
+  },
+  beforeDestroy(){
+    EventBus.$off('selectagent')
   },
   mounted() {
     var console_element = document.querySelector("#terminalui");
     console_element.scrollTop = console_element.scrollHeight;
     this.get_commands();
-  },
+  },  
   updated() {
     var console_element = document.querySelector("#terminalui");
     console_element.scrollTop = console_element.scrollHeight;
