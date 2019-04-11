@@ -10,13 +10,11 @@
           <b-form method="post" @submit.prevent="login">
             <b-row class="top-10">
               <b-col cols="12">
-                <!-- <i class="icon"><font-awesome-icon icon="user" /></i> -->
                 <b-form-input type="text" class="input-field" v-model="username" required placeholder="Username"></b-form-input>
               </b-col>
             </b-row>
             <b-row class="top-10">
               <b-col cols="12">
-                <!-- <i class="icon"><font-awesome-icon icon="key" /></i> -->
                 <b-form-input type="password" class="input-field" v-model="password" required placeholder="Password"></b-form-input>
               </b-col>
             </b-row>
@@ -58,7 +56,8 @@ export default {
         return;
       }
 
-      this.$store.commit("auth/set_access_token", response.data.access_token);
+      this.$store.commit('auth/set_claims', response.data.access_token)
+      this.$store.commit("auth/set_access_token", response.data.access_token)
       this.$store.commit("auth/set_refresh_token", response.data.refresh_token)
       this.$router.push("/home")
     },

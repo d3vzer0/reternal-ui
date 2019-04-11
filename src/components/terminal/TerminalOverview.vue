@@ -9,7 +9,7 @@
     </b-row>
     <b-row class="top-10 terminalinput">
       <b-col cols="12">
-          <label class="terminaluser terminalprepend">{{terminal_user}}</label>
+          <label class="terminaluser terminalprepend">{{claims.username}}</label>
           <label class="terminalprot terminalprepend">{{terminal_proto}}</label>
           <label class="terminalhost terminalprepend">{{terminal_host}}</label>
           <label class="terminalpath terminalprepend">{{terminal_path}}</label>
@@ -34,7 +34,6 @@ export default {
   data() {
     return {
       terminal_input: "",
-      terminal_user: "joeydreijer",
       terminal_proto: "@",
       terminal_host: "reternal",
       terminal_path: "~/# ",
@@ -70,6 +69,9 @@ export default {
     console_element.scrollTop = console_element.scrollHeight;
   },
   computed: {
+    claims: function() {
+      return this.$store.getters['auth/claims']
+    },
     last_word: function() {
       var search_list = this.terminal_input.split(" ");
       var last_word = search_list.pop();
