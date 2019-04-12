@@ -20,6 +20,16 @@
         </div>
       </div>
     </b-col>
+    <b-col cols="3">
+      <div class="card mapping-card">
+        <div class="card-header mapping-card-header">
+           <font-awesome-icon icon="user-secret" />
+        </div>
+        <div class="card-body mapping-card-body">
+          <b-form-select v-model="search_actor" :options="actor_options" class="platform-select"></b-form-select>
+        </div>
+      </div>
+    </b-col>
     <b-col cols="">
       <div class="card mapping-card">
         <div class="card-header mapping-card-header">
@@ -61,18 +71,26 @@ export default {
         { text: "command-and-control", value: "command-and-control" }
       ],
       search_technique: "",
+      search_actor: "",
       search_phase: "",
       search_platform: "Windows"
     };
+  },
+  mounted () {
+    this.get_actors()
   },
   computed: {
     search_filters: function() {
       var filters = {
         technique: this.search_technique,
         platform: this.search_platform,
-        phase: this.search_phase
+        phase: this.search_phase,
+        actor: this.search_actor
       };
       return filters;
+    },
+    actor_options: function() {
+      return this.$store.getters['mitre/get_actors']
     }
   },
   watch: {
@@ -87,7 +105,19 @@ export default {
     search_technique: function(value) {
       this.search_technique = value;
       EventBus.$emit("refreshmitre", this.search_filters);
+    },
+    search_actor: function(value) {
+      this.search_actor = value;
+      EventBus.$emit("refreshmitre", this.search_filters);
     }
+  },
+  methods: {
+    get_actors() {
+      this.$http
+        .get("mitre/actors")
+        .then(response => this.$store.commit('mitre/add_actors', response['data']))
+        // .catch(response => this.generic_failed(response))
+    },
   }
 };
 </script>

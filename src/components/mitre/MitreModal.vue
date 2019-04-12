@@ -13,6 +13,10 @@
         <td>Phases</td>
         <td v-if="mitre_technique_details.kill_chain_phases">{{mitre_technique_details.kill_chain_phases.join(', ')}}</td>
       </tr>
+      <tr v-if="mitre_technique_details.actors">
+        <td>Actors</td>
+        <td>{{mitre_technique_details.actors.map(actor => actor.name).join(', ')}}</td>
+      </tr>
       <tr>
         <td>Permissions</td>
         <td v-if="mitre_technique_details.permissions_required">{{mitre_technique_details.permissions_required.join(', ')}}</td>

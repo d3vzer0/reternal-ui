@@ -24,6 +24,7 @@ export default {
       mitre_techniques: [],
       search_technique: "",
       search_phase: "",
+      search_actor: "",
       search_platform: "Windows"
     };
   },
@@ -40,6 +41,7 @@ export default {
       this.$http
         .get("mitre/techniques", {
           params: {
+            actor: this.search_actor,
             name: this.search_technique,
             phase: this.search_phase,
             platform: this.search_platform
@@ -55,9 +57,10 @@ export default {
       this.error = "Unable to perform request";
     },
     change_filters(filters) {
-      this.search_technique = filters.technique;
-      this.search_platform = filters.platform;
-      this.search_phase = filters.phase;
+      this.search_technique = filters.technique
+      this.search_platform = filters.platform
+      this.search_phase = filters.phase
+      this.search_actor = filters.actor
       this.get_techniques_filtered();
     },
     show_technique(technique_id) {
