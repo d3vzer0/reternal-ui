@@ -14,6 +14,13 @@ import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import {
   faMapMarked,
   faSearch,
+  faWalking,
+  faUpload,
+  faProjectDiagram,
+  faStepBackward,
+  faPlay,
+  faShieldAlt,
+  faUnlock,
   faTerminal,
   faKey,
   faCog,
@@ -41,7 +48,8 @@ import {
   faPlus,
   faKeyboard,
   faHammer,
-  faPlug
+  faPlug,
+  faLevelUpAlt,
 } from "@fortawesome/free-solid-svg-icons";
 
 import {
@@ -51,6 +59,14 @@ import {
 } from '@fortawesome/free-brands-svg-icons'
 
 library.add(
+  faWalking,
+  faUpload,
+  faProjectDiagram,
+  faStepBackward,
+  faPlay,
+  faLevelUpAlt,
+  faShieldAlt,
+  faUnlock,
   faSearch,
   faMapMarked,
   faPlug,

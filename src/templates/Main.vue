@@ -40,15 +40,21 @@
           <b-nav vertical id="sidebar-nav" class="sidebar-nav-links">
             <ul class="nav flex-column">
               <b-nav-item class="nav-item">
+                <b-link to="/actors" active-class="active">
+                  <span class="nav-item-icon"><font-awesome-icon icon="user-secret" /></span>
+                  <span class="nav-item-title">Actors</span>
+                </b-link>
+              </b-nav-item>
+              <b-nav-item class="nav-item">
                 <b-link to="/mapping" active-class="active">
                   <span class="nav-item-icon"><font-awesome-icon icon="link" /></span>
-                  <span class="nav-item-title">Linked techniques</span>
+                  <span class="nav-item-title">Techniques</span>
                 </b-link>
               </b-nav-item>
               <b-nav-item class="nav-item">
                 <b-link to="/mitre" active-class="active">
                   <span class="nav-item-icon"><font-awesome-icon icon="archive" /></span>
-                  <span class="nav-item-title">Mitre Archive</span>
+                  <span class="nav-item-title">Matrix</span>
                 </b-link>
               </b-nav-item>
             </ul>
@@ -69,7 +75,7 @@
               <b-nav-item class="nav-item">
                 <b-link to="/macros" active-class="active">
                   <span class="nav-item-icon"><font-awesome-icon icon="bookmark" /></span>
-                  <span class="nav-item-title">macros</span>
+                  <span class="nav-item-title">shortcuts</span>
                 </b-link>
               </b-nav-item>
 
