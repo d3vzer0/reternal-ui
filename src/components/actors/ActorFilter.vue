@@ -6,7 +6,7 @@
     <div class="card-body mapping-card-body">
       <b-form-input v-model="actor_filter" placeholder="Actor search"></b-form-input>
       <b-list-group>
-        <b-list-group-item v-for="actor in filtered_actors" href="#" v-on:click="search_actor(actor)">{{actor}}</b-list-group-item>
+        <b-list-group-item v-for="actor in filtered_actors" href="#" v-on:click="search_actor(actor)" :active="selected_actor === actor">{{actor}}</b-list-group-item>
       </b-list-group>
     </div>
   </div>
@@ -19,7 +19,8 @@ export default {
   name: "ActorFilter",
   data() {
     return {
-      actor_filter: '', 
+      actor_filter: '',
+      selected_actor: '',
       actor_options: []
     };
   },
@@ -35,6 +36,7 @@ export default {
   },
   methods: {
     search_actor(actor){
+      this.selected_actor = actor
       EventBus.$emit("get_actor_flow", actor);
     },
     get_actors_mapped() {
@@ -60,16 +62,21 @@ export default {
   .list-group {
     max-height: 80vh;
     margin-bottom: 10px;
-    // overflow: hidden;
-    overflow-x: hidden;
-    // overflow-y: hidden;
- 
+    overflow-x: hidden; 
     .list-group-item {
       border-radius: 0px;
     }
   }
   .mapping-card-body {
     padding: 0;
+    .list-group{
+      .list-group-item {
+        &.active {
+          border: 0px;
+          background-color: #9e1c1d;
+        }
+      }
+    }
     .platform-select {
       border-radius: 0px;
     }

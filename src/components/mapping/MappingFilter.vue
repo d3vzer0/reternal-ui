@@ -1,37 +1,26 @@
 <template>
-  <b-row class="justify-content-center">
-    <b-col cols="2">
-      <div class="card mapping-card">
-        <div class="card-header mapping-card-header">
-           <font-awesome-icon icon="desktop" />
-        </div>
-        <div class="card-body mapping-card-body">
-          <b-form-select v-model="search_platform" :options="platform_options" class="platform-select"></b-form-select>
-        </div>
+  <div class="mapping-filters">
+    <div class="card mapping-card">
+      <div class="card-header mapping-card-header">
+          <font-awesome-icon icon="desktop" />
       </div>
-    </b-col>
-    <b-col cols="2">
-      <div class="card mapping-card">
-        <div class="card-header mapping-card-header">
-           123
-        </div>
-        <div class="card-body mapping-card-body">
-          <b-form-select v-model="search_phase" :options="phase_options" class="platform-select"></b-form-select>
-        </div>
+      <div class="card-body mapping-card-body">
+        <b-list-group>
+            <b-list-group-item v-for="platform in platform_options" href="#" v-on:click="get_phases(platform.value), search_platform = platform.value" :active="platform.value === search_platform">{{platform.text}}</b-list-group-item>
+        </b-list-group>
       </div>
-    </b-col>
-    <b-col cols="3">
-      <div class="card mapping-card">
-        <div class="card-header mapping-card-header">
-           <font-awesome-icon icon="bullseye" />
-        </div>
-        <div class="card-body mapping-card-body">
-          <b-form-select v-model="search_technique" :options="technique_options" class="platform-select"></b-form-select>
-        </div>
+    </div>
+    <div class="card mapping-card">
+      <div class="card-header mapping-card-header bg-dark text-white">
+          123
       </div>
-    </b-col>
-  </b-row>
-
+      <div class="card-body mapping-card-body">
+        <b-list-group>
+            <b-list-group-item v-for="phase in phase_options" v-on:click="search_phase = phase, get_techniques(phase)" :active="search_phase === phase" href="#">{{phase}}</b-list-group-item>
+        </b-list-group>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -67,20 +56,6 @@ export default {
       return filters;
     }
   },
-  watch: {
-    search_phase: function(value) {
-      this.search_phase = value;
-      this.get_techniques(value)
-    },
-    search_platform: function(value) {
-      this.search_platform = value;
-      this.get_phases(value)
-    },
-    search_technique: function(value) {
-      this.search_technique = value;
-      EventBus.$emit('get_mapping_flow', this.search_filters)
-    }
-  },
   methods: {
     get_phases(platform){
        this.$http
@@ -93,28 +68,8 @@ export default {
         .then(response => this.phase_options = response.data)
     },
     get_techniques(phase) {
-      this.$http
-        .get("mapping", {
-          params: {
-            phase: phase,
-            platform: this.search_platform,
-            distinct: "technique_name"
-          }
-        })
-        .then(response => this.technique_options = response.data)
-    },
-    get_mapping(technique) {
-      this.$http
-        .get("mapping", {
-          params: {
-            phase: this.selected_phase,
-            platform: this.search_platform,
-            technique: technique,
-            distinct: 'name'
-          }
-        })
-        .then(response => this.mapping_options = response.data)
-    },
+        EventBus.$emit('get_mapping_flow', this.search_filters)
+    }
   }
 };
 </script>
@@ -125,6 +80,17 @@ export default {
 }
 
 .mapping-card {
+   .list-group-item {
+    border-radius: 0px;
+    &.active {
+      border-color: white;
+      background-color: #9d3a3a;
+      .badge {
+        background-color: white;
+        color: black;
+      }
+    }
+  }
   .mapping-card-body {
     padding: 0;
     .platform-select {

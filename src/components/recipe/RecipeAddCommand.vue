@@ -26,10 +26,11 @@
         </div>
         <div class="card-body mapping-card-body">
           <b-form-input v-if="command.input_type == 'text' || command.input" type="text" placeholder="Command input" v-model="input" form="add-command"></b-form-input>
-          <b-form-input v-if="command.input_type == 'none'" disabled type="text" placeholder="Command does not accept input"></b-form-input>
-          <b-form-select v-if="command.input_type == 'agent'" form="add-command" v-model="input">
+          <b-form-input v-else-if="command.input_type == 'none'" disabled type="text" placeholder="Command does not accept input"></b-form-input>
+          <b-form-select v-else-if="command.input_type == 'agent'" form="add-command" v-model="input">
             <option v-for="agent in all_agents" :key="agent.beacon_id" :value="agent.beacon_id">{{agent.hostname}}</option>
           </b-form-select>
+          <b-form-input v-else disabled type="text" placeholder="Command does not accept input"></b-form-input>
         </div>
       </div>
     </b-col>

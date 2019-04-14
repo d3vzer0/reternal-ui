@@ -356,7 +356,8 @@ body {
       border: none;
       width: 400px;
       color: #ddddddab;
-      font-family: 'Lucida Console';
+      font-family: monospace;
+      font-size:18px;
     }
     .nav-item {
       margin-left: 24px;

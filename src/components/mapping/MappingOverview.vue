@@ -1,7 +1,16 @@
 <template>
- <b-row id="mapping-overview" class="justify-content-center">
-   <b-col cols="7">
-        <div v-for="(technique, mapping) in techniques">
+  <div class="mapping-techniques">
+    <div class="category" v-for="(techniques, category) in mapping.techniques" :key="category">
+      <div :key="category" class="card mapping-card-mitre category-card" v-if="techniques.length > 0">
+        <div class="card-header bg-light text-dark">
+          {{category}}
+          <span class="float-right">  
+            <b-badge href="#" pill  v-b-toggle="category" variant="dark">{{techniques.length}}</b-badge>
+          </span>
+        </div>
+      </div>
+      <b-collapse :id="category">
+        <div v-for="(technique, mapping) in techniques[0]" :key="mapping">
           <div class="card">
             <div class="card-header bg-dark-child text-light">
               {{technique.technique_name}}
@@ -43,7 +52,7 @@
                 </b-row>
               </b-list-group-item>
               <b-list-group-item >
-                <div v-for="command in technique.commands">
+                <div v-for="(command, index) in technique.commands" :key="index">
                   <b-row>
                     <b-col cols="10">
                       <b-list-group flush>
@@ -71,76 +80,9 @@
             </div>
           </div>
         </div>
-
-   <!-- <b-row >
-      <b-col offset="1" cols="1" class="command-seperator">
-        </b-col>
-        <b-col cols="6">
-          <b-card class="mapping-card-mitre" header="Details">
-            <b-list-group flush>
-              <b-list-group-item>
-                <b-row>
-                  <b-col><b>ID</b></b-col>
-                  <b-col>{{mapping_details.details.external_id}}</b-col>
-                </b-row>
-              </b-list-group-item>
-              <b-list-group-item>
-                <b-row>
-                  <b-col><b>Platform</b></b-col>
-                  <b-col>{{mapping_details.details.platform}}</b-col>
-                </b-row>
-              </b-list-group-item>
-              <b-list-group-item>
-                <b-row>
-                  <b-col><b>Phase</b></b-col>
-                  <b-col>{{mapping_details.details.kill_chain_phase}}</b-col>
-                </b-row>
-              </b-list-group-item>
-              <b-list-group-item>
-                <b-row>
-                  <b-col><b>Technique</b></b-col>
-                  <b-col>{{mapping_details.details.technique_name}}</b-col>
-                </b-row>
-              </b-list-group-item>
-              <b-list-group-item >
-                <b-row>
-                  <b-col><b>Description</b></b-col>
-                  <b-col>{{mapping_details.details.description}}</b-col>
-                </b-row>
-              </b-list-group-item>
-               <b-list-group-item v-if="mapping_details.commands.length > 0"><b-button @click="add_to_recipe" variant="primary">Add commands to recipe</b-button></b-list-group-item>
-            </b-list-group>
-          </b-card>
-        </b-col>
-      </b-row> -->
-
-    <!-- <div v-for="command in mapping_details.commands">
-      <b-row>
-        <b-col offset="2" cols="6">
-          <b-card class="mapping-card-technique" :header="command.name" header-bg-variant="dark" header-text-variant="white">
-            <b-list-group flush>
-              <b-list-group-item>
-                <b-row>
-                  <b-col><b>Input</b></b-col>
-                  <b-col>{{command.input}}</b-col>
-                </b-row>
-              </b-list-group-item>
-            </b-list-group>
-          </b-card>
-        </b-col>
-        <b-col offset="1" cols="1" class="command-seperator">
-          <div class="seperator-line">
-          </div>
-          <div class="seperator-circle">
-            <div class="seperator-time">
-              {{ command.sleep }}
-            </div>
-          </div>
-        </b-col>
-      </b-row>
-    </div> -->
-    </b-col>
-  </b-row>
+      </b-collapse>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -150,51 +92,48 @@ export default {
   name: "MappingOverview",
   data() {
     return {
-      mapping_details: {
-        commands: [],
-        details: {},
-      },
-      techniques: [],
-      command_input: "",
-      command_sleep: 0,
-      command_type: "",
-      show_input: false,
+      mapping: {
+        techniques: [],
+      }
     };
   },
   created() {
     EventBus.$on("get_mapping_flow", filters => {
-      this.get_mapping_flow(filters);
+      this.mapping.techniques = {}
+      this.get_mapping_flow(filters)
     });
+  },
+  beforeDestroy(){
+    EventBus.$off('get_mapping_flow')
   },
   methods: {
     get_mapping_flow(filters) {
-      console.log(filters)
       this.$http
         .get("technique", {
-          params: {
-            phase: filters.phase,
-            platform: filters.platform,
-            technique: filters.technique,
-          }
-        })
+          params: { phase: filters.phase, platform: filters.platform,
+          technique: filters.technique }})
         .then(response => this.display_mapping_flow(response.data))
     },
     display_mapping_flow(result) {
-      this.techniques = result
-      // this.mapping_details.details = result[0];
-      // this.$set(this.mapping_details, 'commands', result[0].commands);
+      var categorize_mapping = {}
+      result.forEach(mapping => {
+        if(!(mapping.technique_name in categorize_mapping)){
+          categorize_mapping[mapping.technique_name] = []
+        }
+        categorize_mapping[mapping.technique_name].push(result)
+      })
+      this.$set(this.mapping, 'techniques', categorize_mapping);
     },
-    
-    add_to_recipe() {
-      this.mapping_details.commands.forEach(command => {
+    add_to_recipe(technique) {
+      technique.commands.forEach(command => {
         var random_array = new Uint32Array(5);
         var random_id = window.crypto.getRandomValues(random_array)[2];
         var command_options = {
-          reference_name: this.mapping_details.details.name,
-          reference_id: this.mapping_details.details._id['$oid'],
-          technique_name: this.mapping_details.details.technique_name,
-          kill_chain_phase: this.mapping_details.details.kill_chain_phase,
-          technique_id: this.mapping_details.details.technique_id,
+          reference_name: technique.name,
+          reference_id: technique._id['$oid'],
+          technique_name: technique.technique_name,
+          kill_chain_phase: technique.kill_chain_phase,
+          technique_id: technique.technique_id,
           name: command.name,
           input: command.input,
           sleep: command.sleep,
@@ -209,9 +148,17 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
-
-#mapping-overview {
+.mapping-techniques {
+  .category:nth-child(n+5) {
+    .card-header {
+      background-color: #343a40 !important;
+      color: white !important;
+      .badge {
+        color: #343a40;
+        background-color: white;
+      }
+    }
+  }
   .cmdinput {
     word-break: break-all;
   }
@@ -219,6 +166,13 @@ export default {
     height: 20px;
   }
   .card {
+    .list-group{
+      .list-group-item {
+        &.active {
+          background-color: #9e1c1d;
+        }
+      }
+    }
     .card-header{
       &.bg-dark-child {
         background-color: #343a40c2 !important;
@@ -260,17 +214,6 @@ export default {
 }
 
 .mappingpanel {
-  .list-group-item {
-    border-radius: 0px;
-    &.active {
-      border-color: white;
-      background-color: #9d3a3a;
-      .badge {
-        background-color: white;
-        color: black;
-      }
-    }
-  }
   .card {
     padding: 0px;
   }

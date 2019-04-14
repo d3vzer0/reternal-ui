@@ -49,6 +49,7 @@ import {
   faKeyboard,
   faHammer,
   faPlug,
+  faMinus,
   faLevelUpAlt,
 } from "@fortawesome/free-solid-svg-icons";
 
@@ -60,6 +61,7 @@ import {
 
 library.add(
   faWalking,
+  faMinus,
   faUpload,
   faProjectDiagram,
   faStepBackward,

@@ -121,8 +121,8 @@ export default {
   }
   .agent-card-content {
     padding: 1.25rem;
-    font-family: menlo;
-    font-size: 12px;
+    font-family: monospace;
+    font-size: 14px;
     .agent-buttons {
       width: 100%;
       .btn {

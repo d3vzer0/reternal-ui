@@ -22,45 +22,48 @@
             <div v-for="command in task_commands" :key="command.rand">
               <b-row>
                 <b-col cols="8">
-                  <b-card class="recipe-card" header-bg-variant="dark" header-text-variant="white" :header="command.name">
-                    <b-list-group flush>
-                      <b-list-group-item>
-                        <b-row>
-                          <b-col><b>Type</b></b-col>
-                          <b-col>{{command.type}}</b-col>
-                        </b-row>
-                      </b-list-group-item>
-                      <b-list-group-item v-if="command.type == 'Mitre'">
-                        <b-row>
-                          <b-col><b>Command</b></b-col>
-                          <b-col>{{command.reference_name}}</b-col>
-                        </b-row>
-                      </b-list-group-item>
-                      <b-list-group-item v-if="command.type == 'Mitre'">
-                        <b-row>
-                          <b-col><b>Technique</b></b-col>
-                          <b-col>{{command.technique_name}}</b-col>
-                        </b-row>
-                      </b-list-group-item>
-                      <b-list-group-item v-if="command.type == 'Mitre'">
-                        <b-row>
-                          <b-col><b>Phase</b></b-col>
-                          <b-col>{{command.kill_chain_phase}}</b-col>
-                        </b-row>
-                      </b-list-group-item>
+                  <b-card class="recipe-card" header-bg-variant="dark" header-text-variant="white" header-tag="header">
+                    <span slot="header">
+                      {{command.name}}
+                      <span class="float-right">  
+                        <b-badge href="#" @click="remove_command(command.rand)" pill variant="light"><font-awesome-icon icon="minus" /></b-badge>
+                      </span>
+                    </span>
+                    <b-card-text>
+                      <b-list-group flush>
+                        <b-list-group-item>
+                          <b-row>
+                            <b-col><b>Type</b></b-col>
+                            <b-col>{{command.type}}</b-col>
+                          </b-row>
+                        </b-list-group-item>
+                        <b-list-group-item v-if="command.type == 'Mitre'">
+                          <b-row>
+                            <b-col><b>Command</b></b-col>
+                            <b-col>{{command.reference_name}}</b-col>
+                          </b-row>
+                        </b-list-group-item>
+                        <b-list-group-item v-if="command.type == 'Mitre'">
+                          <b-row>
+                            <b-col><b>Technique</b></b-col>
+                            <b-col>{{command.technique_name}}</b-col>
+                          </b-row>
+                        </b-list-group-item>
+                        <b-list-group-item v-if="command.type == 'Mitre'">
+                          <b-row>
+                            <b-col><b>Phase</b></b-col>
+                            <b-col>{{command.kill_chain_phase}}</b-col>
+                          </b-row>
+                        </b-list-group-item>
 
-                      <b-list-group-item>
-                        <b-row>
-                          <b-col><b>Input</b></b-col>
-                          <b-col>{{command.input}}</b-col>
-                        </b-row>
-                      </b-list-group-item>
-                      <b-list-group-item>
-                        <b-row>
-                          <b-col><b-button variant="primary-reversed" class="fullwidth" @click="remove_command(command.rand)">Remove from recipe</b-button></b-col>
-                        </b-row>
-                      </b-list-group-item>
-                    </b-list-group>
+                        <b-list-group-item>
+                          <b-row>
+                            <b-col><b>Input</b></b-col>
+                            <b-col>{{command.input}}</b-col>
+                          </b-row>
+                        </b-list-group-item>
+                      </b-list-group>
+                    </b-card-text>
                   </b-card>
                 </b-col>
                  <b-col offset="1" cols="1" class="command-seperator">

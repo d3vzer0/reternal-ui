@@ -1,14 +1,14 @@
 <template>
   <div class="mitre">
-    <!-- <b-row class="top-10">
+    <b-row class="top-10">
       <b-col cols="2">
-        <ActorFilter></ActorFilter>
+        <MappingFilter></MappingFilter>
       </b-col>
       <b-col cols="8">
-        <ActorOverview></ActorOverview>
+        <MappingOverview></MappingOverview>
       </b-col>
-    </b-row> -->
-
+    </b-row>
+<!-- 
     <b-row class="top-10">
       <b-col cols="12">
         <MappingFilter></MappingFilter>
@@ -18,7 +18,7 @@
       <b-col cols="12">
         <MappingOverview></MappingOverview>
       </b-col>
-    </b-row>
+    </b-row> -->
   </div>
 </template>
 

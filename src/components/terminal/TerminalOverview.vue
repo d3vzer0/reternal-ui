@@ -189,7 +189,8 @@ export default {
   height: 100%;
   margin-left: -50px;
   margin-right: -50px;
-  font-family: 'Lucida Console';
+  font-family: monospace;
+  font-size: 18px;
   &:focus {
     outline: none;
   }
