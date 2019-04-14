@@ -17,7 +17,7 @@
         <b-list-group-item>
           <b-row>
             <b-col cols="2"><b>Description</b></b-col>
-            <b-col>{{actor_description}}</b-col>
+            <b-col><span v-html="parse_markdown(actor_description)"></span></b-col>
           </b-row>
         </b-list-group-item>
         <b-list-group-item>
@@ -118,6 +118,7 @@
 
 <script>
 import EventBus from "@/eventbus";
+var marked = require('marked');
 
 export default {
   name: "ActorOverview",
@@ -142,6 +143,9 @@ export default {
     EventBus.$off('get_actor_flow')
   },
   methods: {
+    parse_markdown(input){
+      return marked(input, { sanitize: true })
+    },
     get_actor_details(actor) {
       var actor_url = `/mitre/actors/` + actor
       this.$http
