@@ -59,7 +59,7 @@ export default {
   methods: {
     get_phases(platform){
        this.$http
-        .get("mapping", {
+        .get("techniques", {
           params: {
             platform: platform,
             distinct: "kill_chain_phase"
