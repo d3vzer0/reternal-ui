@@ -4,9 +4,9 @@
       <b-col cols="2">
         <ActorFilter></ActorFilter>
       </b-col>
-    <b-col cols="8">
-      <ActorOverview></ActorOverview>
-    </b-col>
+      <b-col cols="8">
+        <ActorOverview></ActorOverview>
+      </b-col>
     </b-row>
   </div>
 </template>

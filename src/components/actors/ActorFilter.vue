@@ -1,7 +1,7 @@
 <template>
   <div class="card mapping-card">
     <div class="card-header mapping-card-header">
-      <font-awesome-icon icon="user-secret" />
+      <font-awesome-icon icon="users" />
     </div>
     <div class="card-body mapping-card-body">
       <b-form-input v-model="actor_filter" placeholder="Actor search"></b-form-input>
@@ -58,9 +58,15 @@ export default {
 
 .mapping-card {
   .list-group {
-    max-height: 60vh;
+    max-height: 80vh;
     margin-bottom: 10px;
-    overflow:scroll;
+    // overflow: hidden;
+    overflow-x: hidden;
+    // overflow-y: hidden;
+ 
+    .list-group-item {
+      border-radius: 0px;
+    }
   }
   .mapping-card-body {
     padding: 0;

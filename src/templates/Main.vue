@@ -28,20 +28,22 @@
                <b-nav-item class="nav-item">
                 <b-link to="/recipe" active-class="active">
                   <span class="nav-item-icon"><font-awesome-icon icon="tasks" /></span>
-                  <span class="nav-item-title">Recipe Builder <b-badge class="recipecount" variant="primary">{{recipe_count}}</b-badge></span>
+                  <span class="nav-item-title">Recipe <b-badge class="recipecount" variant="primary">{{recipe_count}}</b-badge></span>
                 </b-link>
               </b-nav-item>
 
             </ul>
           </b-nav>
-          <div class="nav-category">
-            MITRE
-          </div>
+          <hr>
+
+          <!-- <div class="nav-category">
+            ATT&CK&trade;
+          </div> -->
           <b-nav vertical id="sidebar-nav" class="sidebar-nav-links">
             <ul class="nav flex-column">
               <b-nav-item class="nav-item">
                 <b-link to="/actors" active-class="active">
-                  <span class="nav-item-icon"><font-awesome-icon icon="user-secret" /></span>
+                  <span class="nav-item-icon"><font-awesome-icon icon="users" /></span>
                   <span class="nav-item-title">Actors</span>
                 </b-link>
               </b-nav-item>
@@ -54,24 +56,24 @@
               <b-nav-item class="nav-item">
                 <b-link to="/mitre" active-class="active">
                   <span class="nav-item-icon"><font-awesome-icon icon="archive" /></span>
-                  <span class="nav-item-title">Matrix</span>
+                  <span class="nav-item-title">ATT&CK&trade;</span>
                 </b-link>
               </b-nav-item>
             </ul>
           </b-nav>
-          <div class="nav-category">
-            BEACON CONTROL
-          </div>
+         <hr>
+          <!-- <div class="nav-category">
+            MANAGEMENT
+          </div> -->
+          <!-- <hr> -->
           <b-nav vertical id="sidebar-nav" class="sidebar-nav-links">
             <ul class="nav flex-column">
-
               <b-nav-item class="nav-item">
                 <b-link to="/payloads" active-class="active">
                   <span class="nav-item-icon"><font-awesome-icon icon="download" /></span>
                   <span class="nav-item-title">payloads</span>
                 </b-link>
               </b-nav-item>
-
               <b-nav-item class="nav-item">
                 <b-link to="/macros" active-class="active">
                   <span class="nav-item-icon"><font-awesome-icon icon="bookmark" /></span>
@@ -85,13 +87,6 @@
                   <span class="nav-item-title">startup tasks</span>
                 </b-link>
               </b-nav-item>
-            </ul>
-          </b-nav>
-          <div class="nav-category">
-            MANAGEMENT
-          </div>
-          <b-nav vertical id="sidebar-nav" class="sidebar-nav-links">
-            <ul class="nav flex-column">
               <b-nav-item class="nav-item">
                 <b-link to="/recipes" active-class="active">
                   <span class="nav-item-icon"><font-awesome-icon icon="tasks" /></span>
@@ -296,7 +291,7 @@ body {
   border-right-style: solid;
   border-right-width: 1px;
   border-right-color: #bbbbbb;
-  max-width:270px;
+  max-width:230px;
 
   .recipecount {
     float: right;
@@ -361,7 +356,7 @@ body {
       border: none;
       width: 400px;
       color: #ddddddab;
-      font-family: menlo;
+      font-family: 'Lucida Console';
     }
     .nav-item {
       margin-left: 24px;

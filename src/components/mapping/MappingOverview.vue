@@ -1,6 +1,78 @@
 <template>
- <div id="recipe-overview">
-   <b-row>
+ <b-row id="mapping-overview" class="justify-content-center">
+   <b-col cols="7">
+        <div v-for="(technique, mapping) in techniques">
+          <div class="card">
+            <div class="card-header bg-dark-child text-light">
+              {{technique.technique_name}}
+              <span class="float-right">  
+                <b-badge href="#" @click="add_to_recipe(technique)" pill variant="light"><font-awesome-icon icon="plus" /></b-badge>
+              </span>
+            </div>
+            <div class="card-body">
+              <b-list-group flush>
+              <b-list-group-item>
+                <b-row>
+                  <b-col cols="2"><b>Name</b></b-col>
+                  <b-col>{{technique.name}}</b-col>
+                </b-row>
+              </b-list-group-item>
+              <b-list-group-item>
+                <b-row>
+                  <b-col cols="2"><b>Reference ID</b></b-col>
+                  <b-col>{{technique.external_id}}</b-col>
+                </b-row>
+              </b-list-group-item>
+              <b-list-group-item>
+                <b-row>
+                  <b-col cols="2"><b>Platform</b></b-col>
+                  <b-col>{{technique.platform}}</b-col>
+                </b-row>
+              </b-list-group-item>
+              <b-list-group-item>
+                <b-row>
+                  <b-col cols="2"><b>Phase</b></b-col>
+                  <b-col>{{technique.kill_chain_phase}}</b-col>
+                </b-row>
+              </b-list-group-item>
+    
+              <b-list-group-item >
+                <b-row>
+                  <b-col cols="2"><b>Description</b></b-col>
+                  <b-col>{{technique.description}}</b-col>
+                </b-row>
+              </b-list-group-item>
+              <b-list-group-item >
+                <div v-for="command in technique.commands">
+                  <b-row>
+                    <b-col cols="10">
+                      <b-list-group flush>
+                        <b-list-group-item>
+                          <b-row class="top-10">
+                            <b-col cols="2"><b>{{command.name}}</b></b-col>
+                            <b-col class="cmdinput">{{command.input}}</b-col>
+                          </b-row>
+                        </b-list-group-item>
+                      </b-list-group>
+                    </b-col>
+                    <b-col offset="1" cols="1" class="command-seperator">
+                      <div class="seperator-line">
+                      </div>
+                      <div class="seperator-circle">
+                        <div class="seperator-time">
+                          {{ command.sleep }}
+                        </div>
+                      </div>
+                    </b-col>
+                  </b-row>
+                </div>
+                </b-list-group-item >
+              </b-list-group>
+            </div>
+          </div>
+        </div>
+
+   <!-- <b-row >
       <b-col offset="1" cols="1" class="command-seperator">
         </b-col>
         <b-col cols="6">
@@ -40,9 +112,9 @@
             </b-list-group>
           </b-card>
         </b-col>
-      </b-row>
+      </b-row> -->
 
-    <div v-for="command in mapping_details.commands">
+    <!-- <div v-for="command in mapping_details.commands">
       <b-row>
         <b-col offset="2" cols="6">
           <b-card class="mapping-card-technique" :header="command.name" header-bg-variant="dark" header-text-variant="white">
@@ -66,8 +138,9 @@
           </div>
         </b-col>
       </b-row>
-    </div>
-  </div>
+    </div> -->
+    </b-col>
+  </b-row>
 </template>
 
 <script>
@@ -81,6 +154,7 @@ export default {
         commands: [],
         details: {},
       },
+      techniques: [],
       command_input: "",
       command_sleep: 0,
       command_type: "",
@@ -94,10 +168,10 @@ export default {
   },
   methods: {
     get_mapping_flow(filters) {
+      console.log(filters)
       this.$http
-        .get("mapping", {
+        .get("technique", {
           params: {
-            name: filters.mapping,
             phase: filters.phase,
             platform: filters.platform,
             technique: filters.technique,
@@ -106,8 +180,9 @@ export default {
         .then(response => this.display_mapping_flow(response.data))
     },
     display_mapping_flow(result) {
-      this.mapping_details.details = result[0];
-      this.$set(this.mapping_details, 'commands', result[0].commands);
+      this.techniques = result
+      // this.mapping_details.details = result[0];
+      // this.$set(this.mapping_details, 'commands', result[0].commands);
     },
     
     add_to_recipe() {
@@ -134,6 +209,27 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+
+
+#mapping-overview {
+  .cmdinput {
+    word-break: break-all;
+  }
+  .seperator-circle {
+    height: 20px;
+  }
+  .card {
+    .card-header{
+      &.bg-dark-child {
+        background-color: #343a40c2 !important;
+      }
+      .badge {
+        font-size: 100%;
+      }
+    }
+  }
+}
+
 .addrecipecol {
   background-color: #9d3a3a;
   text-transform: uppercase;

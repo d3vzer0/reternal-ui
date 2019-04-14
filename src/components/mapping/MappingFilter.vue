@@ -30,16 +30,6 @@
         </div>
       </div>
     </b-col>
-    <b-col cols="3">
-      <div class="card mapping-card">
-        <div class="card-header mapping-card-header">
-           <font-awesome-icon icon="save" />
-        </div>
-        <div class="card-body mapping-card-body">
-          <b-form-select v-model="search_name" :options="mapping_options" class="platform-select"></b-form-select>
-        </div>
-      </div>
-    </b-col>
   </b-row>
 
 </template>
@@ -61,7 +51,6 @@ export default {
       mapping_options: [],
       search_technique: "",
       search_phase: "",
-      search_name: "",
       search_platform: "Windows"
     };
   },
@@ -74,7 +63,6 @@ export default {
         technique: this.search_technique,
         platform: this.search_platform,
         phase: this.search_phase,
-        mapping: this.search_name,
       };
       return filters;
     }
@@ -90,10 +78,6 @@ export default {
     },
     search_technique: function(value) {
       this.search_technique = value;
-      this.get_mapping(value)
-    },
-    search_name: function(value) {
-      this.search_name = value;
       EventBus.$emit('get_mapping_flow', this.search_filters)
     }
   },

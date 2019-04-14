@@ -23,7 +23,7 @@
     <b-col cols="3">
       <div class="card mapping-card">
         <div class="card-header mapping-card-header">
-           <font-awesome-icon icon="user-secret" />
+           <font-awesome-icon icon="users" />
         </div>
         <div class="card-body mapping-card-body">
           <b-form-select v-model="search_actor" :options="actor_options" class="platform-select"></b-form-select>

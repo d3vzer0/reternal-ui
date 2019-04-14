@@ -35,75 +35,81 @@
         <div class="card-header bg-dark text-light">
           {{phase}}
           <span class="float-right">  
-            <b-badge href="#" v-b-toggle="phase"  pill variant="light">{{techniques.length}}</b-badge>
+            <b-badge href="#" v-b-toggle="phase" pill variant="light">{{techniques.length}}</b-badge>
           </span>
         </div>
       </div>
 
-      <b-collapse :id="phase" class="mt-2">
+      <b-collapse :id="phase">
         <div v-for="(technique, mapping) in techniques">
-          <b-card class="mapping-card-mitre" :header="technique.technique_name" header-text-variant="white" header-bg-variant="dark-child">
-            <b-list-group flush>
+          <div class="card">
+            <div class="card-header bg-dark-child text-light">
+              {{technique.technique_name}}
+              <span class="float-right">  
+                <b-badge href="#" @click="add_to_recipe(technique)" pill variant="light"><font-awesome-icon icon="plus" /></b-badge>
+              </span>
+            </div>
+            <div class="card-body">
+              <b-list-group flush>
               <b-list-group-item>
                 <b-row>
-                  <b-col><b>Name</b></b-col>
+                  <b-col cols="2"><b>Name</b></b-col>
                   <b-col>{{technique.name}}</b-col>
                 </b-row>
               </b-list-group-item>
               <b-list-group-item>
                 <b-row>
-                  <b-col><b>Reference ID</b></b-col>
+                  <b-col cols="2"><b>Reference ID</b></b-col>
                   <b-col>{{technique.external_id}}</b-col>
                 </b-row>
               </b-list-group-item>
               <b-list-group-item>
                 <b-row>
-                  <b-col><b>Platform</b></b-col>
+                  <b-col cols="2"><b>Platform</b></b-col>
                   <b-col>{{technique.platform}}</b-col>
                 </b-row>
               </b-list-group-item>
               <b-list-group-item>
                 <b-row>
-                  <b-col><b>Phase</b></b-col>
+                  <b-col cols="2"><b>Phase</b></b-col>
                   <b-col>{{technique.kill_chain_phase}}</b-col>
                 </b-row>
               </b-list-group-item>
     
               <b-list-group-item >
                 <b-row>
-                  <b-col><b>Description</b></b-col>
+                  <b-col cols="2"><b>Description</b></b-col>
                   <b-col>{{technique.description}}</b-col>
                 </b-row>
               </b-list-group-item>
-            </b-list-group>
-            <b-row class="top-10">
-              <b-col>
-               <div v-for="command in technique.commands">
-      <b-row>
-        <b-col cols="10">
-            <b-list-group flush>
-              <b-list-group-item>
-                <b-row class="top-10">
-                  <b-col cols="2"><b>{{command.name}}</b></b-col>
-                  <b-col class="cmdinput">{{command.input}}</b-col>
-                </b-row>
-              </b-list-group-item>
-            </b-list-group>
-        </b-col>
-        <b-col offset="1" cols="1" class="command-seperator">
-          <div class="seperator-line">
-          </div>
-          <div class="seperator-circle">
-            <div class="seperator-time">
-              {{ command.sleep }}
+              <b-list-group-item >
+                <div v-for="command in technique.commands">
+                  <b-row>
+                    <b-col cols="10">
+                      <b-list-group flush>
+                        <b-list-group-item>
+                          <b-row class="top-10">
+                            <b-col cols="2"><b>{{command.name}}</b></b-col>
+                            <b-col class="cmdinput">{{command.input}}</b-col>
+                          </b-row>
+                        </b-list-group-item>
+                      </b-list-group>
+                    </b-col>
+                    <b-col offset="1" cols="1" class="command-seperator">
+                      <div class="seperator-line">
+                      </div>
+                      <div class="seperator-circle">
+                        <div class="seperator-time">
+                          {{ command.sleep }}
+                        </div>
+                      </div>
+                    </b-col>
+                  </b-row>
+                </div>
+                </b-list-group-item >
+              </b-list-group>
             </div>
           </div>
-        </b-col>
-      </b-row>
-    </div>
-              </b-col>
-            </b-row>
-          </b-card>
         </div>
       </b-collapse>
     </div>
@@ -171,6 +177,25 @@ export default {
         this.technique_order[technique.kill_chain_phase].push(technique)
       });
     },
+    add_to_recipe(technique) {
+      technique.commands.forEach(command => {
+        var random_array = new Uint32Array(5);
+        var random_id = window.crypto.getRandomValues(random_array)[2];
+        var command_options = {
+          reference_name: technique.name,
+          reference_id: technique._id['$oid'],
+          technique_name: technique.technique_name,
+          kill_chain_phase: technique.kill_chain_phase,
+          technique_id: technique.technique_id,
+          name: command.name,
+          input: command.input,
+          sleep: command.sleep,
+          rand: random_id,
+          type: command.type
+        };
+        this.$store.commit("task/add_command", command_options);
+      });
+    }
   }
 };
 </script>
