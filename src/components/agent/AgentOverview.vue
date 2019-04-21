@@ -19,8 +19,11 @@
           <b-row>
              <b-col cols="1"><font-awesome-icon icon="ethernet" /></b-col><b-col>{{agent.remote_ip}}</b-col>
           </b-row>
+          <b-row>
+             <b-col cols="1"><font-awesome-icon icon="desktop" /></b-col><b-col>{{agent.hostname}}</b-col>
+          </b-row>
            <b-row>
-             <b-col cols="1"><font-awesome-icon icon="plug" /></b-col><b-col>{{agent.state}}</b-col>
+             <b-col cols="1"><font-awesome-icon icon="plug" /></b-col><b-col>{{state_check(agent.timestamp.$date, agent.timer, agent.jitter)}}</b-col>
           </b-row>
            <b-row>
              <b-col cols="1"><font-awesome-icon icon="clock" /></b-col><b-col>{{to_unix(agent.timestamp.$date)}}</b-col>
@@ -67,6 +70,16 @@ export default {
   methods: {
     generic_failed(response) {
       this.error = "Unable to perform request";
+    },
+    state_check(agent_time, timer, jitter){
+      var state_time = (agent_time / 1000) + (jitter * timer)
+      var current_time = this.$moment().unix()
+      if (current_time > state_time) {
+        return 'offline'
+      }
+      else {
+        return 'online'
+      }
     },
     to_unix(unix_timestamp) {
       var from_miliseconds = unix_timestamp / 1000;
