@@ -35,10 +35,6 @@
             </ul>
           </b-nav>
           <hr>
-
-          <!-- <div class="nav-category">
-            ATT&CK&trade;
-          </div> -->
           <b-nav vertical id="sidebar-nav" class="sidebar-nav-links">
             <ul class="nav flex-column">
               <b-nav-item class="nav-item">
@@ -62,10 +58,6 @@
             </ul>
           </b-nav>
          <hr>
-          <!-- <div class="nav-category">
-            MANAGEMENT
-          </div> -->
-          <!-- <hr> -->
           <b-nav vertical id="sidebar-nav" class="sidebar-nav-links">
             <ul class="nav flex-column">
               <b-nav-item class="nav-item">
@@ -136,7 +128,6 @@
                 <template slot="button-content">
                 <font-awesome-icon icon="cog" />
                 </template>
-                <b-dropdown-item href="#">Profile</b-dropdown-item>
                 <b-dropdown-item @click="logout" href="#">Signout</b-dropdown-item>
               </b-nav-item-dropdown>
             </b-navbar-nav>
