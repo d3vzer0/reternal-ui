@@ -214,9 +214,9 @@ export default {
   },
   methods: {
     logout() {
-      this.$store.commit('delete_refresh_token')
-      this.$store.commit('delete_access_token')
-      this.$router.replace(this.$route.query.redirect || "/login");
+      this.$store.commit('auth/delete_refresh_token')
+      this.$store.commit('auth/delete_access_token')
+      this.$router.push('/login')
     },
     run_recipe() {
       EventBus.$emit("confirmtask");

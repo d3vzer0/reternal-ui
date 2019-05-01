@@ -1,10 +1,12 @@
-import axios from "axios";
-axios.defaults.baseURL = process.env.VUE_APP_BASEAPI;
+import axios from 'axios'
+import store from '@/store'
+
+axios.defaults.baseURL = process.env.VUE_APP_BASEAPI
 
 export default axios.create({
   baseURL: axios.defaults.baseURL,
   headers: {
     "Content-Type": "application/json",
-    Authorization: "Bearer " + localStorage.access_token
+    Authorization: "Bearer " + store.getters['auth/access_token']
   }
 });
