@@ -1,21 +1,19 @@
 <template>
   <div class="recipes">
     <b-row class="top-10">
-      <b-col cols="12">
-       <!-- <RecipesFilter></RecipesFilter> -->
+      <b-col cols="2">
+       <SavesFilter></SavesFilter>
       </b-col>
-    </b-row>
-    <b-row class="top-10">
-      <b-col cols="12">
-       <RecipesOverview></RecipesOverview>
+      <b-col cols="10">
+       <SavesOverview></SavesOverview>
       </b-col>
     </b-row>
   </div>
 </template>
 
 <script>
-import RecipesOverview from "@/components/saves/SavesOverview";
-// import RecipesFilter from "@/components/saves/RecipesFilter";
+import SavesOverview from "@/components/saves/SavesOverview";
+import SavesFilter from "@/components/saves/SavesFilter";
 
 export default {
   name: "Recipes",
@@ -23,8 +21,8 @@ export default {
     return {};
   },
   components: {
-    // RecipesFilter,
-    RecipesOverview
+    SavesFilter,
+    SavesOverview
   }
 };
 </script>

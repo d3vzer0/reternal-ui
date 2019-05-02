@@ -17,7 +17,7 @@
         </div>
       </b-col>
       <b-col>
-        <draggable v-model="task_commands" group="people" @start="drag=true" @end="drag=false">
+        <draggable v-model="task_commands" @start="drag=true" @end="drag=false">
           <transition-group>
             <div v-for="command in task_commands" :key="command.rand">
               <b-row>
@@ -59,6 +59,8 @@
                         <b-list-group-item>
                           <b-row>
                             <b-col><b>Input</b></b-col>
+                          </b-row>
+                          <b-row>
                             <b-col>{{command.input}}</b-col>
                           </b-row>
                         </b-list-group-item>
@@ -66,14 +68,10 @@
                     </b-card-text>
                   </b-card>
                 </b-col>
-                 <b-col offset="1" cols="1" class="command-seperator">
-                  <div class="seperator-line">
-                  </div>
-                  <div class="seperator-circle">
-                    <div class="seperator-time">
-                      {{ command.sleep }}
-                    </div>
-                  </div>
+              </b-row>
+              <b-row class="timeout-seperator">
+                <b-col cols="8" class="text-center">
+                  <font-awesome-icon icon="clock" /> {{command.sleep}}
                 </b-col>
               </b-row>
             </div>
@@ -137,7 +135,6 @@ export default {
       this.show_details_panel = false;
     },
     click_agent_tile(agent_object) {
-      console.log(1);
       this.$store.commit("selection/add_agent", agent_object);
     },
     is_selected(agent_object) {
@@ -164,6 +161,12 @@ export default {
   color: white;
 }
 
+.seperator-card {
+  height: 100%;
+}
+.seperator-clock {
+  // font-size:22px;
+}
 .recipe-card {
   word-break: break-all;
 }

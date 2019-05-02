@@ -24,14 +24,12 @@
                   <span class="nav-item-title">Agents</span>
                 </b-link>
               </b-nav-item>
-
                <b-nav-item class="nav-item">
                 <b-link to="/recipe" active-class="active">
-                  <span class="nav-item-icon"><font-awesome-icon icon="tasks" /></span>
-                  <span class="nav-item-title">Recipe <b-badge class="recipecount" variant="primary">{{recipe_count}}</b-badge></span>
+                  <span class="nav-item-icon"><font-awesome-icon icon="route" /></span>
+                  <span class="nav-item-title">Campaign <b-badge class="recipecount" variant="primary">{{recipe_count}}</b-badge></span>
                 </b-link>
               </b-nav-item>
-
             </ul>
           </b-nav>
           <hr>
@@ -81,8 +79,8 @@
               </b-nav-item>
               <b-nav-item class="nav-item">
                 <b-link to="/recipes" active-class="active">
-                  <span class="nav-item-icon"><font-awesome-icon icon="tasks" /></span>
-                  <span class="nav-item-title">Saved Recipes</span>
+                  <span class="nav-item-icon"><font-awesome-icon icon="save" /></span>
+                  <span class="nav-item-title">Saved Campaigns</span>
                 </b-link>
               </b-nav-item>
               <b-nav-item class="nav-item">

@@ -54,24 +54,16 @@
               <b-list-group-item >
                 <div v-for="(command, index) in technique.commands" :key="index">
                   <b-row>
-                    <b-col cols="10">
+                    <b-col cols="12">
                       <b-list-group flush>
                         <b-list-group-item>
                           <b-row class="top-10">
                             <b-col cols="2"><b>{{command.name}}</b></b-col>
                             <b-col class="cmdinput">{{command.input}}</b-col>
+                            <b-col cols="2" class="text-right"><font-awesome-icon icon="clock" />  {{command.sleep}}</b-col>
                           </b-row>
                         </b-list-group-item>
                       </b-list-group>
-                    </b-col>
-                    <b-col offset="1" cols="1" class="command-seperator">
-                      <div class="seperator-line">
-                      </div>
-                      <div class="seperator-circle">
-                        <div class="seperator-time">
-                          {{ command.sleep }}
-                        </div>
-                      </div>
                     </b-col>
                   </b-row>
                 </div>
