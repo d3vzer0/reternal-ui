@@ -1,5 +1,5 @@
 <template>
-  <masonry :cols="3" :gutter="40" >
+  <masonry :cols="3" :gutter="40">
     <b-card class="agent-card" v-for="agent in $parent.agent_list"
       @click="click_agent_tile(agent)" :class="{active: is_selected(agent)}">
       <b-row class="agent-card-container">
@@ -34,14 +34,13 @@
           <b-row>
             <b-col cols="12">
               <b-button-group class="agent-buttons">
-                <router-link :to="{ name: 'AgentDetails', params: {agent_id: agent.beacon_id} }"><b-button variant="primary-reversed">History</b-button></router-link>
-                <router-link :to="{ name: 'AgentTasks', params: {agent_id: agent.beacon_id} }"><b-button variant="primary-reversed">Tasks</b-button></router-link>
+                <router-link class="agent-button" :to="{ name: 'AgentDetails', params: {agent_id: agent.beacon_id} }"><b-button variant="primary-reversed">History</b-button></router-link>
+                <router-link class="agent-button" :to="{ name: 'AgentTasks', params: {agent_id: agent.beacon_id} }"><b-button variant="primary-reversed">Tasks</b-button></router-link>
               </b-button-group>
             </b-col>
           </b-row>
         </b-col>
       </b-row>
-      
     </b-card>
   </masonry>
 </template>
@@ -111,9 +110,11 @@ export default {
 }
 .agent-card {
   width: 100%;
+  .agent-button {
+    width: 50%;
+  }
   &.active {
-    border-color: #00a5d69e;
-    border-width: 3px;
+    outline: 4px solid #00a5d69e;
   }
   .card-body {
     padding: 0px;
@@ -125,11 +126,10 @@ export default {
       margin: auto;
       font-size: 90px;
       color:white;
-      span {
-        display: inline-block;
-        vertical-align: middle;
-        line-height: normal;
-      }
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
     }
   }
   .agent-card-content {

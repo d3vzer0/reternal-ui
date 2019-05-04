@@ -1,10 +1,8 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import store from './store/index.js'
-
 import Main from './templates/Main.vue'
 import Login from './templates/Login.vue'
-import Home from './views/Home.vue'
 import Macros from './views/Macros.vue'
 import Agents from './views/Agents.vue'
 import AgentDetails from './views/AgentDetails.vue'
@@ -19,7 +17,7 @@ import Recipes from './views/Recipes.vue'
 import Users from './views/Users.vue'
 import Actors from './views/Actors.vue'
 import Navigator from './views/Navigator.vue'
-// import Network from './views/Network.vue'
+// import Network from './views/Network.v/ue'
 
 Vue.use(Router)
 

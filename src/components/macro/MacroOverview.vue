@@ -6,7 +6,12 @@
         <b-list-group-item v-for="macro in macro_list"
         :key="macro._id['$oid']" 
         :class="{'selectedmacro': (macro._id['$oid'] == selected_macro)}"
-        @click="show_macro_details(macro), selected_macro = macro._id['$oid']">{{macro.name}}</b-list-group-item>
+        @click="show_macro_details(macro), selected_macro = macro._id['$oid']">
+          {{macro.name}}
+          <span class="delete-pill">
+            <b-badge href="#" v-on:click="delete_macro(macro._id['$oid'])" pill variant="dark"><font-awesome-icon icon="minus" /></b-badge> 
+          </span>
+        </b-list-group-item>
       </b-list-group>
     </b-card>
     <b-card header="Input">
@@ -21,11 +26,6 @@
           <b-row>
             <b-col><b>Input</b></b-col>
             <b-col>{{macro_input}}</b-col>
-          </b-row>
-        </b-list-group-item>
-         <b-list-group-item>
-          <b-row>
-            <b-col><b-button variant="primary-reversed" class="fullwidth" @click="delete_macro">Remove macro</b-button></b-col>
           </b-row>
         </b-list-group-item>
       </b-list-group>
@@ -43,7 +43,6 @@ export default {
   data() {
     return {
       macro_list: [],
-      macro_id: "",
       macro_input: "",
       macro_command: "",
       selected_macro: "",
@@ -58,16 +57,17 @@ export default {
   },
   methods: {
     get_macros() {
+      this.macro_list = []
       this.$http
         .get("macros")
         .then(response => this.parse_macros(response))
         .catch(error => EventBus.$emit("showalert", error.response));
     },
-    delete_macro() {
-      var delete_url = `macro/${this.macro_id}`;
+    delete_macro(macro_id) {
+      var delete_url = `macro/${macro_id}`;
       this.$http
         .delete(delete_url)
-        .then(this.get_macros())
+        .then(response => this.get_macros())
         .catch(error => EventBus.$emit("showalert", error.response));
     },
     parse_macros(response) {
@@ -75,7 +75,6 @@ export default {
       this.macro_list = response.data;
     },
     show_macro_details(macro) {
-      this.macro_id = macro["_id"]["$oid"];
       this.macro_command = macro.command;
       this.macro_input = macro.input;
       this.show_input = true;
@@ -89,10 +88,19 @@ export default {
 .selectedmacro {
   background-color: #9d3a3a;
   color: white;
+  .delete-pill {
+    a{
+      background-color: white;
+      color: #9d3a3a;
+    }
+  }
 }
 
 .macropanel {
   .list-group-item {
+    .delete-pill {
+      float:right;
+    }
     border-radius: 0px;
     &.active {
       border-color: white;
