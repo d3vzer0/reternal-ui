@@ -75,9 +75,6 @@ export default {
     state_check(agent_time, timer, jitter){
       var state_time = (agent_time / 1000) + (jitter * timer)
       var current_time = this.$moment().unix()
-
-      console.log(agent_time, state_time, current_time, timer, jitter)
-
       if (current_time > state_time) {
         return 'offline'
       }
