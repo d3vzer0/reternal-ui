@@ -23,10 +23,12 @@
              <b-col cols="1"><font-awesome-icon icon="desktop" /></b-col><b-col>{{agent.hostname}}</b-col>
           </b-row>
            <b-row>
-             <b-col cols="1"><font-awesome-icon icon="plug" /></b-col><b-col>{{state_check(agent.timestamp.$date, agent.timer, agent.jitter)}}</b-col>
+             <b-col cols="1"><font-awesome-icon icon="plug" /></b-col>
+             <b-col class="agentonline" v-if="state_check(agent.output.timestamp.$date, agent.timer, agent.jitter) === 'online'">Online</b-col>
+             <b-col class="agentoffline" v-if="state_check(agent.output.timestamp.$date, agent.timer, agent.jitter) === 'offline'">Offline</b-col>
           </b-row>
            <b-row>
-             <b-col cols="1"><font-awesome-icon icon="clock" /></b-col><b-col>{{to_unix(agent.timestamp.$date)}}</b-col>
+             <b-col cols="1"><font-awesome-icon icon="clock" /></b-col><b-col>{{to_unix(agent.output.timestamp.$date)}}</b-col>
           </b-row>
           <b-row>
             <b-col>{{agent.last_beacon}}</b-col>
@@ -73,6 +75,9 @@ export default {
     state_check(agent_time, timer, jitter){
       var state_time = (agent_time / 1000) + (jitter * timer)
       var current_time = this.$moment().unix()
+
+      console.log(agent_time, state_time, current_time, timer, jitter)
+
       if (current_time > state_time) {
         return 'offline'
       }
@@ -112,6 +117,12 @@ export default {
   width: 100%;
   .agent-button {
     width: 50%;
+  }
+  .agentonline {
+    color: green;
+  }
+  .agentoffline {
+    color: red;
   }
   &.active {
     outline: 4px solid #00a5d69e;
