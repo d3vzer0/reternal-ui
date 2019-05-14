@@ -37,12 +37,12 @@
                             <b-col>{{command.type}}</b-col>
                           </b-row>
                         </b-list-group-item>
-                        <b-list-group-item v-if="command.type == 'Mitre'">
+                        <!-- <b-list-group-item v-if="command.type == 'Mitre'">
                           <b-row>
                             <b-col><b>Command</b></b-col>
                             <b-col>{{command.reference_name}}</b-col>
                           </b-row>
-                        </b-list-group-item>
+                        </b-list-group-item> -->
                         <b-list-group-item v-if="command.type == 'Mitre'">
                           <b-row>
                             <b-col><b>Technique</b></b-col>

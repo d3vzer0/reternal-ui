@@ -10,7 +10,7 @@
                 <b-badge href="#" pill variant="dark" v-on:click="delete_campaign(campaign)"><font-awesome-icon icon="minus"/></b-badge>
               </span>
               <span class="float-right delete-save">
-                <b-badge href="#" pill variant="dark"><font-awesome-icon icon="plus" /></b-badge> 
+                <b-badge href="#" pill variant="dark" v-on:click="load_campaign()"><font-awesome-icon icon="plus" /></b-badge> 
               </span>
             </span>
           </div>
@@ -117,8 +117,11 @@ export default {
         if ('metadata' in mapping) {
           this.task_commands.push({
             type: mapping.commands.type,
-            reference_name: mapping.commands.name,
+            reference_id: mapping.metadata['_id']['$oid'],
+            name: mapping.commands.name,
+            reference_name: mapping.metadata.name,
             technique_name: mapping.metadata.technique_name,
+            technique_id: mapping.metadata.technique_id,
             kill_chain_phase: mapping.metadata.kill_chain_phase,
             input: mapping.commands.input,
             sleep: mapping.commands.sleep
@@ -133,6 +136,13 @@ export default {
           })
         }
       })
+    },
+    load_campaign () {
+       this.task_commands.forEach(command => {
+        var random_array = new Uint32Array(5);
+        command.rand = window.crypto.getRandomValues(random_array)[2];
+        this.$store.commit("task/add_command", command);
+      });
     }
   }
 };
@@ -214,7 +224,5 @@ export default {
   background-color: #9d3a3a;
   color: white;
 }
-
-
 
 </style>
