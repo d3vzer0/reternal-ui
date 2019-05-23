@@ -7,15 +7,20 @@
         <div class="card-header mapping-card-header">
            <font-awesome-icon icon="terminal" />
         </div>
-        <div class="card-body mapping-card-body">
-          <b-form-select required v-model="command" form="add-command">
-            <optgroup label="Manual commands">
-              <option v-for="command in command_options" :key="command.id" :value="command.value">{{command.text}}</option>
-            </optgroup>
-            <optgroup label="Macro commands">
-              <option v-for="macro in macro_options" :key="macro.id" :value="macro.value">{{macro.text}}</option>
-            </optgroup>
-         </b-form-select>
+        <div class="card-body mapping-card-body input-card">
+          <!-- <span class="input-label">
+            <font-awesome-icon icon="terminal" />
+          </span> -->
+          <span class="input-content">
+            <b-form-select required v-model="command" form="add-command">
+              <optgroup label="Manual commands">
+                <option v-for="command in command_options" :key="command.id" :value="command.value">{{command.text}}</option>
+              </optgroup>
+              <optgroup label="Macro commands">
+                <option v-for="macro in macro_options" :key="macro.id" :value="macro.value">{{macro.text}}</option>
+              </optgroup>
+            </b-form-select>
+          </span>
         </div>
       </div>
     </b-col>
@@ -144,6 +149,12 @@ export default {
 
 
 <style lang="scss" scoped>
+.input-card {
+  .input-label {
+    float:left;
+    
+  }
+}
 #recipe-add-command {
   height: 85%;
 }

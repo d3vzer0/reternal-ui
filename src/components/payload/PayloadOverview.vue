@@ -99,7 +99,7 @@ export default {
     },
     download_link(platform, arch) {
       this.$http
-        .get("payload/get", { responseType: 'blob', params: { 'platform': platform, 'arch':arch } })
+        .get("payload/get", { responseType: 'blob', params: { 'platform': platform, 'arch':arch, 'base_url': this.c2_dest} })
         .then(response => {
           const url = window.URL.createObjectURL(new Blob([response.data]));
           const link = document.createElement('a');
