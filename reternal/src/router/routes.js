@@ -9,7 +9,9 @@ const routes = [
       { path: '/mitre', component: () => import('pages/Mitre.vue') },
       { path: '/agents', component: () => import('pages/Agents.vue') },
       { path: '/techniques', component: () => import('pages/Techniques.vue') },
-      { path: '/queue', component: () => import('pages/Queue.vue') }
+      { path: '/queue', component: () => import('pages/Queue.vue') },
+      { path: '/payloads', component: () => import('pages/Payloads.vue') },
+      { path: '/integrations', component: () => import('pages/Integrations.vue') }
     ]
   },
   {

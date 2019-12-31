@@ -169,21 +169,21 @@ export default {
     };
   },
   created (){
-    this.$socket.open();
-    this.$options.sockets.connect = () => {
-      console.log("Authenticating socket")
-      this.$socket.emit("authenticate", {"access_token": this.$store.getters['auth/access_token']})
-    }
-    this.$options.sockets.disconnect = () => {
-      console.log("Disconnected socket")
-    },
-    this.$options.sockets.emit_result = (result) => {
-      this.output_result(result);
-    },
-    this.$options.sockets.emit_buildstate = (result) => {
-      result.data.state = 'SUCCESS'
-      this.$store.commit('payloads/change_state', result.data)
-    }
+    // this.$socket.open();
+    // this.$options.sockets.connect = () => {
+    //   console.log("Authenticating socket")
+    //   this.$socket.emit("authenticate", {"access_token": this.$store.getters['auth/access_token']})
+    // }
+    // this.$options.sockets.disconnect = () => {
+    //   console.log("Disconnected socket")
+    // },
+    // this.$options.sockets.emit_result = (result) => {
+    //   this.output_result(result);
+    // },
+    // this.$options.sockets.emit_buildstate = (result) => {
+    //   result.data.state = 'SUCCESS'
+    //   this.$store.commit('payloads/change_state', result.data)
+    // }
   },
   mounted() {
     EventBus.$on("showalert", alert_data => {

@@ -106,7 +106,7 @@ library.add(
   faClock
 );
 
-const socket = io(process.env.VUE_APP_SOCKETHOST, {
+const socket = io("http://localhost:5000", {
   autoConnect: false
 });
 

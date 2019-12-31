@@ -35,7 +35,7 @@
               <q-timeline>
                 <q-timeline-entry v-if="queuedCommands.length === 0">
                   <template v-slot:title>
-                    No tasks added to queue yet
+                    No tasks added to task queue yet
                   </template>
                   <template v-slot:subtitle>
                     Tasks will be displayed here when available
@@ -83,8 +83,8 @@
             <div class="col-1 q-mr-md">
                 <q-input v-model="taskInput" label="Sleep" />
             </div>
-            <div class="col-1">
-                <q-btn unelevated color="primary" icon="add_to_queue"/>
+            <div class="col-1 vertical-bottom">
+                <q-btn class="float-right" unelevated icon="add_to_queue" size="lg" />
               <!-- <q-input v-model="taskInput" label="Standard" /> -->
             </div>
           </div>

@@ -127,14 +127,7 @@ const router = new Router({
 
 router.beforeEach((to, from, next) => {
   if (to.matched.some(record => record.meta.requiresAuth)) {
-    if (!store.getters['auth/access_token']) {
-      next({
-        path: '/login',
-        query: { redirect: to.fillPath }
-      });
-    } else {
       next();
-    }
   } else {
     next();
   }
