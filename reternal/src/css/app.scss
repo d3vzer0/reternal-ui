@@ -22,6 +22,9 @@ body.body--dark {
     background-color: #262626;
   }
   #q-app {
+    .text-white {
+      color: #262626 !important;
+    }
     #search-banner {
       background-color: #262626;
     }

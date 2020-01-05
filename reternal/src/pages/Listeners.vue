@@ -25,11 +25,11 @@
       <!-- Results column -->
       <div class="col">
         <q-slide-transition>
-          <div class="row" v-show="showCreateListener && listenerOptions">
+          <div class="row" v-show="showCreateListener">
             <div class="col-12 q-pa-md">
               <q-card flat class="my-card">
                 <q-card-section>
-                  <q-stepper v-model="step" ref="stepper" color="primary" animated flat>
+                  <q-stepper v-model="step" ref="stepper" color="primary" animated flat v-if="listenerOptions">
                     <q-step :name="1" title="Choose listener type" icon="settings" :done="step > 1">
                       Select the apropriate listener type
                       <q-list>
@@ -40,7 +40,7 @@
                           <q-item-section>
                             <q-item-label>{{ value }}</q-item-label>
                             <q-item-label caption>
-                              {{ listenerSettings[value].metadata.description}}
+                              {{ listenerSettings[value].description}}
                             </q-item-label>
                           </q-item-section>
                         </q-item>
@@ -49,30 +49,27 @@
                     <q-step :name="2" title="Set listener options" icon="settings" :done="step > 2">
                       Set the required listener settings
                       <q-form class="q-gutter-sm" v-if="listenerSelected">
-                        <q-input v-for="(settings, listener) in listenerSettings[listenerSelected]['nested']" v-bind:key="listener"
+                        <q-input v-for="(settings, listener) in listenerSettings[listenerSelected]['options']" v-bind:key="listener"
                           :label="listener"
                           v-model="settings.default"
-                          :hint="settings.metadata.description"
+                          :hint="settings.description"
                           :error="isRequired(settings.default, settings)"
                           filled
                           />
                       </q-form>
                     </q-step>
                     <q-step :name="3" title="Confirm" icon="settings" :done="step > 3">
-                       Set new listener name and create listener
-                       <q-form class="q-gutter-sm" v-if="listenerSelected">
-                         <q-input label="Listener name" v-model="newListenerName" hint="Custom listener name"
-                         :rules="[val => !!val || 'Field is required']" />
-                      </q-form>
+                      Confirm creation for listener <br/>
+                      <q-linear-progress dark rounded indeterminate class="q-mt-sm" v-show="inProgress" />
                     </q-step>
                     <template v-slot:navigation>
-                      <q-stepper-navigation>
+                      <q-stepper-navigation v-if="listenerSelected">
                         <q-btn :disabled="forgotRequired" @click="createListener()" color="primary" label="Create" v-if="step === 3"/>
-                        <q-btn :disabled="forgotRequired" @click="$refs.stepper.next()" color="primary" label="Next" v-else/>
+                        <q-btn @click="$refs.stepper.next()" color="primary" label="Next" v-else/>
                         <q-btn v-if="step > 1" flat color="primary" @click="$refs.stepper.previous()" label="Back" class="q-ml-sm" />
                       </q-stepper-navigation>
                     </template>
-                    </q-stepper>
+                  </q-stepper>
                 </q-card-section>
               </q-card>
             </div>
@@ -89,7 +86,7 @@
                   row-key="name"
                   flat >
                   <template v-slot:top="props">
-                    <div class="col-2 q-table__title">Listeners</div>
+                    <div class="col-2 q-table__title">Active listeners</div>
                     <q-space />
                   </template>
                   <template v-slot:body="props">
@@ -137,14 +134,14 @@ export default {
   computed: {
     forgotRequired: {
       get () {
-        const relatedListener = this.listenerSettings[this.listenerSelected]['nested']
+        var forgot = false
+        const relatedListener = this.listenerSettings[this.listenerSelected]['options']
         Object.keys(relatedListener).forEach(function (key) {
-          if (relatedListener[key].defaut === '' && relatedListener[key].required) {
-            console.log(111)
-            return true
+          if (relatedListener[key].default === '' && relatedListener[key].required) {
+            forgot = true
           }
         })
-        return false
+        return forgot
       }
     },
     integrationOptions: {
@@ -174,6 +171,7 @@ export default {
       ],
       newListenerName: '',
       showCreateListener: true,
+      inProgress: false,
       step: 1
     }
   },
@@ -224,16 +222,15 @@ export default {
     },
     createListener () {
       var postData = {}
-      const relatedListener = this.listenerSettings[this.listenerSelected]['nested']
+      const relatedListener = this.listenerSettings[this.listenerSelected]['options']
       Object.keys(relatedListener).forEach(function (key) {
-        postData[key] = relatedListener[key]['default']
+        if (relatedListener[key]['default'] !== '') {
+          postData[key] = relatedListener[key]['default']
+        }
       })
       this.$axios
         .post(`/listeners/${this.selectedIntegration}/${this.listenerSelected}`, postData)
-        .then(response => this.createListenerSuccess(response['data']))
-    },
-    createListenerSuccess (response) {
-      console.log(response)
+        .then(response => this.getListeners())
     }
   }
 }
