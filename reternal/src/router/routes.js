@@ -11,7 +11,8 @@ const routes = [
       { path: '/techniques', component: () => import('pages/Techniques.vue') },
       { path: '/queue', component: () => import('pages/Queue.vue') },
       { path: '/payloads', component: () => import('pages/Payloads.vue') },
-      { path: '/integrations', component: () => import('pages/Integrations.vue') }
+      { path: '/integrations', component: () => import('pages/Integrations.vue') },
+      { path: '/listeners', component: () => import('pages/Listeners.vue') }
     ]
   },
   {

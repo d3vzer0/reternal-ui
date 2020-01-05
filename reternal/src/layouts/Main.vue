@@ -56,6 +56,14 @@
               Agents
             </q-item-section>
           </q-item>
+           <q-item clickable v-ripple to='/listeners'>
+            <q-item-section avatar>
+              <q-icon name="settings_ethernet" />
+            </q-item-section>
+            <q-item-section>
+              Listeners
+            </q-item-section>
+          </q-item>
           <q-item clickable v-ripple to='/queue'>
             <q-item-section avatar>
               <q-icon name="list_alt" />

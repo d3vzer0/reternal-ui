@@ -85,11 +85,11 @@
                       <q-icon color="primary" name="power" />
                     </q-item-section>
                     <q-item-section v-if="mapping.enabled">
-                      <q-item-label><q-badge color="positive" label="Enabled" /></q-item-label>
+                      <q-item-label><q-badge class="q-pa-xs" color="positive" label="Enabled" /></q-item-label>
                       <q-item-label caption>Enabled in config</q-item-label>
                     </q-item-section>
                     <q-item-section v-else>
-                      <q-item-label><q-badge color="negative" label="Disabled" /></q-item-label>
+                      <q-item-label><q-badge class="q-pa-xs" color="negative" label="Disabled" /></q-item-label>
                       <q-item-label caption>Disabled in config</q-item-label>
                     </q-item-section>
                   </q-item>
@@ -98,7 +98,7 @@
                       <q-icon color="primary" name="wifi" />
                     </q-item-section>
                     <q-item-section>
-                      <q-item-label><q-badge color="negative" label="Offline" /></q-item-label>
+                      <q-item-label><q-badge class="q-pa-xs" color="negative" label="Offline" /></q-item-label>
                       <q-item-label caption>Unable to connect</q-item-label>
                     </q-item-section>
                   </q-item>
