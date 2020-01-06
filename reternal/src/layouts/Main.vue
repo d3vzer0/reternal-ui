@@ -47,7 +47,8 @@
             <q-item-section>
               Integrations
             </q-item-section>
-          </q-item>
+          </q-item>          <q-separator />
+
           <q-item clickable v-ripple to="/agents">
             <q-item-section avatar>
               <q-icon name="desktop_windows" />
@@ -62,6 +63,14 @@
             </q-item-section>
             <q-item-section>
               Listeners
+            </q-item-section>
+          </q-item>
+          <q-item clickable v-ripple to="/payloads">
+            <q-item-section avatar>
+              <q-icon name="get_app" />
+            </q-item-section>
+            <q-item-section>
+              Stagers
             </q-item-section>
           </q-item>
           <q-item clickable v-ripple to='/queue'>
@@ -98,14 +107,7 @@
             </q-item-section>
           </q-item>
           <q-separator />
-          <q-item clickable v-ripple to="/payloads">
-            <q-item-section avatar>
-              <q-icon name="cloud_download" />
-            </q-item-section>
-            <q-item-section>
-              Payloads
-            </q-item-section>
-          </q-item>
+          <q-separator />
           <q-item clickable v-ripple>
             <q-item-section avatar>
               <q-icon name="bookmark" />

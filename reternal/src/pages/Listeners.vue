@@ -60,7 +60,7 @@
                     </q-step>
                     <q-step :name="3" title="Confirm" icon="settings" :done="step > 3">
                       Confirm creation for listener <br/>
-                      <q-linear-progress dark rounded indeterminate class="q-mt-sm" v-show="inProgress" />
+                      <!-- <q-linear-progress dark rounded indeterminate class="q-mt-sm" v-show="inProgress" /> -->
                     </q-step>
                     <template v-slot:navigation>
                       <q-stepper-navigation v-if="listenerSelected">
@@ -171,7 +171,6 @@ export default {
       ],
       newListenerName: '',
       showCreateListener: true,
-      inProgress: false,
       step: 1
     }
   },

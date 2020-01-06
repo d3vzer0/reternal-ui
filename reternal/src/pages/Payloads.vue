@@ -8,50 +8,56 @@
           <q-stepper v-model="step" ref="stepper" color="primary" animated >
             <q-step :name="1" title="Select C2 module" icon="settings" :done="step > 1">
               <q-list>
-                <q-item tag="label" v-ripple>
+                <q-item tag="label" v-ripple v-for="(metadata, integration) in integrationOptions" v-bind:key="integration">
                   <q-item-section avatar>
-                    <q-radio v-model="color" color="teal" />
+                    <q-radio v-model="selectedIntegration" color="teal" :val="integration"/>
                   </q-item-section>
                   <q-item-section>
-                    <q-item-label>Covenant C2</q-item-label>
+                    <q-item-label>{{ metadata.name }}</q-item-label>
                     <q-item-label caption>
-                      Covenant is a .NET command and control framework that aims to highlight the attack surface of .NET, make the use of offensive .NET tradecraft easier, and serve as a collaborative command and control platform for red teamers.
-Covenant is an ASP.NET Core, cross-platform application that includes a web-based interface that allows for multi-user collaboration.
-                    </q-item-label>
-                  </q-item-section>
-                </q-item>
-                <q-item tag="label" v-ripple disable :clickable="False">
-                  <q-item-section avatar>
-                    <q-radio v-model="color" color="empire2" disable />
-                  </q-item-section>
-                  <q-item-section>
-                    <q-item-label>Empire V2</q-item-label>
-                    <q-item-label caption>
-Empire is a post-exploitation framework that includes a pure-PowerShell2.0 Windows agent, and a pure Python 2.6/2.7 Linux/OS X agent. It is the merge of the previous PowerShell Empire and Python EmPyre projects. The framework offers cryptologically-secure communications and a flexible architecture. On the PowerShell side, Empire implements the ability to run PowerShell agents without needing powershell.exe, rapidly deployable post-exploitation modules ranging from key loggers to Mimikatz, and adaptable communications to evade network detection, all wrapped up in a usability-focused framework.                     </q-item-label>
-                  </q-item-section>
-                </q-item>
-                <q-item tag="label" v-ripple disable :clickable="False">
-                  <q-item-section avatar>
-                    <q-radio v-model="color" color="empire3" disable />
-                  </q-item-section>
-                  <q-item-section>
-                    <q-item-label>Empire V3</q-item-label>
-                    <q-item-label caption>
-                      Empire 3.0 is a post-exploitation framework that includes a pure-PowerShell 2.0 Windows agent, and compatibility with Python 2.x/3.x Linux/OS X agents. It is the merger of the previous PowerShell Empire and Python EmPyre projects. The framework offers cryptologically-secure communications and a flexible architecture. On the PowerShell side, Empire implements the ability to run PowerShell agents without needing powershell.exe, rapidly deployable post-exploitation modules ranging from key loggers to Mimikatz, and adaptable communications to evade network detection, all wrapped up in a usability-focused framework.
+                       {{ metadata.description }}
                     </q-item-label>
                   </q-item-section>
                 </q-item>
               </q-list>
             </q-step>
-            <q-step :name="2" title="Select campaign settings" icon="settings" :done="step > 2">
-              For each ad campaign that you create, you can control how much you're willing to
-              spend on clicks and conversions, which networks and geographical locations you want
-              your ads to show on, and more.
+            <q-step :name="2" title="Select platform" icon="settings" :done="step > 2">
+              <q-list v-if="selectedIntegration">
+                <q-item tag="label" v-ripple v-for="(stagers, platform) in integrationStagers" v-bind:key="platform">
+                  <q-item-section avatar>
+                    <q-radio v-model="selectedPlatform" :val="platform" color="teal" />
+                  </q-item-section>
+                  <q-item-section>
+                    <q-item-label>{{platform}}</q-item-label>
+                  </q-item-section>
+                </q-item>
+              </q-list>
             </q-step>
-             <q-step :name="3" title="Select campaign settings" icon="settings" :done="step > 3">
-              For each ad campaign that you create, you can control how much you're willing to
-              spend on clicks and conversions, which networks and geographical locations you want
-              your ads to show on, and more.
+            <q-step :name="3" title="Select stager" icon="settings" :done="step > 3">
+              <q-list v-if="selectedPlatform">
+                <q-item tag="label" v-ripple v-for="(options, stager) in integrationStagers[selectedPlatform]" v-bind:key="stager">
+                  <q-item-section avatar>
+                    <q-radio v-model="selectedStager" :val="stager" color="teal" />
+                  </q-item-section>
+                  <q-item-section>
+                    <q-item-label>{{ stager }}</q-item-label>
+                    <q-item-label caption>
+                      {{ options.description}}
+                    </q-item-label>
+                  </q-item-section>
+                </q-item>
+              </q-list>
+            </q-step>
+            <q-step :name="4" title="Configure stager" icon="settings" :done="step > 3">
+              <q-form class="q-gutter-sm" v-if="selectedStager">
+                <q-input v-for="(settings, stager) in integrationStagers[selectedPlatform][selectedStager]['options']" v-bind:key="stager"
+                  :label="stager"
+                  v-model="settings.default"
+                  :hint="settings.description"
+                  :error="isRequired(settings.default, settings)"
+                  filled
+                  />
+              </q-form>
             </q-step>
             <template v-slot:navigation>
               <q-stepper-navigation>
@@ -75,61 +81,62 @@ import Vue from 'vue'
 Vue.use(VueMasonry)
 
 export default {
-  name: 'Queue',
+  name: 'Stagers',
   data () {
     return {
-      platformOptions: [
-        { 'value': 'Windows', 'label': 'Windows' },
-        { 'value': 'macOS', 'label': 'MacOS' },
-        { 'value': 'Linux', 'label': 'Linux' }
-      ],
+      selectedIntegration: '',
+      selectedPlatform: '',
+      selectedStager: '',
       tab: null,
-      color: null,
       step: 1,
-      phaseStep: '',
-      selectedPlatform: 'Windows',
-      phaseOptions: [],
+      integrationStagers: {},
       phaseTechniques: {
       },
-      selectedAgents: [],
-      agentOptions: ['agent1', 'agent2'],
-      selectedPhase: '',
-      taskInput: ''
+      selectedAgents: []
     }
   },
   created () {
   },
   watch: {
+    selectedIntegration: function (integration) {
+      this.getStagers()
+    }
   },
   computed: {
+    forgotRequired: {
+      get () {
+        var forgot = false
+        const relatedStager = this.integrationStagers[this.selectedPlatform][this.selectedStager]['options']
+        Object.keys(relatedStager).forEach(function (key) {
+          if (relatedStager[key].default === '' && relatedStager[key].required) {
+            forgot = true
+          }
+        })
+        return forgot
+      }
+    },
     queuedCommands: {
       get () {
         return this.$store.state.queue.commands
       }
+    },
+    integrationOptions: {
+      get () {
+        return this.$store.state.integrations.integrationOptions
+      }
     }
   },
   methods: {
-    addToQueue (technique) {
-      technique.commands.forEach(command => {
-        var randomArray = new Uint32Array(5)
-        var randomId = window.crypto.getRandomValues(randomArray)[2]
-        var commandOptions = {
-          reference_name: technique.name,
-          reference_id: technique._id['$oid'],
-          technique_name: technique.technique_name,
-          kill_chain_phase: technique.kill_chain_phase,
-          technique_id: technique.technique_id,
-          name: command.name,
-          input: command.input,
-          sleep: command.sleep,
-          rand: randomId,
-          type: command.type
-        }
-        this.$store.commit('queue/addCommand', commandOptions)
-      })
+    isRequired (value, options) {
+      return value === '' && options.required
     },
-    removeFromQueue (technique) {
-      this.$store.commit('queue/removeCommand', technique.rand)
+    getStagers () {
+      this.$axios
+        .get('/stagers/' + this.selectedIntegration)
+        .then(response => this.getStagersSuccess(response['data']))
+    },
+    getStagersSuccess (stagers) {
+      this.integrationStagers = stagers
     }
   }
 }
