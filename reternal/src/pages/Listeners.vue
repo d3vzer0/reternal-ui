@@ -27,15 +27,14 @@
         <q-slide-transition>
           <div class="row" v-show="showCreateListener">
             <div class="col-12 q-pa-md">
-              <q-card flat class="my-card">
+              <q-card flat>
                 <q-card-section>
                   <q-stepper v-model="step" ref="stepper" color="primary" animated flat v-if="listenerOptions">
                     <q-step :name="1" title="Choose listener type" icon="settings" :done="step > 1">
-                      Select the apropriate listener type
                       <q-list>
                         <q-item tag="label" v-ripple v-for="(value, index) in listenerOptions" v-bind:key="index">
                           <q-item-section avatar>
-                            <q-radio v-model="listenerSelected" :val="value" color="teal" />
+                            <q-radio v-model="listenerSelected" :val="value" />
                           </q-item-section>
                           <q-item-section>
                             <q-item-label>{{ value }}</q-item-label>
@@ -47,7 +46,6 @@
                       </q-list>
                     </q-step>
                     <q-step :name="2" title="Set listener options" icon="settings" :done="step > 2">
-                      Set the required listener settings
                       <q-form class="q-gutter-sm" v-if="listenerSelected">
                         <q-input v-for="(settings, listener) in listenerSettings[listenerSelected]['options']" v-bind:key="listener"
                           :label="listener"
@@ -175,7 +173,8 @@ export default {
     }
   },
   created () {
-    this.getIntegrations()
+    this.$getIntegrations()
+    this.selectedIntegration = this.integrationOptions[0].value
   },
   watch: {
     selectedIntegration: function (integration) {
@@ -186,15 +185,6 @@ export default {
   methods: {
     isRequired (value, options) {
       return value === '' && options.required
-    },
-    getIntegrations () {
-      this.$axios
-        .get('/workers')
-        .then(response => this.getIntegrationsSuccess(response['data']))
-    },
-    getIntegrationsSuccess (integrations) {
-      this.$store.commit('integrations/setIntegrations', integrations)
-      this.selectedIntegration = Object.keys(integrations)[0]
     },
     getListenerOptions () {
       this.$axios

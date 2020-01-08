@@ -43,7 +43,7 @@
 
           <div class="col-4 q-pa-md" v-for="(mapping, integration) in filteredIntegrations" v-bind:key="integration">
             <q-card flat class="my-card">
-              <q-img :src="mapping.thumbnail" v-if="mapping.thumbnail" style="height: 140px; background-color: rgba(0, 0, 0, 0.47)" >
+              <q-img :src="mapping.thumbnail" v-if="mapping.thumbnail" style="height: 200px; background-color: rgba(0, 0, 0, 0.47)" >
                 <div class="absolute-full">
                   <div class="absolute-top text-right text-h5 q-pa-md">
                     <span class="supported-platform q-pr-md" v-for="(platform, index) in mapping.platforms" v-bind:key="index">
@@ -77,33 +77,6 @@
                 <q-btn flat icon="fas fa-cogs" />
                 <q-btn flat icon="info" @click="showDescription = true, selectedIntegration = integration"  />
               </q-card-actions>
-              <q-separator />
-              <q-card-section>
-                <q-list>
-                  <q-item>
-                    <q-item-section avatar>
-                      <q-icon color="primary" name="power" />
-                    </q-item-section>
-                    <q-item-section v-if="mapping.enabled">
-                      <q-item-label><q-badge class="q-pa-xs" color="positive" label="Enabled" /></q-item-label>
-                      <q-item-label caption>Enabled in config</q-item-label>
-                    </q-item-section>
-                    <q-item-section v-else>
-                      <q-item-label><q-badge class="q-pa-xs" color="negative" label="Disabled" /></q-item-label>
-                      <q-item-label caption>Disabled in config</q-item-label>
-                    </q-item-section>
-                  </q-item>
-                  <q-item>
-                    <q-item-section avatar>
-                      <q-icon color="primary" name="wifi" />
-                    </q-item-section>
-                    <q-item-section>
-                      <q-item-label><q-badge class="q-pa-xs" color="negative" label="Offline" /></q-item-label>
-                      <q-item-label caption>Unable to connect</q-item-label>
-                    </q-item-section>
-                  </q-item>
-                </q-list>
-              </q-card-section>
             </q-card>
           </div>
         </div>
@@ -150,20 +123,7 @@ export default {
     }
   },
   created () {
-    this.getIntegrations()
-  },
-  watch: {
-  },
-  methods: {
-    getIntegrations () {
-      this.$axios
-        .get('/workers')
-        .then(response => this.getIntegrationsSuccess(response['data']))
-    },
-    getIntegrationsSuccess (integrations) {
-      this.$store.commit('integrations/setIntegrations', integrations)
-    }
-
+    this.$getIntegrations()
   }
 }
 </script>

@@ -67,12 +67,13 @@
           </q-item>
           <q-item clickable v-ripple to="/payloads">
             <q-item-section avatar>
-              <q-icon name="get_app" />
+              <q-icon name="save_alt" />
             </q-item-section>
             <q-item-section>
               Stagers
             </q-item-section>
           </q-item>
+          <q-separator />
           <q-item clickable v-ripple to='/queue'>
             <q-item-section avatar>
               <q-icon name="list_alt" />
@@ -81,7 +82,6 @@
               Campaign
             </q-item-section>
           </q-item>
-          <q-separator />
           <q-item clickable v-ripple to="/actors">
             <q-item-section avatar>
               <q-icon name="group" />
@@ -136,7 +136,7 @@
 
 <script>
 export default {
-  name: 'MyLayout',
+  name: 'MainView',
   computed: {
     darkmode: {
       get: function () {
