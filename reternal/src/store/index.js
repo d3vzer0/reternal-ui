@@ -4,6 +4,8 @@ import Vuex from 'vuex'
 // import example from './module-example'
 import queue from './queue'
 import integrations from './integrations'
+import agents from './agents'
+import scheduler from './scheduler'
 
 Vue.use(Vuex)
 
@@ -20,7 +22,9 @@ export default function (/* { ssrContext } */) {
   const Store = new Vuex.Store({
     modules: {
       queue,
-      integrations
+      integrations,
+      agents,
+      scheduler
       // example
     },
 

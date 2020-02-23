@@ -1,7 +1,7 @@
 <template>
   <q-dialog v-model="error_dialog" seamless position="top">
     <q-card style="width: 650px">
-      <q-linear-progress :value="error_progress" color="purple" />
+      <q-linear-progress :value="errorProgress" color="purple" />
       <q-card-section class="row items-center no-wrap">
         <div> {{error_message}} </div>
         <q-space />
@@ -17,23 +17,30 @@ export default {
   props: ['error_message'],
   data () {
     return {
-      error_progress: 0.10,
-      error_dialog: false
+      errorProgress: 0.10,
+      errorDialog: false
     }
   },
-  created () {
-    this.onError()
+  watch: {
+    error_message: function (message) {
+      this.onError()
+    }
   },
   methods: {
     onError () {
-      this.error_dialog = true
-      this.interval = setInterval(() => {
-        if (this.error_progress >= 1) {
-          this.error_dialog = false
-          return
-        }
-        this.error_progress += 0.10
-      }, 1000)
+      console.log(1)
+      if (this.errorDialog === false) {
+        this.errorDialog = true
+        this.interval = setInterval(() => {
+          if (this.errorProgress >= 1) {
+            console.log('hier')
+            this.errorDialog = false
+            // this.error_progress = 0.10
+            return
+          }
+          this.errorProgress += 0.10
+        }, 1000)
+      }
     }
   }
 }

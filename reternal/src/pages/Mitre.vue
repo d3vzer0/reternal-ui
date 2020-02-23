@@ -108,7 +108,6 @@ export default {
         { 'value': 'Linux', 'label': 'Linux' }
       ],
       selectedPlatform: 'Windows',
-      // phaseOptions: ['initial-access', 'execution', ''],
       phaseOptions: [
         '', 'initial-access', 'execution', 'persistence', 'privilege-escalation',
         'defense-evasion', 'credential-access', 'discovery', 'lateral-movement',
@@ -175,7 +174,7 @@ export default {
     },
     getTechniques () {
       this.$axios
-        .get('mitre/techniques', {
+        .get('mitre/by_phase', {
           params: {
             actor: this.selectedActor,
             name: this.searchTechnique,

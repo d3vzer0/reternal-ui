@@ -183,7 +183,7 @@ export default {
     },
     getActorDetails (actor) {
       this.$axios
-        .get('/mitre/actors/' + actor)
+        .get('/mitre/actor/' + actor)
         .then(response => this.getActorDetailsSuccess(response['data']))
     },
     getActorDetailsSuccess (details) {
@@ -191,7 +191,7 @@ export default {
     },
     getActorTechniques (actor) {
       this.$axios
-        .get('/mapping/actors/' + actor)
+        .get('/mapping/actor/' + actor)
         .then(response => this.getActorTechniquesSuccess(response['data']))
     },
     getActorTechniquesSuccess (techniques) {

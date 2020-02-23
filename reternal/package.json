@@ -17,10 +17,15 @@
     "install": "^0.13.0",
     "quasar": "^1.0.0",
     "vue-code-highlight": "^0.7.4",
-    "vue-masonry-css": "^1.0.3"
+    "vue-command": "^7.0.7",
+    "vue-d3-network": "^0.1.28",
+    "vue-masonry-css": "^1.0.3",
+    "vue-moment": "^4.1.0",
+    "vue2vis": "0.0.16",
+    "yargs-parser": "^16.1.0"
   },
   "devDependencies": {
-    "@quasar/app": "^1.0.0",
+    "@quasar/app": "^1.5.6",
     "@quasar/quasar-app-extension-qmarkdown": "^1.0.10",
     "@vue/eslint-config-standard": "^4.0.0",
     "babel-eslint": "^10.0.1",

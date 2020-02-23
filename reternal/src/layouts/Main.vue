@@ -9,7 +9,6 @@
           <q-btn flat icon="play_circle_outline" />
           <q-btn flat icon="save_alt" />
           <q-btn flat icon="call_to_action" />
-
         </div>
         <div class="q-ml-lg">
           <q-btn-dropdown flat icon="person_pin">
@@ -40,15 +39,24 @@
       bordered>
       <q-scroll-area class="fit">
         <q-list padding>
-          <q-item clickable v-ripple to="/integrations">
+          <q-item clickable v-ripple to="/">
             <q-item-section avatar>
-              <q-icon name="apps" />
+              <q-icon name="home" />
             </q-item-section>
             <q-item-section>
-              Integrations
+              Home
             </q-item-section>
-          </q-item>          <q-separator />
-
+          </q-item>
+          <q-item clickable v-ripple to='/campaign'>
+            <q-item-section avatar>
+              <q-icon name="list_alt" />
+            </q-item-section>
+            <q-item-section>
+              Campaign
+            </q-item-section>
+          </q-item>
+          <q-separator />
+          <q-separator />
           <q-item clickable v-ripple to="/agents">
             <q-item-section avatar>
               <q-icon name="desktop_windows" />
@@ -74,14 +82,6 @@
             </q-item-section>
           </q-item>
           <q-separator />
-          <q-item clickable v-ripple to='/queue'>
-            <q-item-section avatar>
-              <q-icon name="list_alt" />
-            </q-item-section>
-            <q-item-section>
-              Campaign
-            </q-item-section>
-          </q-item>
           <q-item clickable v-ripple to="/actors">
             <q-item-section avatar>
               <q-icon name="group" />
@@ -106,7 +106,7 @@
               ATT&CK
             </q-item-section>
           </q-item>
-          <q-separator />
+          <!-- <q-separator />
           <q-separator />
           <q-item clickable v-ripple>
             <q-item-section avatar>
@@ -123,7 +123,7 @@
             <q-item-section>
               Saves
             </q-item-section>
-          </q-item>
+          </q-item> -->
         </q-list>
       </q-scroll-area>
     </q-drawer>

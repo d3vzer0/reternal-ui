@@ -1,10 +1,12 @@
 <template>
   <q-page>
-    <error-message :error_message='error_response'></error-message>
+
     <!-- Center content row -->
     <div class="q-pa-md q-mt-md row">
       <!-- Filter column -->
-      <!-- <div class="col-2">
+      <div class="col-2">
+
+        <!-- Dynamic filters -->
          <div class="row q-mt-md">
           <div class="col">
             <q-card flat class="filter-row">
@@ -32,14 +34,33 @@
             </q-card>
           </div>
         </div>
-      </div> -->
+
+        <!-- /Dynamic filters-->
+      </div>
       <!-- Filter column -->
 
       <!-- Results column -->
       <div class="col">
         <div class="row">
           <div class="col q-pa-md">
-            <terminal></terminal>
+            <div class="terminal">
+              <div class="terminal-history q-pa-md">
+                <vue-code-highlight language='bash'>
+                  {{terminalHistory.join('\n')}}
+                </vue-code-highlight>
+              </div>
+              <div class="terminal-current q-pa-md">
+                <span class="terminal-prompt">{{ terminalPrompt }}</span>
+                <span class="terminal-input"><input @keydown.tab.prevent="autoComplete" @keydown.enter.prevent="terminalAction" v-model="terminalInput" placeholder="Prrrt..."/></span>
+              </div>
+              <div class="terminal-suggestions q-pa-md">
+                <span class="terminal-prompt">{{ terminalSuggestion }}</span>
+              </div>
+            </div>
+             <!-- <q-chip v-for="suggestion in suggestionList" v-bind:key="suggestion">
+               <q-avatar icon="label" color="primary" text-color="white"/>
+                {{ splitSuggestion(suggestion) }}
+            </q-chip> -->
           </div>
         </div>
         <div class="row">
@@ -62,20 +83,12 @@
               </q-card-actions>
             </q-card>
           </q-dialog>
-          <div class="col-3 q-pa-md" v-if="agentOptions === []">
-            <q-card flat class="agent-card">
-              <q-card-section>
-                <div class='text-h6'>No agents running yet</div>
-              </q-card-section>
-            </q-card>
-          </div>
           <div class="col-3 q-pa-md" v-for="(agent, index) in agentOptions" v-bind:key="index">
-            <q-card flat class="agent-card">
+            <q-card flat class="my-card">
               <q-img :src="getThumbnail(agent.integration)" style="height: 140px">
                 <div class="absolute-top">
                   <div class="text-left float-left">
-                    <q-checkbox v-model="agentsSelected" dark :val="agent.id" color="teal"
-                      @input="clickety(agent)"/>
+                    <q-checkbox v-model="agentsSelected" dark :val="agent.id" color="teal"/>
                   </div>
                   <div class="float-right text-right text-h4">
                     <q-icon name="fab fa-apple" v-if="agent.operating_system === 'macOS'"/>
@@ -140,19 +153,19 @@
 </template>
 
 <script>
-
-import Terminal from 'components/Terminal'
+import { component as VueCodeHighlight } from 'vue-code-highlight'
+// import 'vue-code-highlight/themes/prism-okaidia.css'
+import 'prism-es6/components/prism-bash'
+import 'prism-es6/components/prism-python'
+import yargsParser from 'yargs-parser'
 
 export default {
   name: 'Agents',
   components: {
-    ErrorMessage: () => import('components/errors/ErrorMessage'),
-    Terminal
+    VueCodeHighlight
   },
   data () {
     return {
-      error_response: null,
-      error_dialog: false,
       platformOptions: [
         { 'value': 'Windows', 'label': 'Windows' },
         { 'value': 'macOS', 'label': 'MacOS' },
@@ -165,16 +178,26 @@ export default {
       suggestionList: [],
       agentOptions: [],
       agentDetails: {},
+      // agentsSelected: [],
       agentDetailsColumns: [
         { name: 'key', align: 'left', field: 'key', label: 'Key' },
         { name: 'value', align: 'left', field: 'value', label: 'Value' }
       ],
-      showAgentDetails: false
+      showAgentDetails: false,
+      moduleList: {},
+      terminalUser: 'root@reternal',
+      terminalPath: '~',
+      terminalInput: '',
+      terminalHistory: [],
+      terminalSuggestion: '',
+      commandFunctions: {
+      }
     }
   },
   created () {
     this.$getIntegrations()
     this.getAgents()
+    this.getModules()
   },
   computed: {
     terminalPrompt () {
@@ -205,8 +228,6 @@ export default {
       },
       set (agents) {
         console.log(agents)
-        this.error_response = agents.join('')
-
         this.$store.commit('agents/setSelected', agents)
       }
     }
@@ -217,8 +238,72 @@ export default {
     }
   },
   methods: {
-    clickety (a) {
-      console.log(a)
+    terminalAction (event) {
+      const parsedInput = yargsParser(this.terminalInput)
+      const command = parsedInput['_'][0]
+      this.terminalHistory.push(`${this.terminalPrompt} ${this.terminalInput}`)
+      this.terminalInput = ''
+      if (!Object.keys(this.moduleList).includes(command)) {
+        this.terminalHistory.push(`Command: ${command} not found`)
+      } else {
+        Object.entries(this.moduleList[command].options).forEach(([option, parameters]) => {
+          if (!(option in parsedInput)) {
+            parsedInput[option] = parameters.default
+          }
+          if (parameters.required === true && parsedInput[option] === '') {
+            var moduleDesc = this.moduleList[command].description
+            var stdOut = `\nDescription: \n ${moduleDesc} \n\n`
+            Object.entries(this.moduleList[command].options).forEach(([key, value]) => {
+              stdOut += `--${key} [required=${value['required']},default=${value['default']}]\n`
+            })
+            this.terminalHistory.push(stdOut)
+          }
+        })
+      }
+    },
+    autoComplete () {
+      this.terminalSuggestion = ''
+      var totalMatches = new Set()
+      for (var module of Object.keys(this.moduleList)) {
+        var modCompare = module.substr(this.terminalInput.length, module.length)
+        var modulePath = modCompare.split('/')
+        if (module.startsWith(this.terminalInput)) {
+          var autoComplete = this.terminalInput + modulePath[0]
+          if (modulePath.length !== 1) {
+            autoComplete += '/'
+          }
+          totalMatches.add(this.terminalInput + modulePath[0])
+        }
+      }
+
+      if (totalMatches.size === 1) {
+        this.terminalInput = autoComplete
+      } else {
+        // this.suggestionList = Array.from(totalMatches)
+        var counter = 0
+        for (var sug of Array.from(totalMatches)) {
+          counter += 1
+          this.terminalSuggestion += this.splitSuggestion(sug) + '\t\t'
+          if (counter % 4 === 0) {
+            this.terminalSuggestion += '\n'
+          }
+        }
+      }
+    },
+    splitSuggestion (value) {
+      var splitValue = value.split('/')
+      return splitValue[splitValue.length - 1]
+    },
+    getModules () {
+      this.$axios
+        .get('modules/empire2')
+        .then(response => this.getModulesSuccess(response['data']))
+    },
+    getModulesSuccess (modules) {
+      this.moduleList = modules
+      for (var module of Object.keys(modules)) {
+        this.commandFunctions[module] = this.runCommand
+      }
     },
     getAgents () {
       for (var integration in this.$store.state.integrations.integrationOptions) {

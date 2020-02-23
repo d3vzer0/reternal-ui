@@ -146,7 +146,7 @@ export default {
   methods: {
     getPhases () {
       this.$axios
-        .get('/techniques', {
+        .get('/mapping/techniques/distinct', {
           params: {
             platform: this.selectedPlatform,
             distinct: 'kill_chain_phase'
@@ -160,7 +160,7 @@ export default {
     },
     getTechniques () {
       this.$axios
-        .get('/technique', {
+        .get('/mapping/techniques', {
           params: {
             platform: this.selectedPlatform,
             phase: this.tab,
