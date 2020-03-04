@@ -6,8 +6,7 @@
         <q-toggle color="red" label="Dark Mode" v-model="darkmode" />
         <q-toolbar-title></q-toolbar-title>
         <div class="action-controls q-ml-lg">
-          <q-btn flat icon="play_circle_outline" />
-          <q-btn flat icon="save_alt" />
+          <q-btn flat icon="info" />
           <q-btn flat icon="call_to_action" />
         </div>
         <div class="q-ml-lg">
@@ -20,7 +19,7 @@
               </q-item>
               <q-item clickable v-close-popup>
                 <q-item-section>
-                  <q-item-label>Kekk</q-item-label>
+                  <q-item-label>Doei</q-item-label>
                 </q-item-section>
               </q-item>
             </q-list>
@@ -57,6 +56,23 @@
           </q-item>
           <q-separator />
           <q-separator />
+          <q-item clickable v-ripple to="/techniques">
+            <q-item-section avatar>
+              <q-icon name="link" />
+            </q-item-section>
+            <q-item-section>
+              Techniques
+            </q-item-section>
+          </q-item>
+          <q-item clickable v-ripple to="/mitre">
+            <q-item-section avatar>
+              <q-icon name="inbox" />
+            </q-item-section>
+            <q-item-section>
+              ATT&CK
+            </q-item-section>
+          </q-item>
+          <q-separator />
           <q-item clickable v-ripple to="/agents">
             <q-item-section avatar>
               <q-icon name="desktop_windows" />
@@ -79,31 +95,6 @@
             </q-item-section>
             <q-item-section>
               Stagers
-            </q-item-section>
-          </q-item>
-          <q-separator />
-          <q-item clickable v-ripple to="/actors">
-            <q-item-section avatar>
-              <q-icon name="group" />
-            </q-item-section>
-            <q-item-section>
-              Actors
-            </q-item-section>
-          </q-item>
-          <q-item clickable v-ripple to="/techniques">
-            <q-item-section avatar>
-              <q-icon name="link" />
-            </q-item-section>
-            <q-item-section>
-              Techniques
-            </q-item-section>
-          </q-item>
-          <q-item clickable v-ripple to="/mitre">
-            <q-item-section avatar>
-              <q-icon name="inbox" />
-            </q-item-section>
-            <q-item-section>
-              ATT&CK
             </q-item-section>
           </q-item>
           <!-- <q-separator />

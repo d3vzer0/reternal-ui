@@ -6,6 +6,7 @@ import queue from './queue'
 import integrations from './integrations'
 import agents from './agents'
 import scheduler from './scheduler'
+import tasks from './tasks'
 
 Vue.use(Vuex)
 
@@ -24,7 +25,8 @@ export default function (/* { ssrContext } */) {
       queue,
       integrations,
       agents,
-      scheduler
+      scheduler,
+      tasks
       // example
     },
 

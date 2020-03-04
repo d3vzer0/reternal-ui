@@ -4,11 +4,14 @@
     <!-- Center content row -->
     <div class="q-pa-md q-mt-md row">
       <!-- Filter column -->
-      <div class="col-2">
-
+      <div class="col-3 q-mr-md">
         <!-- Dynamic filters -->
-
-         <div class="row q-mt-md">
+        <div class="row q-mb-md">
+          <div class="col">
+            <ModulesActive></ModulesActive>
+          </div>
+        </div>
+        <div class="row">
           <div class="col">
             <q-card flat class="filter-row">
               <q-card-section>
@@ -26,7 +29,7 @@
       <div class="col">
         <q-slide-transition>
           <div class="row" v-show="showCreateListener">
-            <div class="col-12 q-pa-md">
+            <div class="col-12 q-mb-md">
               <q-card flat>
                 <q-card-section>
                   <q-stepper v-model="step" ref="stepper" color="primary" animated flat v-if="listenerOptions">
@@ -74,7 +77,7 @@
           </div>
         </q-slide-transition>
         <div class="row">
-          <div class="col-12 q-pa-md">
+          <div class="col-12">
             <q-card flat class="my-card">
               <q-card-section>
                 <q-table
@@ -126,9 +129,13 @@
 </template>
 
 <script>
+import ModulesActive from 'components/Modules'
 
 export default {
   name: 'Listeners',
+  components: {
+    ModulesActive
+  },
   computed: {
     forgotRequired: {
       get () {

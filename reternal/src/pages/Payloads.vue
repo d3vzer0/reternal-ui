@@ -2,8 +2,14 @@
   <q-page>
     <!-- Center content row -->
     <div class="q-pa-md q-mt-md row">
-      <div class="col-2">
+      <div class="col-3">
         <!-- Dynamic filters -->
+         <div class="row">
+          <div class="col">
+            <ModulesActive></ModulesActive>
+          </div>
+        </div>
+
         <div class="row q-mt-md">
           <div class="col">
             <q-card flat class="filter-row">
@@ -27,7 +33,7 @@
       <!-- Results column -->
       <div class="col">
         <div class="row">
-          <div class="col-12 q-pa-md">
+          <div class="col-12 q-pl-md">
             <q-card flat>
               <q-card-section>
                 <q-stepper v-model="step" ref="stepper" color="primary" animated flat>
@@ -97,13 +103,15 @@
 </template>
 
 <script>
+import ModulesActive from 'components/Modules'
 import { component as VueCodeHighlight } from 'vue-code-highlight'
 import 'vue-code-highlight/themes/prism-okaidia.css'
 
 export default {
   name: 'Stagers',
   components: {
-    VueCodeHighlight
+    VueCodeHighlight,
+    ModulesActive
   },
   data () {
     return {

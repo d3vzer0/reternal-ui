@@ -1,6 +1,7 @@
 export default function () {
   return {
     selected: [],
-    integration: ''
+    integration: '',
+    options: []
   }
 }

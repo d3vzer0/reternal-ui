@@ -1,5 +1,20 @@
 <template>
   <q-page>
+
+    <q-dialog v-model="showSaveGraph">
+      <q-card>
+        <q-form @submit="saveGraph">
+          <q-card-section>
+            <q-input ref="scenario" lazy-rules v-model="campaignName" label="Scenario name" :rules="[ val => val && val.length > 0 || 'Scenario name is required']"/>
+          </q-card-section>
+          <q-card-actions align="right">
+            <q-btn flat label="Cancel" v-close-popup />
+            <q-btn type="submit" flat label="Save" color="primary"/>
+          </q-card-actions>
+        </q-form>
+      </q-card>
+    </q-dialog>
+
     <q-dialog v-model="showScheduleScenario">
       <q-card>
         <q-form @submit="scheduleCampaign">
@@ -13,6 +28,7 @@
         </q-form>
       </q-card>
     </q-dialog>
+
     <!-- Center content row -->
     <div class="q-pa-md q-mt-md row">
       <!-- Filter column -->
@@ -123,7 +139,7 @@
               <div class="dag">
                 <div class="dag-text" style="position: absolute; z-index: 100; padding: 20px;">
                   <div class="dag-text-title text-h5">
-                    Campaign  <q-btn v-if="nodes.length > 0" flat icon="play_circle_outline" @click="showScheduleScenario = true" />
+                    Campaign  <q-btn v-if="nodes.length > 0" flat icon="play_circle_outline" @click="showScheduleScenario = true" /> <q-btn v-if="nodes.length > 0" flat icon="save" @click="showSaveGraph = true" />
                   </div>
                   <div class="dag-text-message text-h7" v-if="nodes.length === 0 ">
                     No scenarios have been added to the campaign
@@ -136,11 +152,11 @@
                       </tr>
                       <tr>
                         <td>Time</td>
-                        <td>{{ taskDetails.datetime }}</td>
+                        <td>{{ taskDetails.taskData.start_date }}</td>
                       </tr>
                       <tr>
                         <td>Agents</td>
-                        <td>{{ taskDetails.agents.join(',') }}</td>
+                        <td>{{ taskDetails.taskData.agents.join(',') }}</td>
                       </tr>
                     </table>
                   </div>
@@ -233,6 +249,7 @@ export default {
   data () {
     return {
       showScheduleScenario: false,
+      showSaveGraph: false,
       campaignName: '',
       scheduleCondition: 'immediate',
       schedulerDate: moment().format('YYYY-MM-DD hh:mm'),
@@ -333,6 +350,20 @@ export default {
         this.selectedTask = nodeData
       }
     },
+    saveGraph () {
+      var graphData = {
+        nodes: this.nodes,
+        edges: this.edges,
+        name: this.campaignName
+      }
+      console.log(graphData)
+      this.$axios
+        .post('/graphs', graphData)
+        .then(response => this.saveGraphSuccess(response['data']))
+    },
+    saveGraphSuccess (response) {
+      console.log(response)
+    },
     scheduleCampaign () {
       this.$refs.scenario.validate()
       this.showScheduleScenario = false
@@ -341,13 +372,9 @@ export default {
         dependencies: this.dependencies,
         name: this.campaignName
       }
-      console.log(campaignData)
       this.$axios
-        .post('/campaigns', campaignData)
+        .post('/tasks', campaignData)
         .then(response => this.getListenerOptionsSuccess(response['data']))
-
-      console.log(this.nodes)
-      console.log(this.edges)
     },
     scheduleCampaignSuccess (response) {
       console.log(response)

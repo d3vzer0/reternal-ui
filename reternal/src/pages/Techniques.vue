@@ -7,11 +7,25 @@
       <div class="col-2">
 
         <!-- Dynamic filters -->
-        <div class="row q-mt-md">
+        <div class="row">
           <div class="col">
             <q-card flat class="filter-row">
               <q-card-section>
                 <q-option-group :options="platformOptions" label="Platform" type="radio" v-model="selectedPlatform" />
+              </q-card-section>
+            </q-card>
+          </div>
+        </div>
+        <div class="row q-mt-md">
+          <div class="col">
+            <q-card flat class="filter-row">
+              <q-card-section>
+                <q-input v-model="filterActor">
+                  <template v-slot:prepend>
+                    <q-icon name="group" />
+                  </template>
+                </q-input>
+                <q-option-group :options="actors.filter(actor => actor.label.includes(filterActor))" label="Actors" type="radio" v-model="selectedActor" />
               </q-card-section>
             </q-card>
           </div>
@@ -21,9 +35,46 @@
       <!-- Filter column -->
 
       <!-- Results column -->
-      <div class="col">
+      <div class="col q-pl-md">
+        <div class="row">
+          <div class="col">
+            <q-card flat class="my-card">
+              <q-card-section>
+                <div class="text-h6">Actor details</div>
+                <div class="text-h7" v-if="!actorDetails.name">Select an actor to view details and filter techniques</div>
+              </q-card-section>
+
+              <q-card-section v-if="actorDetails.name">
+                <div class="row">
+                  <div class="col-2">
+                    <b>Name</b>
+                  </div>
+                  <div class="col" >
+                    {{ actorDetails.name }}
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-2">
+                    <b>Description</b>
+                  </div>
+                  <div class="col">
+                    <q-markdown :src="actorDetails.description"></q-markdown>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-2">
+                    <b>Aliases</b>
+                  </div>
+                  <div class="col">
+                    {{ (actorDetails.aliases && actorDetails.aliases.length > 0) ? actorDetails.aliases.join(', ') : "" }}
+                  </div>
+                </div>
+              </q-card-section>
+            </q-card>
+          </div>
+        </div>
         <div class="row q-mt-md">
-          <div class="col q-pl-md">
+          <div class="col">
             <q-card flat>
               <q-tabs v-model="tab">
                 <q-tab v-for="(phase, index) in phaseOptions" v-bind:key="index"
@@ -128,11 +179,18 @@ export default {
       phaseOptions: [],
       phaseTechniques: {
       },
-      selectedPhase: ''
+      selectedPhase: '',
+      actors: [
+        { 'value': '', 'label': 'Any' }
+      ],
+      actorDetails: {},
+      selectedActor: '',
+      filterActor: ''
     }
   },
   created () {
     this.getPhases()
+    this.getActors()
   },
   watch: {
     selectedPlatform: function (platform) {
@@ -141,14 +199,43 @@ export default {
     },
     tab: function (tab) {
       this.getTechniques()
+    },
+    selectedActor: function (actor) {
+      this.phaseTechniques = {}
+      this.phaseOptions = []
+      this.getPhases()
+      if (actor !== '') {
+        this.getActorDetails(actor)
+      } else {
+        this.actorDetails = { }
+      }
     }
   },
   methods: {
+    getActors () {
+      this.$axios
+        .get('/mapping/actors')
+        .then(response => this.getActorsSuccess(response['data']))
+    },
+    getActorsSuccess (actors) {
+      actors.forEach(actor => {
+        this.actors.push({ 'value': actor, 'label': actor })
+      })
+    },
+    getActorDetails (actor) {
+      this.$axios
+        .get('/mitre/actor/' + actor)
+        .then(response => this.getActorDetailsSuccess(response['data']))
+    },
+    getActorDetailsSuccess (details) {
+      this.actorDetails = details
+    },
     getPhases () {
       this.$axios
         .get('/mapping/techniques/distinct', {
           params: {
             platform: this.selectedPlatform,
+            actor: this.selectedActor,
             distinct: 'kill_chain_phase'
           }
         })
@@ -157,12 +244,14 @@ export default {
     getPhasesSuccess (phases) {
       this.phaseOptions = phases
       this.tab = this.phaseOptions[0]
+      this.getTechniques()
     },
     getTechniques () {
       this.$axios
         .get('/mapping/techniques', {
           params: {
             platform: this.selectedPlatform,
+            actor: this.selectedActor,
             phase: this.tab,
             technique: ''
           }
@@ -188,7 +277,6 @@ export default {
       })
     },
     addToQueue (technique) {
-      console.log(technique)
       technique.commands.forEach(command => {
         var randomArray = new Uint32Array(5)
         var randomId = window.crypto.getRandomValues(randomArray)[2]

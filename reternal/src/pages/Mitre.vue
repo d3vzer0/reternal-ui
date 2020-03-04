@@ -45,11 +45,12 @@
           <div class="col">
             <q-card flat class="filter-row">
               <q-card-section>
-                <q-select  v-model="selectedActor" :options="actorOptions" label="Actor">
+                <q-input v-model="filterActor">
                   <template v-slot:prepend>
                     <q-icon name="group" />
                   </template>
-                </q-select>
+                </q-input>
+                <q-option-group :options="actorOptions.filter(actor => actor.label.includes(filterActor))" label="Actors" type="radio" v-model="selectedActor" />
               </q-card-section>
             </q-card>
           </div>
@@ -114,7 +115,10 @@ export default {
         'exfiltration', 'collection', 'command-and-control'
       ],
       selectedPhase: '',
-      actorOptions: [],
+      actorOptions: [
+        { value: '', label: 'Any' }
+      ],
+      filterActor: '',
       selectedActor: '',
       searchTechnique: '',
       techniqueOptions: []
@@ -169,7 +173,7 @@ export default {
     },
     getActorsSuccess (actors) {
       actors.forEach(actor => {
-        this.actorOptions.push(actor)
+        this.actorOptions.push({ 'value': actor, 'label': actor })
       })
     },
     getTechniques () {
