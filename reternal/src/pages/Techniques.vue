@@ -121,7 +121,7 @@
                       <q-timeline>
                         <q-timeline-entry v-for="(command, index) in technique.commands" v-bind:key="index">
                           <template v-slot:subtitle>
-                            ${{ command.name }}
+                            ${{ command.module }}
                           </template>
                           <div>
                             <q-markdown>
@@ -290,7 +290,7 @@ export default {
           input: command.input,
           sleep: command.sleep,
           rand: randomId,
-          type: command.type
+          module: command.module
         }
         this.$store.commit('queue/addCommand', commandOptions)
       })
