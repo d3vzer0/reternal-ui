@@ -6,21 +6,26 @@
         <q-toggle color="red" label="Dark Mode" v-model="darkmode" />
         <q-toolbar-title></q-toolbar-title>
         <div class="action-controls q-ml-lg">
-          <q-btn flat icon="info" />
-          <q-btn flat icon="call_to_action" />
+          <!-- <q-btn flat icon="info" />
+          <q-btn flat icon="call_to_action" /> -->
         </div>
-        <div class="q-ml-lg">
-          <q-btn-dropdown flat icon="person_pin">
+        <div class="">
+          <q-btn-dropdown flat icon="person_pin" v-if="$auth.user" :label="'Hi, ' + $auth.user.nickname">
             <q-list>
-              <q-item clickable v-close-popup>
-                <q-item-section>
-                  <q-item-label>Hallo</q-item-label>
-                </q-item-section>
+              <q-item>
+                  <q-item-section side>
+                    <q-avatar>
+                      <img :src="$auth.user.picture">
+                    </q-avatar>
+                  </q-item-section>
+                  <q-item-section>
+                    <q-item-label>{{ $auth.user.nickname }}</q-item-label>
+                    <q-item-label caption lines="2">{{ $auth.user.email }}</q-item-label>
+                  </q-item-section>
               </q-item>
-              <q-item clickable v-close-popup>
-                <q-item-section>
-                  <q-item-label>Doei</q-item-label>
-                </q-item-section>
+              <q-separator />
+              <q-item clickable>
+                <q-item-section>Logout</q-item-section>
               </q-item>
             </q-list>
           </q-btn-dropdown>

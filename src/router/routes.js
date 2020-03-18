@@ -1,8 +1,11 @@
+import { authGuard } from '../auth/authGuard'
 
 const routes = [
   {
     path: '/',
+    // beforeEnter: authGuard,
     component: () => import('layouts/Main.vue'),
+    beforeEnter: authGuard,
     children: [
       { path: '', component: () => import('pages/Index.vue') },
       { path: '/actors', component: () => import('pages/Actors.vue') },

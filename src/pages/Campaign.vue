@@ -450,3 +450,10 @@ export default {
   }
 }
 </script>
+
+<style lang="scss">
+.q-markdown--code, .q-markdown--code__inner {
+  width: 100%;
+  margin: 0;
+}
+</style>
