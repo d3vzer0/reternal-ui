@@ -5,6 +5,7 @@
 FROM node:11.13.0 as dependency-stage
 WORKDIR /app
 COPY package*.json ./
+RUN npm install -g @quasar/cli
 RUN npm install
 
 # Stage building the Vue app
