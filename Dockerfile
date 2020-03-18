@@ -16,7 +16,7 @@ ARG VUE_APP_BASEAPI
 ENV VUE_APP_BASEAPI ${VUE_APP_BASEAPI}
 
 COPY . .
-RUN npm run build
+RUN quasar build
 
 # Runs output of reternal build-stage and hosts content
 # via nginx service
