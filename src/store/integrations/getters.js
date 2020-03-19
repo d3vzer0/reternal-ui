@@ -6,3 +6,11 @@ export function getIntegrations (state) {
 export function getStagers (state) {
   return state.stagers
 }
+
+export function integrationOptions (state) {
+  var options = []
+  for (var integration in state.integrationOptions) {
+    options.push({ 'value': integration, 'label': integration })
+  }
+  return options
+}

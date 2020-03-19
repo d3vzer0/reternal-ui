@@ -20,7 +20,7 @@
       swipeable animated control-color="var(--primary-color)"
       arrows height="200px"
       >
-      <q-carousel-slide :img-src="mapping.thumbnail" name="style" class="column no-wrap flex-center integration" v-for="(mapping, integration) in integrationOptions" v-bind:key="integration">
+      <q-carousel-slide :img-src="mapping.thumbnail" :name="integration" class="column no-wrap flex-center integration" v-for="(mapping, integration) in integrationOptions" v-bind:key="integration">
         <div class="text-center">
           <div class="div text-h5" >
             {{ mapping.name }}
@@ -54,13 +54,14 @@ export default {
   },
   data () {
     return {
-      slide: 'style',
+      slide: null,
       selectedIntegration: null,
       showDescription: false
     }
   },
   created () {
     this.$getIntegrations()
+    this.slide = Object.keys(this.integrationOptions)[0]
   },
   methods: {
   }

@@ -214,7 +214,6 @@ export default {
     },
     getListenersSuccess (listeners) {
       this.listenersActive = listeners
-      console.log(listeners)
     },
     createListener () {
       var postData = {}

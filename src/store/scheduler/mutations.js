@@ -24,3 +24,7 @@ export function deleteTask (state, task) {
   })
   state.nodes = state.nodes.filter(node => node.id !== task.node)
 }
+
+export function setAgents (state, agents) {
+  state.agents = agents
+}

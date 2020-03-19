@@ -4,8 +4,8 @@ export function setCommands (state, commands) {
 }
 
 export function addCommand (state, command) {
-  if (!('type' in command)) {
-    command.type = 'Manual'
+  if (!('category' in command)) {
+    command.category = 'Manual'
   }
   state.commands.push(command)
 }

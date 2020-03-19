@@ -1,6 +1,6 @@
 <template>
   <q-page>
-    <error-message :error_message='error_response'></error-message>
+    <!-- <error-message :error_message='error_response'></error-message> -->
     <!-- Center content row -->
     <div class="q-pa-md q-mt-md row">
       <!-- Filter column -->
@@ -146,13 +146,11 @@ import Terminal from 'components/Terminal'
 export default {
   name: 'Agents',
   components: {
-    ErrorMessage: () => import('components/errors/ErrorMessage'),
     Terminal
   },
   data () {
     return {
       error_response: null,
-      error_dialog: false,
       platformOptions: [
         { 'value': 'Windows', 'label': 'Windows' },
         { 'value': 'macOS', 'label': 'MacOS' },
@@ -163,7 +161,6 @@ export default {
       searchTechnique: '',
       techniqueOptions: [],
       suggestionList: [],
-      agentOptions: [],
       agentDetails: {},
       agentDetailsColumns: [
         { name: 'key', align: 'left', field: 'key', label: 'Key' },
@@ -204,10 +201,15 @@ export default {
         return this.$store.state.agents.selected
       },
       set (agents) {
-        console.log(agents)
-        this.error_response = agents.join('')
-
         this.$store.commit('agents/setSelected', agents)
+      }
+    },
+    agentOptions: {
+      set (agents) {
+        this.$store.commit('agents/setOptions', agents)
+      },
+      get () {
+        return this.$store.state.agents.options
       }
     }
   },

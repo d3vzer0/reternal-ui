@@ -164,12 +164,7 @@ export default {
     },
     integrationOptions: {
       get () {
-        const options = [
-        ]
-        for (var integration in this.$store.state.integrations.integrationOptions) {
-          options.push({ 'value': integration, 'label': integration })
-        }
-        return options
+        return this.$store.getters['integrations/integrationOptions']
       }
     }
   },

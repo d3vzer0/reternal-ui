@@ -3,6 +3,7 @@ export default function () {
     tasks: [],
     nodes: [],
     edges: [],
+    agents: [],
     selectedDate: ''
   }
 }

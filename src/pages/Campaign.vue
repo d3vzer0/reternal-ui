@@ -183,10 +183,10 @@
                 </q-timeline-entry>
                 <q-timeline-entry v-for="(command, index) in queuedCommands" v-bind:key="index">
                   <template v-slot:title>
-                    ${{ command.name }}: {{ command.reference_name }} <q-btn v-on:click="removeFromQueue(command)" dense unelevated icon="delete" size="sm"/>
+                    ${{ command.module }}: {{ command.reference_name }} <q-btn v-on:click="removeFromQueue(command)" dense unelevated icon="delete" size="sm"/>
                   </template>
                   <template v-slot:subtitle>
-                    {{ command.type }} / {{ command.kill_chain_phase }} / {{ command.technique_name }}
+                    {{ command.category }} / {{ command.kill_chain_phase }} / {{ command.technique_name }}
                   </template>
                   <div class="row">
                     <div class="col">
@@ -257,8 +257,6 @@ export default {
       taskName: null,
       taskSleep: 0,
       selectedTask: null,
-      selectedAgents: [],
-      agentOptions: ['agent1', 'agent2'],
       taskInput: '',
       clearCommands: true,
       options:
@@ -299,6 +297,14 @@ export default {
         return this.$store.state.queue.commands
       }
     },
+    selectedAgents: {
+      set (agents) {
+        this.$store.commit('scheduler/setAgents', agents)
+      },
+      get () {
+        return this.$store.state.scheduler.agents
+      }
+    },
     nodes: {
       get () {
         return this.$store.state.scheduler.nodes
@@ -311,29 +317,22 @@ export default {
     },
     tasks: {
       get () {
-        var tasks = []
-        this.$store.state.scheduler.nodes.forEach(task => {
-          tasks.push(task.taskData)
-        })
-        return tasks
+        return this.$store.getters['scheduler/getTasks']
       }
     },
     dependencies: {
       get () {
-        var dependencies = []
-        this.$store.state.scheduler.edges.forEach(dep => {
-          dependencies.push(dep.dependencyData)
-        })
-        return dependencies
+        return this.$store.getters['scheduler/getDependencies']
       }
     },
     taskOptions: {
       get () {
-        var tasks = []
-        this.nodes.forEach(node => {
-          tasks.push(node.id)
-        })
-        return tasks
+        return this.$store.getters['scheduler/taskOptions']
+      }
+    },
+    agentOptions: {
+      get () {
+        return this.$store.getters['agents/agentOptions']
       }
     }
   },
@@ -352,11 +351,10 @@ export default {
     },
     saveGraph () {
       var graphData = {
-        nodes: this.nodes,
-        edges: this.edges,
+        nodes: this.$store.getters['scheduler/getNodes'],
+        edges: this.$store.getters['scheduler/getEdges'],
         name: this.campaignName
       }
-      console.log(graphData)
       this.$axios
         .post('/graphs', graphData)
         .then(response => this.saveGraphSuccess(response['data']))
@@ -366,6 +364,7 @@ export default {
     },
     scheduleCampaign () {
       this.$refs.scenario.validate()
+      console.log(this.tasks)
       this.showScheduleScenario = false
       var campaignData = {
         tasks: this.tasks,
@@ -399,7 +398,7 @@ export default {
           taskData: {
             name: this.taskName,
             commands: this.$store.state.queue.commands,
-            agents: this.selectedAgents,
+            agents: this.$store.getters['scheduler/getAgents'],
             start_date: this.schedulerDate,
             sleep: this.taskSleep
           }
@@ -438,8 +437,7 @@ export default {
           name: command.name,
           input: command.input,
           sleep: command.sleep,
-          rand: randomId,
-          type: command.type
+          rand: randomId
         }
         this.$store.commit('queue/addCommand', commandOptions)
       })

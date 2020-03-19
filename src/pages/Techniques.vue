@@ -290,6 +290,7 @@ export default {
           input: command.input,
           sleep: command.sleep,
           rand: randomId,
+          category: 'Mitre',
           module: command.module
         }
         this.$store.commit('queue/addCommand', commandOptions)
