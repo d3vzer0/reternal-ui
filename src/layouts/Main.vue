@@ -3,6 +3,7 @@
     <q-header>
       <q-toolbar>
         <q-btn flat dense round @click="leftDrawerOpen = !leftDrawerOpen" icon="menu" aria-label="Menu"/>
+        <!-- <q-btn flat dense round @click="miniState = !miniState" icon="menu" aria-label="Menu"/> -->
         <q-toggle color="red" label="Dark Mode" v-model="darkmode" />
         <q-toolbar-title></q-toolbar-title>
         <div class="action-controls q-ml-lg">
@@ -35,9 +36,10 @@
     <q-drawer
       v-model="leftDrawerOpen"
       show-if-above
-      :mini="miniState"
-      @mouseover="miniState = false"
+      mini-to-overlay
       @mouseout="miniState = true"
+      @mouseover="miniState = false"
+      :mini="miniState"
       :width="200"
       :breakpoint="500"
       bordered>

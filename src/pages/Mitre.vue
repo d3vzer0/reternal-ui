@@ -7,19 +7,15 @@
       <div class="col-2">
 
         <!-- Dynamic filters -->
-         <!-- <div class="row q-mt-md">
-          <div class="col">
-            <q-card flat class="filter-row">
-              <q-card-section>
-                <q-input v-model="searchTechnique" label="Technique " />
-              </q-card-section>
-            </q-card>
-          </div>
-        </div> -->
-
         <div class="row q-mt-md">
           <div class="col">
             <q-card flat class="filter-row">
+              <q-card-section>
+                <q-select v-model="selectedPhase" :options="phaseOptions" label="Phase"/>
+              </q-card-section>
+              <q-card-section>
+                <q-checkbox v-model="filterCoverage" label="Datasource covered" />
+              </q-card-section>
               <q-card-section>
                 <q-option-group :options="platformOptions" label="Platform" type="radio" v-model="selectedPlatform" />
               </q-card-section>
@@ -27,19 +23,15 @@
           </div>
         </div>
 
-        <div class="row q-mt-md">
+        <!-- <div class="row q-mt-md">
           <div class="col">
             <q-card flat class="filter-row">
               <q-card-section>
-                <q-select v-model="selectedPhase" :options="phaseOptions" label="Phase"/>
-                  <!-- <template v-slot:prepend>
-                    <q-icon name="my_location" />
-                  </template> -->
-                <!-- </q-select> -->
+                <q-option-group :options="platformOptions" label="Platform" type="radio" v-model="selectedPlatform" />
               </q-card-section>
             </q-card>
           </div>
-        </div>
+        </div> -->
 
         <div class="row q-mt-md">
           <div class="col">
@@ -64,8 +56,7 @@
       <div class="col">
 
         <div class="row">
-          <masonry :cols="4" gutter="5">
-            <div class="col q-pa-md" v-for="(phase, index) in techniqueOptions" v-bind:key="index">
+            <div class="col-3 q-pa-md" v-for="(phase, index) in techniqueOptions" v-bind:key="index">
               <q-card flat class="my-card">
                 <q-card-section class="bg-primary text-white">
                   <div class="text-h6">{{ phase._id.kill_chain_phases | capitalize }}</div>
@@ -73,8 +64,19 @@
                 <q-seperator />
                 <q-card-section>
                   <q-list separator>
-                    <q-item clickable v-ripple v-for="(technique, index) in phase.techniques" v-bind:key="index">
-                      <q-item-section>{{ technique.name }}</q-item-section>
+                    <q-item v-ripple v-for="(technique, index) in phase.techniques" v-bind:key="index">
+                      <q-item-section>
+                        <q-item-label>
+                          {{ technique.name }}
+                        </q-item-label>
+                        <q-item-label>
+                          <q-rating readonly
+                            v-model="technique.rating"
+                            :max="5"
+                            color="primary"
+                          />
+                        </q-item-label>
+                      </q-item-section>
                       <q-item-section avatar>
                         <q-icon color="primary" name="help_outline" />
                       </q-item-section>
@@ -83,7 +85,6 @@
                 </q-card-section>
               </q-card>
             </div>
-          </masonry>
         </div>
       </div>
       <!-- /Results column -->
@@ -94,9 +95,6 @@
 </template>
 
 <script>
-import VueMasonry from 'vue-masonry-css'
-import Vue from 'vue'
-Vue.use(VueMasonry)
 
 export default {
   name: 'Mitre',
@@ -120,6 +118,7 @@ export default {
         { value: '', label: 'Any' }
       ],
       filterActor: '',
+      filterCoverage: false,
       selectedActor: '',
       searchTechnique: '',
       techniqueOptions: []
