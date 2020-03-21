@@ -7,6 +7,7 @@ import integrations from './integrations'
 import agents from './agents'
 import scheduler from './scheduler'
 import tasks from './tasks'
+import coverage from './coverage'
 
 Vue.use(Vuex)
 
@@ -26,7 +27,8 @@ export default function (/* { ssrContext } */) {
       integrations,
       agents,
       scheduler,
-      tasks
+      tasks,
+      coverage
       // example
     },
 

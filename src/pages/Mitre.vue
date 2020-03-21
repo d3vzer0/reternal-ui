@@ -64,12 +64,13 @@
       <div class="col">
 
         <div class="row">
-          <masonry :cols="3" gutter="5">
+          <masonry :cols="4" gutter="5">
             <div class="col q-pa-md" v-for="(phase, index) in techniqueOptions" v-bind:key="index">
               <q-card flat class="my-card">
-                <q-card-section>
-                  <div class="text-h6">{{ phase._id.kill_chain_phases }}</div>
+                <q-card-section class="bg-primary text-white">
+                  <div class="text-h6">{{ phase._id.kill_chain_phases | capitalize }}</div>
                 </q-card-section>
+                <q-seperator />
                 <q-card-section>
                   <q-list separator>
                     <q-item clickable v-ripple v-for="(technique, index) in phase.techniques" v-bind:key="index">
@@ -122,6 +123,13 @@ export default {
       selectedActor: '',
       searchTechnique: '',
       techniqueOptions: []
+    }
+  },
+  filters: {
+    capitalize: function (value) {
+      if (!value) return ''
+      value = value.toString()
+      return value.charAt(0).toUpperCase() + value.slice(1)
     }
   },
   created () {

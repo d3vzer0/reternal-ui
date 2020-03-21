@@ -77,6 +77,14 @@
               ATT&CK
             </q-item-section>
           </q-item>
+          <q-item clickable v-ripple to="/coverage">
+            <q-item-section avatar>
+              <q-icon name="spellcheck" />
+            </q-item-section>
+            <q-item-section>
+              Coverage
+            </q-item-section>
+          </q-item>
           <q-separator />
           <q-item clickable v-ripple to="/agents">
             <q-item-section avatar>
