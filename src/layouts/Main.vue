@@ -84,7 +84,7 @@
               <q-icon name="spellcheck" />
             </q-item-section>
             <q-item-section>
-              Coverage
+              DeTTECT
             </q-item-section>
           </q-item>
           <q-separator />

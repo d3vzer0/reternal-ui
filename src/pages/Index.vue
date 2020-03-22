@@ -1,91 +1,139 @@
 <template>
   <q-page>
     <!-- Center content row -->
-    <div class="q-pa-md q-mt-md row justify-around">
+    <div class="q-mt-md row justify-around q-gutter-md">
       <!-- Filter column -->
-      <div class="col-3 q-pr-md">
-        <div class="row q-mb-md">
-          <div class="col-12">
-            <q-card flat style="height: 220px">
-              <q-card-section>
-                <q-table
-                  flat
-                  hide-bottom
-                  :data="platforms"
-                  :columns="columnsPlatform"
-                  row-key="name"
-                />
-              </q-card-section>
-            </q-card>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-12">
-            <q-card flat style="height: 280px">
-              <q-card-section>
-                <q-table
-                  style="height: 260px"
-                  flat
-                  hide-bottom
-                  :data="techniques"
-                  :columns="columnsTechniques"
-                  :pagination.sync="pagination"
-                  :rows-per-page-options="[0]"
-                  virtual-scroll
-                />
-              </q-card-section>
-            </q-card>
-          </div>
-        </div>
+      <div class="col-xs-11 col-sm-6 col-md-6 col-lg-3 col-xl-3 " style="height: 200px;">
+        <q-card style="height: 200px;">
+          <q-card-section horizontal>
+            <q-card-section>
+              <q-knob
+                readonly
+                v-model="dsRating"
+                show-value
+                size="120px"
+                :thickness="0.22"
+                track-color="grey-3"
+                class="text-primary q-ma-md"
+              />
+            </q-card-section>
+            <q-card-section>
+              <div class="text-h5 q-mt-sm q-mb-xs">
+                Datasources
+              </div>
+              <div class="text-caption text-grey">
+                Amount of datasources mapped to the DeTTECT framework
+              </div>
+            </q-card-section>
+          </q-card-section>
+        </q-card>
       </div>
-      <div class="col-9">
-        <div class="row">
-          <div class="col-12">
-             <q-table
-          flat
-          dense
-          title="Scheduled tasks"
-          :data="tasks"
-          :columns="columnsTasks"
-          row-key="name"
-          class="tasks-table"
-        />
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-12 dag">
-            <q-card flat>
-              <network :nodes="nodes" :edges="edges" :options="options"
-                    :events="['select']"
-                  >
-              </network>
-            </q-card>
-          </div>
-        </div>
+      <div class="col-xs-11 col-sm-6 col-md-6 col-lg-3 col-xl-3">
+        <ModulesActive></ModulesActive>
       </div>
-      <!-- <div class="col">
-      </div> -->
-    <!-- <div class="row q-pa-md q-mt-md justify-around">
+
+       <div class="col-xs-11 col-sm-6 col-md-5 col-lg-3 col-xl-3">
+        <q-card style="height: 200px;">
+          <q-card-section horizontal>
+            <q-card-section>
+              <q-knob
+                readonly
+                v-model="cRating"
+                show-value
+                size="120px"
+                :thickness="0.22"
+                color="primary"
+                track-color="grey-3"
+                class="text-primary q-ma-md"
+              />
+            </q-card-section>
+            <q-card-section>
+              <div class="text-h5 q-mt-sm q-mb-xs">
+                Coverage
+              </div>
+              <div class="text-caption text-grey">
+                Percentage of ATT&CK techniques covered based on the DeTTECT coverage mapping
+              </div>
+            </q-card-section>
+          </q-card-section>
+        </q-card>
+      </div>
+    </div>
+    <div class="q-mt-lg row q-gutter-md justify-around ">
       <div class="col-11">
-        <q-table
-          flat
-          title="Scheduled tasks"
-          :data="tasks"
-          :columns="columnsTasks"
-          row-key="name"
-          class="tasks-table"
-        />
-      </div> -->
+        <q-card>
+          <q-card-section horizontal>
+            <q-card-section class="col-5">
+              <q-table
+                flat
+                title="Active campaigns"
+                :data="campaigns"
+                :columns="columsCampaigns"
+                row-key="name"
+                class="tasks-table">
+
+                <template v-slot:header="props">
+                  <q-tr :props="props">
+                    <q-th auto-width />
+                    <q-th v-for="col in props.cols" :key="col.name" :props="props">
+                      {{ col.label }}
+                    </q-th>
+                  </q-tr>
+                </template>
+                <template v-slot:body="props">
+                  <q-tr :props="props">
+                  <q-td auto-width>
+                    <q-btn size="sm" unelevated color="primary" round dense @click="props.expand = !props.expand" :icon="props.expand ? 'remove' : 'add'" />
+                  </q-td>
+                  <q-td v-for="col in props.cols" :key="col.name" :props="props">
+                    {{ col.value }}
+                  </q-td>
+                  <q-td>
+                    <q-icon size="sm" name="input" v-on:click="getCampaign(props.row._id)"></q-icon>
+                  </q-td>
+                </q-tr>
+                <q-tr v-show="props.expand" :props="props">
+                  <q-td colspan="100%">
+                    <q-list separator>
+                      <q-item class="text-left" v-for="(task, index) in props.row.tasks" v-bind:key="index">
+                        <q-item-section avatar>
+                          <q-icon name="update"></q-icon>
+                        </q-item-section>
+                        <q-item-section>
+                          {{ task.task }}
+                        </q-item-section>
+                        <q-item-section side>
+                          <q-item-label caption>Queued, scheduled for {{ task.start_date}}</q-item-label>
+                        </q-item-section>
+                      </q-item>
+                    </q-list>
+                  </q-td>
+                </q-tr>
+              </template>
+              </q-table>
+            </q-card-section>
+            <q-card-section class="col-7">
+              <div class="text-h5 q-mt-sm q-mb-xs">
+                Execution Graph
+              </div>
+               <network :nodes="nodes" :edges="edges" :options="options" :events="['select']" >
+              </network>
+            </q-card-section>
+          </q-card-section>
+        </q-card>
+      </div>
     </div>
   </q-page>
 </template>
 
 <script>
 import { Network } from 'vue2vis'
+import ModulesActive from 'components/Modules'
 
 export default {
   name: 'PageIndex',
   components: {
+    ModulesActive,
     Network
   },
   computed: {
@@ -113,6 +161,8 @@ export default {
   },
   data () {
     return {
+      dsRating: 25,
+      cRating: 40,
       slide: 'style',
       pagination: {
         rowsPerPage: 0
@@ -134,14 +184,12 @@ export default {
       selectedIntegration: null,
       showDescription: false,
       techniques: [],
-      tasks: [],
+      campaigns: [],
       platforms: [],
-      columnsTasks: [
-        { name: 'start_date', align: 'left', label: 'Start date', field: 'start_date', sortable: true },
-        { name: 'task', align: 'right', label: 'Task', field: 'task', sortable: true },
+      columsCampaigns: [
+        { name: 'start_date', align: 'left', label: 'Start (from) date', field: 'start_date', sortable: true },
         { name: 'campaign', align: 'right', label: 'Campaign', field: 'campaign', sortable: true },
-        { name: 'state', align: 'right', label: 'State', field: 'state', sortable: true }
-
+        { name: 'group_id', align: 'right', label: 'GUID', field: '_id' }
       ],
       columnsTechniques: [
         { name: '_id', align: 'left', label: 'Phase', field: '_id', sortable: true },
@@ -154,27 +202,32 @@ export default {
     }
   },
   created () {
-    this.$getAgents()
-    this.getTasks()
-    this.getTechniquesCount()
-    this.getPlatformCount()
+    this.$getIntegrations()
+    this.getCampaigns()
   },
   methods: {
-    getTasks () {
+    getCampaign (groupId) {
       this.$axios
-        .get('/tasks')
-        .then(response => this.getTasksSuccess(response['data']))
+        .get('/campaign/' + groupId)
+        .then(response => this.getCampaignSuccess(response['data']))
     },
-    getTasksSuccess (response) {
-      this.tasks = response
+    getCampaignSuccess (response) {
+      this.$store.commit('tasks/setNodes', [])
+      this.$store.commit('tasks/setEdges', [])
+      var stateMapping = {
+        'Open': { 'color': '#ffffff', 'font': '#343a40' },
+        'Processing': { 'color': '#343a40', 'font': '#ffffff' },
+        'Processed': { 'color': '#343a40', 'font': '#ffffff' }
+      }
+
       response.forEach(task => {
         this.$store.commit('tasks/addNode', {
           id: task.task,
           label: task.task,
           shape: 'box',
-          color: '#343a40',
+          color: stateMapping[task.state].color,
           font: {
-            color: 'white',
+            color: stateMapping[task.state].font,
             size: 20
           },
           margin: 12
@@ -189,8 +242,15 @@ export default {
             width: 3
           })
         })
-        // console.log(task)
       })
+    },
+    getCampaigns () {
+      this.$axios
+        .get('/campaigns')
+        .then(response => this.getCampaignsSuccess(response['data']))
+    },
+    getCampaignsSuccess (response) {
+      this.campaigns = response
     },
     getTechniquesCount () {
       this.$axios
@@ -211,16 +271,3 @@ export default {
   }
 }
 </script>
-
-<style lang="scss">
-
-.tasks-table {
-  .q-table__top,
-  thead tr:first-child th {
-    border: none;
-    background-color: $primary;
-    color: white;
-  }
-}
-
-</style>

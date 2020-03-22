@@ -4,7 +4,7 @@
     <!-- Center content row -->
     <div class="q-pa-md row">
       <!-- Filter column -->
-      <div class="col-4">
+      <div class="col-4 col-xl-3">
         <div class="row q-mt-md">
           <div class="col">
             <q-toolbar class="bg-primary text-white shadow-2">
