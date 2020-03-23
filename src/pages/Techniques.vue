@@ -121,7 +121,7 @@
                       <q-timeline>
                         <q-timeline-entry v-for="(command, index) in technique.commands" v-bind:key="index">
                           <template v-slot:subtitle>
-                            ${{ command.module }}
+                            ${{ command.module }} / {{ command.integration }}
                           </template>
                           <div>
                             <q-markdown>
@@ -130,11 +130,11 @@
   ```
                             </q-markdown>
                           </div>
-                          <div class="row" v-if="technique.commands.length > index + 1">
+                          <!-- <div class="row" v-if="technique.commands.length > index + 1">
                             <div class="col">
                               <q-badge><q-icon name="timer" /> {{ command.sleep }}s</q-badge>
                             </div>
-                          </div>
+                          </div> -->
                         </q-timeline-entry>
                       </q-timeline>
                     </div>
@@ -286,6 +286,7 @@ export default {
           technique_name: technique.technique_name,
           kill_chain_phase: technique.kill_chain_phase,
           technique_id: technique.technique_id,
+          integration: command.integration,
           name: command.name,
           input: command.input,
           sleep: command.sleep,

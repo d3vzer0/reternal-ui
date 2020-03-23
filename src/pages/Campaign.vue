@@ -197,11 +197,11 @@
                       </q-markdown>
                     </div>
                   </div>
-                  <div class="row">
+                  <!-- <div class="row">
                     <div class="col">
                       <q-badge><q-icon name="timer" /> {{ command.sleep }}s</q-badge>
                     </div>
-                  </div>
+                  </div> -->
                 </q-timeline-entry>
               </q-timeline>
             </q-card>
@@ -434,6 +434,8 @@ export default {
           technique_name: technique.technique_name,
           kill_chain_phase: technique.kill_chain_phase,
           technique_id: technique.technique_id,
+          integration: command.integration,
+          module: command.module,
           name: command.name,
           input: command.input,
           sleep: command.sleep,
