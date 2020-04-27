@@ -1,16 +1,8 @@
-import Vue from 'vue'
-import { domain, clientId } from '../../auth_config.json'
-import { Auth0Plugin } from '../auth/auth0'
-import router from '../router'
+// import hello from 'hellojs'
 
-Vue.use(Auth0Plugin, {
-  domain,
-  clientId,
-  onRedirectCallback: appState => {
-    router.push(
-      appState && appState.targetUrl
-        ? appState.targetUrl
-        : window.location.pathname
-    )
-  }
-})
+// export default ({ Vue }) => {
+//   hello.init({
+//     github: ''
+//   })
+//   Vue.prototype.$hello = hello
+// }

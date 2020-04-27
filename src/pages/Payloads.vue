@@ -137,13 +137,11 @@ export default {
   },
   created () {
     this.$getIntegrations()
+    // this.selectedIntegration = this.integrationOptions[0].value
   },
   watch: {
     selectedIntegration: function (integration) {
       this.getStagers()
-    },
-    integrationOptions: function (integrations) {
-      this.selectedIntegration = this.integrationOptions[0].value
     },
     selectedPlatform: function (platform) {
       this.selectedStager = ''
@@ -164,7 +162,12 @@ export default {
     },
     integrationOptions: {
       get () {
-        return this.$store.getters['integrations/integrationOptions']
+        const options = [
+        ]
+        for (var integration in this.$store.state.integrations.integrationOptions) {
+          options.push({ 'value': integration, 'label': integration })
+        }
+        return options
       }
     }
   },

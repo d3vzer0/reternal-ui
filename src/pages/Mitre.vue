@@ -54,7 +54,7 @@
 
       <!-- Results column -->
       <div class="col">
-        <!-- <div class="row">
+        <div class="row">
           <div class="col q-pa-md">
             <q-pagination
               v-model="currentPage"
@@ -62,17 +62,17 @@
               :input="true">
             </q-pagination>
           </div>
-        </div> -->
+        </div>
         <div class="row">
-          <div class="col-3 q-pa-md" v-for="(phase, index) in techniqueOptions" v-bind:key="index">
+          <div class="col-4 q-pa-md" v-for="(phase, index) in techniquesFiltered" v-bind:key="index">
             <q-card flat class="my-card">
               <q-card-section class="bg-primary text-white">
-                <div class="text-h6">{{ index }}. {{ phase._id.kill_chain_phases | capitalize }}</div>
+                <div class="text-h6">{{ phase._id.kill_chain_phases | capitalize }}</div>
               </q-card-section>
               <q-separator />
               <q-card-section>
                 <q-list separator>
-                  <q-scroll-area style="height: 500px;">
+                  <q-scroll-area style="height: 1500px;">
                     <q-item v-ripple v-for="(technique, index) in phase.techniques" v-bind:key="index">
                       <q-item-section>
                         <q-item-label>
@@ -112,7 +112,7 @@ export default {
     return {
       testRating: 3,
       currentPage: 1,
-      totalPages: 3,
+      totalPages: 4,
       maxCols: 4,
       platformOptions: [
         { 'value': 'Windows', 'label': 'Windows' },
@@ -137,6 +137,19 @@ export default {
     }
   },
   computed: {
+    techniquesFiltered: {
+      get () {
+        console.log(this.techniqueOptions)
+        var filteredTechniques = []
+        this.techniqueOptions.forEach((element, index) => {
+          console.log(element._id, index)
+          if (Math.ceil((index + 1) / 4) === this.currentPage) {
+            filteredTechniques.push(element)
+          }
+        })
+        return filteredTechniques
+      }
+    }
   },
   filters: {
     capitalize: function (value) {

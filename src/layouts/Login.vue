@@ -26,31 +26,16 @@
           <div class="col-4">
             <q-card>
               <q-card-section>
-                <form @submit.prevent.stop="onLogin" class="q-gutter-md">
-                  <div class="row">
-                    <div class="col">
-                      <q-input ref="username" v-model="username" label="Username" lazy-rules :rules="[ val => !!val || 'Please enter your username']">
-                        <template v-slot:prepend>
-                          <q-icon name="person_pin" />
-                        </template>
-                      </q-input>
-                    </div>
+                <div class="row">
+                  <div class="col" style="text-align:center;">
+                     <q-icon name="person_pin" color="primary" style="font-size:120px"/>
                   </div>
-                  <div class="row">
-                    <div class="col">
-                      <q-input ref="password" v-model="password" label="Password" type="password" lazy-rules :rules="[ val => !!val || 'Please enter your password']">
-                        <template v-slot:prepend>
-                          <q-icon name="security" />
-                        </template>
-                      </q-input>
-                    </div>
+                </div>
+                <div class="row q-mt-lg">
+                  <div class="col">
+                    <q-btn type="submit" color="primary" @click="authenticate('github')" label="Login using Github" class="full-width"/>
                   </div>
-                  <div class="row">
-                    <div class="col">
-                      <q-btn type="submit" flat label="Login" />
-                    </div>
-                  </div>
-                </form>
+                </div>
               </q-card-section>
             </q-card>
           </div>
@@ -79,8 +64,6 @@ export default {
   },
   data () {
     return {
-      username: '',
-      password: '',
       error_response: null,
       error_dialog: false
       // error_dialog: false,
@@ -88,13 +71,11 @@ export default {
     }
   },
   methods: {
-    onLogin () {
-      this.$refs.username.validate()
-      this.$refs.password.validate()
-      this.$axios
-        .post('login', { username: this.username, password: this.password })
-        .then(response => this.onSuccess(response))
-        .catch(error => this.onError(error))
+    authenticate: function (provider) {
+      this.$hello(provider).login({ scope: '', redirect_uri: 'http://localhost:9090/login', display: 'page' })
+        .then((res) => {
+          console.log(res)
+        })
     },
     onSuccess (response) {
       console.log('gotit')

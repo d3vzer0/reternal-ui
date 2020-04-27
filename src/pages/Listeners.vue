@@ -181,7 +181,7 @@ export default {
   },
   created () {
     this.$getIntegrations()
-    this.selectedIntegration = this.integrationOptions[0].value
+    // this.selectedIntegration = this.integrationOptions[0].value
   },
   watch: {
     selectedIntegration: function (integration) {

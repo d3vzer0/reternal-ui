@@ -12,9 +12,10 @@
     "test": "echo \"No test specified\" && exit 0"
   },
   "dependencies": {
-    "@auth0/auth0-spa-js": "^1.6.4",
     "@quasar/extras": "^1.6.0",
+    "@websanova/vue-auth": "^3.0.8-beta",
     "axios": "^0.18.1",
+    "hellojs": "^2.0.0-4",
     "install": "^0.13.0",
     "jwt-decode": "^2.2.0",
     "quasar": "^1.9.10",
@@ -27,7 +28,7 @@
     "yargs-parser": "^16.1.0"
   },
   "devDependencies": {
-    "@quasar/app": "^1.6.0",
+    "@quasar/app": "^1.7.1",
     "@quasar/quasar-app-extension-qmarkdown": "^1.0.24",
     "@vue/eslint-config-standard": "^4.0.0",
     "babel-eslint": "^10.1.0",

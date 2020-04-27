@@ -11,7 +11,7 @@
           <q-btn flat icon="call_to_action" /> -->
         </div>
         <div class="">
-          <q-btn-dropdown flat icon="person_pin" v-if="$auth.user" :label="'Hi, ' + $auth.user.nickname">
+          <!-- <q-btn-dropdown flat icon="person_pin" v-if="$auth.user" :label="'Hi, ' + $auth.user.nickname">
             <q-list>
               <q-item>
                   <q-item-section side>
@@ -29,7 +29,7 @@
                 <q-item-section>Logout</q-item-section>
               </q-item>
             </q-list>
-          </q-btn-dropdown>
+          </q-btn-dropdown> -->
         </div>
       </q-toolbar>
     </q-header>
