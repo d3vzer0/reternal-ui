@@ -104,7 +104,7 @@
               Listeners
             </q-item-section>
           </q-item>
-          <q-item clickable v-ripple to="/payloads">
+          <q-item clickable v-ripple to="/stagers">
             <q-item-section avatar>
               <q-icon name="save_alt" />
             </q-item-section>

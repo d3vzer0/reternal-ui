@@ -52,6 +52,11 @@ export default {
       }
     }
   },
+  watch: {
+    integrationOptions: function (element) {
+      this.slide = Object.keys(this.integrationOptions)[0]
+    }
+  },
   data () {
     return {
       slide: null,
@@ -61,9 +66,6 @@ export default {
   },
   created () {
     this.$getIntegrations()
-    this.slide = Object.keys(this.integrationOptions)[0]
-  },
-  methods: {
   }
 }
 </script>

@@ -23,7 +23,7 @@
           <div class="col">
             <q-card flat class="filter-row">
               <q-card-section>
-                <q-option-group :options="platformOptions" label="Platform" type="radio" v-model="selectedPlatform" />
+                <q-option-group :options="platformOptions" label="Platform" type="radio" v-model="selectedPlatform" :disable="selectedIntegration"/>
               </q-card-section>
             </q-card>
           </div>
@@ -122,7 +122,7 @@ export default {
       ],
       selectedIntegration: '',
       selectedPlatform: 'Windows',
-      selectedStager: '',
+      selectedStager: null,
       tab: null,
       step: 1,
       integrationStagers: {},
@@ -137,7 +137,6 @@ export default {
   },
   created () {
     this.$getIntegrations()
-    // this.selectedIntegration = this.integrationOptions[0].value
   },
   watch: {
     selectedIntegration: function (integration) {
