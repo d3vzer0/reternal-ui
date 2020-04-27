@@ -1,19 +1,26 @@
-#  RE:TERNAL
--------------
+# Reternal (reternal)
 
-<img src="https://i.postimg.cc/7hwhx4Dp/reternal.png" alt="Drawing" style="width: 300px;"/>
+VueJS UI for the reternal platform
 
-![VueJS](https://img.shields.io/badge/VueJS-2-green.svg)
-![version](https://img.shields.io/badge/Version-Alpha_0.0.1-orange.svg)
-[![Build Status](https://travis-ci.com/d3vzer0/reternal-ui.svg?branch=development)](https://travis-ci.com/d3vzer0/reternal-ui)
+## Install the dependencies
+```bash
+npm install
+```
 
----------------------
+### Start the app in development mode (hot-code reloading, error reporting, etc.)
+```bash
+quasar dev
+```
 
-RE:TERNAL is a centralised purple team simulation platform. Reternal uses agents installed on a simulation network to execute various known
-red-teaming techniques in order to test blue-teaming capabilities. The simulations are mapped to the MITRE ATT&CK framework. This repo contains
-the VueJS project for the UI.
+### Lint the files
+```bash
+npm run lint
+```
 
-#### Component installation
-Please visit https://github.com/d3vzer0/reternal-quickstart for a complete overview of all the components and a quickstart tutorial in order to get everything up and running.
+### Build the app for production
+```bash
+quasar build
+```
 
-
+### Customize the configuration
+See [Configuring quasar.conf.js](https://quasar.dev/quasar-cli/quasar-conf-js).

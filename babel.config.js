@@ -1,10 +1,5 @@
 module.exports = {
   presets: [
-    [
-      "@vue/app",
-      {
-        useBuiltIns: "entry"
-      }
-    ]
+    '@quasar/babel-preset-app'
   ]
-};
+}

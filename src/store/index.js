@@ -1,31 +1,41 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import template from '@/store/template-store'
-import auth from '@/store/auth-store'
-import error from '@/store/error-store'
-import selection from '@/store/selection-store'
-import task from '@/store/task-store'
-import terminal from '@/store/terminal-store'
-import agents from '@/store/agents-store'
-import payloads from '@/store/payloads-store'
-import iframe from '@/store/iframe-store'
-import mitre from '@/store/mitre-store'
 
-Vue.use(Vuex);
+// import example from './module-example'
+import queue from './queue'
+import integrations from './integrations'
+import agents from './agents'
+import scheduler from './scheduler'
+import tasks from './tasks'
+import coverage from './coverage'
 
-export const store = new Vuex.Store({
-  modules: {
-    template,
-    payloads,
-    auth,
-    error,
-    selection,
-    task,
-    mitre,
-    agents,
-    terminal,
-    iframe
-  }
-});
+Vue.use(Vuex)
 
-export default store;
+/*
+ * If not building with SSR mode, you can
+ * directly export the Store instantiation;
+ *
+ * The function below can be async too; either use
+ * async/await or return a Promise which resolves
+ * with the Store instance.
+ */
+
+export default function (/* { ssrContext } */) {
+  const Store = new Vuex.Store({
+    modules: {
+      queue,
+      integrations,
+      agents,
+      scheduler,
+      tasks,
+      coverage
+      // example
+    },
+
+    // enable strict mode (adds overhead!)
+    // for dev mode only
+    strict: process.env.DEV
+  })
+
+  return Store
+}

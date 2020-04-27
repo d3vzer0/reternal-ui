@@ -5,6 +5,7 @@
 FROM node:11.13.0 as dependency-stage
 WORKDIR /app
 COPY package*.json ./
+RUN npm install -g @quasar/cli
 RUN npm install
 
 # Stage building the Vue app
@@ -16,7 +17,7 @@ ARG VUE_APP_BASEAPI
 ENV VUE_APP_BASEAPI ${VUE_APP_BASEAPI}
 
 COPY . .
-RUN npm run build
+RUN quasar build
 
 # Runs output of reternal build-stage and hosts content
 # via nginx service
