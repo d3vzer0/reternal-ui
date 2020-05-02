@@ -37,11 +37,11 @@
 
       <!-- Results column -->
       <div class="col">
-        <div class="row">
+        <!-- <div class="row">
           <div class="col q-pa-md">
             <terminal></terminal>
           </div>
-        </div>
+        </div> -->
         <div class="row">
           <q-dialog v-model="showAgentDetails">
             <q-card v-if="showAgentDetails" style="min-width: 700px;">
@@ -140,13 +140,12 @@
 </template>
 
 <script>
-
-import Terminal from 'components/Terminal'
+// import Terminal from 'components/Terminal'
 
 export default {
   name: 'Agents',
   components: {
-    Terminal
+    // Terminal
   },
   data () {
     return {

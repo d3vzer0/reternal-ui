@@ -5,6 +5,16 @@
     <div class="q-pa-md row">
       <!-- Filter column -->
       <div class="col-2">
+        <div class="row q-mt-md">
+          <div class="col">
+            <q-card flat class="filter-row">
+              <q-card-section>
+                <q-checkbox v-model="filterCoverage" label="Datasource rated" />
+              </q-card-section>
+
+            </q-card>
+          </div>
+        </div>
 
         <!-- Dynamic filters -->
         <div class="row q-mt-md">
@@ -14,24 +24,11 @@
                 <q-select v-model="selectedPhase" :options="phaseOptions" label="Phase"/>
               </q-card-section>
               <q-card-section>
-                <q-checkbox v-model="filterCoverage" label="Datasource covered" />
-              </q-card-section>
-              <q-card-section>
                 <q-option-group :options="platformOptions" label="Platform" type="radio" v-model="selectedPlatform" />
               </q-card-section>
             </q-card>
           </div>
         </div>
-
-        <!-- <div class="row q-mt-md">
-          <div class="col">
-            <q-card flat class="filter-row">
-              <q-card-section>
-                <q-option-group :options="platformOptions" label="Platform" type="radio" v-model="selectedPlatform" />
-              </q-card-section>
-            </q-card>
-          </div>
-        </div> -->
 
         <div class="row q-mt-md">
           <div class="col">
@@ -42,7 +39,9 @@
                     <q-icon name="group" />
                   </template>
                 </q-input>
-                <q-option-group :options="actorOptions.filter(actor => actor.label.includes(filterActor))" label="Actors" type="radio" v-model="selectedActor" />
+                <q-scroll-area style="height: 450px;">
+                  <q-option-group :options="actorOptions.filter(actor => actor.label.includes(filterActor))" label="Actors" type="radio" v-model="selectedActor" />
+                </q-scroll-area>
               </q-card-section>
             </q-card>
           </div>
@@ -67,23 +66,23 @@
           <div class="col-4 q-pa-md" v-for="(phase, index) in techniquesFiltered" v-bind:key="index">
             <q-card flat class="my-card">
               <q-card-section class="bg-primary text-white">
-                <div class="text-h6">{{ phase._id.kill_chain_phases | capitalize }}</div>
+                <div class="text-h6">{{ phase.name | capitalize }}</div>
               </q-card-section>
               <q-separator />
               <q-card-section>
                 <q-list separator>
-                  <q-scroll-area style="height: 1500px;">
+                  <q-scroll-area style="height: 1200px;">
                     <q-item v-ripple v-for="(technique, index) in phase.techniques" v-bind:key="index">
                       <q-item-section>
                         <q-item-label>
                           {{ technique.name }}
                         </q-item-label>
                         <q-item-label>
-                          <q-rating readonly
+                          <!-- <q-rating readonly
                             v-model="testRating"
                             :max="5"
                             color="primary"
-                          />
+                          /> -->
                         </q-item-label>
                       </q-item-section>
                       <q-item-section avatar>
@@ -113,13 +112,63 @@ export default {
       testRating: 3,
       currentPage: 1,
       totalPages: 4,
-      maxCols: 4,
+      maxPhases: 3,
       platformOptions: [
         { 'value': 'Windows', 'label': 'Windows' },
         { 'value': 'macOS', 'label': 'MacOS' },
         { 'value': 'Linux', 'label': 'Linux' }
       ],
       selectedPlatform: 'Windows',
+      aggregatedTechniques: {
+        'initial-access': {
+          'stage': 1,
+          'techniques': []
+        },
+        'execution': {
+          'stage': 2,
+          'techniques': []
+        },
+        'persistence': {
+          'stage': 3,
+          'techniques': []
+        },
+        'privilege-escalation': {
+          'stage': 4,
+          'techniques': []
+        },
+        'defense-evasion': {
+          'stage': 5,
+          'techniques': []
+        },
+        'credential-access': {
+          'stage': 6,
+          'techniques': []
+        },
+        'discovery': {
+          'stage': 7,
+          'techniques': []
+        },
+        'lateral-movement': {
+          'stage': 8,
+          'techniques': []
+        },
+        'collection': {
+          'stage': 9,
+          'techniques': []
+        },
+        'exfiltration': {
+          'stage': 10,
+          'techniques': []
+        },
+        'command-and-control': {
+          'stage': 11,
+          'techniques': []
+        },
+        'impact': {
+          'stage': 12,
+          'techniques': []
+        }
+      },
       phaseOptions: [
         '', 'initial-access', 'execution', 'persistence', 'privilege-escalation',
         'defense-evasion', 'credential-access', 'discovery', 'lateral-movement',
@@ -139,14 +188,12 @@ export default {
   computed: {
     techniquesFiltered: {
       get () {
-        console.log(this.techniqueOptions)
         var filteredTechniques = []
-        this.techniqueOptions.forEach((element, index) => {
-          console.log(element._id, index)
-          if (Math.ceil((index + 1) / 4) === this.currentPage) {
-            filteredTechniques.push(element)
+        for (const [key, value] of Object.entries(this.aggregatedTechniques)) {
+          if (Math.ceil(value.stage / this.maxPhases) === this.currentPage) {
+            filteredTechniques.push({ 'name': key, 'techniques': value.techniques })
           }
-        })
+        }
         return filteredTechniques
       }
     }
@@ -177,29 +224,6 @@ export default {
     getActorDetailsSuccess (details) {
       this.actorDetails = details
     },
-    getActorTechniques (actor) {
-      this.$axios
-        .get('/mapping/actors/' + actor)
-        .then(response => this.getActorTechniquesSuccess(response['data']))
-    },
-    getActorTechniquesSuccess (techniques) {
-      this.actorTechniques = {
-        'initial-access': [],
-        'execution': [],
-        'persistence': [],
-        'privilege-escalation': [],
-        'defense-evasion': [],
-        'credential-access': [],
-        'discovery': [],
-        'lateral-movement': [],
-        'collection': [],
-        'exfiltration': [],
-        'command-and-control': []
-      }
-      techniques.forEach(technique => {
-        this.actorTechniques[technique.kill_chain_phase].push(technique)
-      })
-    },
     getActors () {
       this.$axios
         .get('/mitre/actors')
@@ -212,7 +236,7 @@ export default {
     },
     getTechniques () {
       this.$axios
-        .get('mitre/by_phase', {
+        .get('mitre/aggregate/by_phase', {
           params: {
             actor: this.selectedActor,
             name: this.searchTechnique,
@@ -224,9 +248,9 @@ export default {
     },
     getTechniquesSuccess (techniques) {
       this.techniqueOptions = techniques
-      // techniques.forEach(technique => {
-      //   this.techniqueOptions.push(technique)
-      // })
+      techniques.forEach(technique => {
+        this.aggregatedTechniques[technique._id.kill_chain_phases]['techniques'] = technique['techniques']
+      })
     },
     getRating (technique) {
       console.log(technique)

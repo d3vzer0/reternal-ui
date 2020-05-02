@@ -64,12 +64,12 @@
         <q-card>
           <q-card-section horizontal>
             <q-card-section class="col-5">
+              {{ campaigns }}
               <q-table
                 flat
                 title="Active campaigns"
                 :data="campaigns"
                 :columns="columsCampaigns"
-                row-key="name"
                 class="tasks-table">
 
                 <template v-slot:header="props">
@@ -80,6 +80,7 @@
                     </q-th>
                   </q-tr>
                 </template>
+
                 <template v-slot:body="props">
                   <q-tr :props="props">
                   <q-td auto-width>
@@ -103,7 +104,7 @@
                           {{ task.task }}
                         </q-item-section>
                         <q-item-section side>
-                          <q-item-label caption>Queued, scheduled for {{ task.start_date}}</q-item-label>
+                          <q-item-label caption>Queued, scheduled for {{ task.scheduled_date}}</q-item-label>
                         </q-item-section>
                       </q-item>
                     </q-list>
@@ -187,7 +188,7 @@ export default {
       campaigns: [],
       platforms: [],
       columsCampaigns: [
-        { name: 'start_date', align: 'left', label: 'Start (from) date', field: 'start_date', sortable: true },
+        { name: 'scheduled_date', align: 'left', label: 'Start (from) date', field: 'scheduled_date', sortable: true },
         { name: 'campaign', align: 'right', label: 'Campaign', field: 'campaign', sortable: true },
         { name: 'group_id', align: 'right', label: 'GUID', field: '_id' }
       ],
@@ -271,3 +272,9 @@ export default {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+.tasks-table {
+  height: 100%;
+}
+</style>

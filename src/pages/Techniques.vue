@@ -25,7 +25,7 @@
                     <q-icon name="group" />
                   </template>
                 </q-input>
-                <q-option-group :options="actors.filter(actor => actor.label.includes(filterActor))" label="Actors" type="radio" v-model="selectedActor" />
+                  <q-option-group :options="actors.filter(actor => actor.label.includes(filterActor))" label="Actors" type="radio" v-model="selectedActor" />
               </q-card-section>
             </q-card>
           </div>
@@ -124,11 +124,9 @@
                             ${{ command.module }} / {{ command.integration }}
                           </template>
                           <div>
-                            <q-markdown>
-  ```
-  {{ command.input }}
-  ```
-                            </q-markdown>
+                            <vue-code-highlight class="language-bash">
+{{ command.input }}
+                            </vue-code-highlight>
                           </div>
                           <!-- <div class="row" v-if="technique.commands.length > index + 1">
                             <div class="col">
@@ -158,13 +156,13 @@
 </template>
 
 <script>
-import VueMasonry from 'vue-masonry-css'
-import Vue from 'vue'
-Vue.use(VueMasonry)
+import { component as VueCodeHighlight } from 'vue-code-highlight'
+import 'vue-code-highlight/themes/prism-okaidia.css'
 
 export default {
   name: 'Agents',
-  computed: {
+  components: {
+    VueCodeHighlight
   },
   data () {
     return {
