@@ -190,11 +190,9 @@
                   </template>
                   <div class="row">
                     <div class="col">
-                      <q-markdown>
-```
-{{ command.input }}
-```
-                      </q-markdown>
+                      <vue-code-highlight class="language-bash">
+{{ JSON.stringify(command.input) }}
+                      </vue-code-highlight>
                     </div>
                   </div>
                   <!-- <div class="row">
@@ -238,13 +236,16 @@
 </template>
 
 <script>
-import { Network } from 'vue2vis'
+import { Network } from 'vue-vis-network'
+import { component as VueCodeHighlight } from 'vue-code-highlight'
+import 'vue-code-highlight/themes/prism-okaidia.css'
 import moment from 'moment'
 
 export default {
   name: 'Campaign',
   components: {
-    Network
+    Network,
+    VueCodeHighlight
   },
   data () {
     return {

@@ -125,7 +125,7 @@
                           </template>
                           <div>
                             <vue-code-highlight class="language-bash">
-{{ command.input }}
+{{ JSON.stringify(command.input) }}
                             </vue-code-highlight>
                           </div>
                           <!-- <div class="row" v-if="technique.commands.length > index + 1">
@@ -257,6 +257,7 @@ export default {
         .then(response => this.getTechniquesSuccess(response['data']))
     },
     getTechniquesSuccess (techniques) {
+      console.log(techniques)
       this.phaseTechniques = {
         'initial-access': [],
         'execution': [],
