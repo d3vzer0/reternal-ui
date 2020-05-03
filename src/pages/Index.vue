@@ -97,11 +97,11 @@
                           {{ col.value }}
                         </q-td>
                         <q-td>
-                          <q-icon size="sm" name="share" v-on:click="getCampaign(props.row.group_id)"></q-icon>
+                          <q-icon size="sm" name="fas fa-project-diagram" v-on:click="drawCampaign(props.row.group_id)"></q-icon>
                         </q-td>
                       </q-tr>
                       <q-tr v-show="props.expand" :props="props">
-                        <q-td>
+                        <q-td colspan="100%">
                           <div class="task-lis">
                             <q-list separator>
                               <q-item class="text-left" v-for="(task, index) in props.row.tasks" v-bind:key="index">
@@ -117,7 +117,7 @@
                               </q-item>
                             </q-list>
                           </div>
-                          <div class="dag">
+                          <div class="dag" v-if="selectedCampaign === props.row.group_id">
                             <div class="dag-text" style="position: absolute; z-index: 100; padding: 20px;">
                               <!-- <div class="dag-text-title text-h5">
                                 Campaign  <q-btn v-if="nodes.length > 0" flat icon="play_circle_outline" @click="showScheduleScenario = true" /> <q-btn v-if="nodes.length > 0" flat icon="save" @click="showSaveGraph = true" />
@@ -142,7 +142,7 @@
                                 </table>
                               </div> -->
                             </div>
-                           <network :nodes="nodes" :edges="edges" :options="options" :events="['select']" >
+                           <network ref="dag_net" :nodes="nodes" :edges="edges" :options="options" :events="['select']" >
                           </network>
                           </div>
                         </q-td>
@@ -150,13 +150,6 @@
                     </template>
                   </q-table>
                 </q-card-section>
-                <!-- <q-card-section class="col-7">
-                  <div class="text-h5 q-mt-sm q-mb-xs">
-                    Execution Graph
-                  </div>
-                  <network :nodes="nodes" :edges="edges" :options="options" :events="['select']" >
-                  </network>
-                </q-card-section> -->
               </q-card-section>
             </q-tab-panel>
           </q-tab-panels>
@@ -202,6 +195,7 @@ export default {
   data () {
     return {
       campaignTab: 'scheduled',
+      selectedCampaign: null,
       dsRating: 25,
       cRating: 40,
       slide: 'style',
@@ -249,6 +243,10 @@ export default {
     this.getCampaigns()
   },
   methods: {
+    drawCampaign (groupId) {
+      this.selectedCampaign = groupId
+      this.getCampaign(groupId)
+    },
     getCampaign (groupId) {
       this.$axios
         .get('/campaign/' + groupId)
@@ -286,6 +284,9 @@ export default {
           })
         })
       })
+      this.$refs.dag_net.fit()
+      this.$refs.dag_net.redraw()
+      this.$refs.dag_net.fit()
     },
     getCampaigns () {
       this.$axios
@@ -319,5 +320,9 @@ export default {
 <style lang="scss" scoped>
 .tasks-table {
   height: 100%;
+}
+
+.fas {
+  font-size: 20px !important;
 }
 </style>

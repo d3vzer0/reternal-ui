@@ -156,14 +156,14 @@
                       </tr>
                       <tr>
                         <td>Agents</td>
-                        <td>{{ taskDetails.taskData.agents.join(',') }}</td>
+                        <td>{{ taskDetails.taskData.agents.map(agent => agent.name).join(',') }}</td>
                       </tr>
                     </table>
                   </div>
                 </div>
                 <network :nodes="nodes" :edges="edges" :options="options"
                   :events="['select']"
-                  @select='clickNode'>
+                  @select='clickNode' ref="campaign_dag">
                 </network>
               </div>
             </q-card>
@@ -195,37 +195,9 @@
                       </vue-code-highlight>
                     </div>
                   </div>
-                  <!-- <div class="row">
-                    <div class="col">
-                      <q-badge><q-icon name="timer" /> {{ command.sleep }}s</q-badge>
-                    </div>
-                  </div> -->
                 </q-timeline-entry>
               </q-timeline>
             </q-card>
-            <!-- <q-card flat>
-              <div class="row q-pa-md q-mt-md">
-                <div class="col-2 q-mr-md">
-                  <q-select
-                    v-model="selectedAgents"
-                    use-input
-                    use-chips
-                    multiple
-                    :options="agentOptions"
-                    label="Command"
-                  />
-                </div>
-                <div class="col q-mr-md">
-                    <q-input v-model="taskInput" label="Input" />
-                </div>
-                <div class="col-1 q-mr-md">
-                    <q-input v-model="taskSleep" label="Sleep" />
-                </div>
-                <div class="col-1 vertical-bottom">
-                    <q-btn class="float-right" unelevated icon="add_to_queue" size="lg" />
-                </div>
-              </div>
-            </q-card> -->
           </div>
         </div>
       </div>
@@ -278,10 +250,6 @@ export default {
         }
       }
     }
-  },
-  created () {
-  },
-  watch: {
   },
   computed: {
     taskDetails: {
@@ -424,6 +392,9 @@ export default {
           this.$store.commit('queue/setCommands', [])
         }
       }
+      this.$refs.campaign_dag.fit()
+      this.$refs.campaign_dag.redraw()
+      this.$refs.campaign_dag.fit()
     },
     addToQueue (technique) {
       technique.commands.forEach(command => {
