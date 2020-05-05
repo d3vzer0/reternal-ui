@@ -284,9 +284,6 @@ export default {
           })
         })
       })
-      this.$refs.dag_net.fit()
-      this.$refs.dag_net.redraw()
-      this.$refs.dag_net.fit()
     },
     getCampaigns () {
       this.$axios

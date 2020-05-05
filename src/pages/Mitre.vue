@@ -1,6 +1,6 @@
 <template>
   <q-page>
-    <q-dialog v-model="techniquePrompt" persistent transition-show="flip-down" transition-hide="flip-up">
+    <q-dialog v-model="techniquePrompt">
       <q-card style="width: 700px; max-width: 80vw">
         <q-card-section>
           <div class="text-h5">{{ techniqueDetails.name }}</div>
@@ -87,44 +87,49 @@
       <div class="col">
         <div class="row">
           <div class="col q-pa-md">
-            <q-pagination
-              v-model="currentPage"
-              :max="totalPages"
-              :input="true">
-            </q-pagination>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-4 q-pa-md" v-for="(phase, index) in techniquesFiltered" v-bind:key="index">
-            <q-card flat class="my-card">
-              <q-card-section class="bg-primary text-white">
-                <div class="text-h6">{{ phase.name | capitalize }}</div>
-              </q-card-section>
-              <q-separator />
-              <q-card-section>
-                <q-list separator>
-                  <q-scroll-area style="height: 1200px;">
-                    <q-item v-for="(technique, index) in phase.techniques" v-bind:key="index">
-                      <q-item-section>
-                        <q-item-label>
-                          {{ technique.name }}
-                        </q-item-label>
-                        <q-item-label>
-                          <q-rating readonly
-                            v-model="technique.data_sources_available.length"
-                            :max="technique.data_sources.length"
-                            color="primary"
-                          />
-                        </q-item-label>
-                      </q-item-section>
-                      <q-item-section avatar>
-                        <q-btn icon="help_outline" flat color="primary" @click="getTechniqueDetails(technique.technique_id)" />
-                      </q-item-section>
-                    </q-item>
-                  </q-scroll-area>
-                </q-list>
-              </q-card-section>
-            </q-card>
+            <q-table
+              grid
+              :data="sortedTechniques"
+              :columns="columns"
+              row-key="name"
+              hide-header
+              :pagination.sync="pagination"
+            >
+              <template v-slot:item="props">
+                <div class="q-pa-xs col-xs-12 col-sm-6 col-md-4">
+                  <q-card flat>
+                    <q-card-section class="bg-primary text-white">
+                    <div class="text-h6">{{ props.row._id | capitalize }}</div>
+                    </q-card-section>
+                    <q-separator />
+                    <q-card-section>
+                      <q-list separator>
+                        <q-scroll-area style="height: 1200px;">
+                          <q-item v-for="(technique, index) in props.row.techniques" v-bind:key="index">
+                            <q-item-section>
+                              <q-item-label>
+                                {{ technique.name }}
+                              </q-item-label>
+                              <q-item-label caption lines="1">
+                                <span v-for="dsa in technique.data_sources_available" v-bind:key="dsa.id">
+                                  <q-icon name="grade" color="black"/>
+                                </span>
+                                 <span v-for="ds in technique.data_sources" v-bind:key="ds.id">
+                                  <q-icon name="grade" />
+                                </span>
+                              </q-item-label>
+                            </q-item-section>
+                            <q-item-section avatar>
+                              <q-btn icon="help_outline" flat color="primary" @click="getTechniqueDetails(technique.technique_id)" />
+                            </q-item-section>
+                          </q-item>
+                        </q-scroll-area>
+                      </q-list>
+                    </q-card-section>
+                  </q-card>
+                </div>
+              </template>
+            </q-table>
           </div>
         </div>
       </div>
@@ -141,65 +146,20 @@ export default {
   name: 'Mitre',
   data () {
     return {
-      currentPage: 1,
-      totalPages: 4,
-      maxPhases: 3,
+      pagination: {
+        page: 1,
+        rowsPerPage: 3
+      },
+      columns: [
+        { name: '_id', label: '_id', field: '_id' },
+        { name: 'techniques', label: 'techniques', field: 'techniques' }
+      ],
       platformOptions: [
         { 'value': 'Windows', 'label': 'Windows' },
         { 'value': 'macOS', 'label': 'MacOS' },
         { 'value': 'Linux', 'label': 'Linux' }
       ],
       selectedPlatform: 'Windows',
-      aggregatedTechniques: {
-        'initial-access': {
-          'stage': 1,
-          'techniques': []
-        },
-        'execution': {
-          'stage': 2,
-          'techniques': []
-        },
-        'persistence': {
-          'stage': 3,
-          'techniques': []
-        },
-        'privilege-escalation': {
-          'stage': 4,
-          'techniques': []
-        },
-        'defense-evasion': {
-          'stage': 5,
-          'techniques': []
-        },
-        'credential-access': {
-          'stage': 6,
-          'techniques': []
-        },
-        'discovery': {
-          'stage': 7,
-          'techniques': []
-        },
-        'lateral-movement': {
-          'stage': 8,
-          'techniques': []
-        },
-        'collection': {
-          'stage': 9,
-          'techniques': []
-        },
-        'exfiltration': {
-          'stage': 10,
-          'techniques': []
-        },
-        'command-and-control': {
-          'stage': 11,
-          'techniques': []
-        },
-        'impact': {
-          'stage': 12,
-          'techniques': []
-        }
-      },
       phaseOptions: [
         '', 'initial-access', 'execution', 'persistence', 'privilege-escalation',
         'defense-evasion', 'credential-access', 'discovery', 'lateral-movement',
@@ -213,23 +173,12 @@ export default {
       filterCoverage: false,
       selectedActor: '',
       searchTechnique: '',
-      techniqueOptions: [],
+      sortedTechniques: [],
       techniqueDetails: { },
       techniquePrompt: false
     }
   },
   computed: {
-    techniquesFiltered: {
-      get () {
-        var filteredTechniques = []
-        for (const [key, value] of Object.entries(this.aggregatedTechniques)) {
-          if (Math.ceil(value.stage / this.maxPhases) === this.currentPage) {
-            filteredTechniques.push({ 'name': key, 'techniques': value.techniques })
-          }
-        }
-        return filteredTechniques
-      }
-    }
   },
   filters: {
     capitalize: function (value) {
@@ -254,6 +203,36 @@ export default {
     }
   },
   methods: {
+    sortTechniques (techniques) {
+      function compareOrder (a, b) {
+        const stageOrder = {
+          'initial-access': 1,
+          'execution': 2,
+          'persistence': 3,
+          'privilege-escalation': 4,
+          'defense-evasion': 5,
+          'credential-access': 6,
+          'discovery': 7,
+          'lateral-movement': 8,
+          'collection': 9,
+          'exfiltration': 10,
+          'command-and-control': 11,
+          'impact': 12
+        }
+        const orderA = stageOrder[a._id]
+        const orderB = stageOrder[b._id]
+        let comparison = 0
+
+        if (orderA > orderB) {
+          comparison = 1
+        } else if (orderA < orderB) {
+          comparison = -1
+        }
+
+        return comparison
+      }
+      return techniques.sort(compareOrder)
+    },
     getTechniqueDetails (technique) {
       this.$axios
         .get('/mitre/technique/' + technique)
@@ -289,13 +268,7 @@ export default {
         .then(response => this.getTechniquesSuccess(response['data']))
     },
     getTechniquesSuccess (techniques) {
-      this.techniqueOptions = techniques
-      techniques.forEach(technique => {
-        this.aggregatedTechniques[technique._id]['techniques'] = technique['techniques']
-      })
-    },
-    getRating (technique) {
-      console.log(technique)
+      this.sortedTechniques = this.sortTechniques(techniques)
     }
   }
 }

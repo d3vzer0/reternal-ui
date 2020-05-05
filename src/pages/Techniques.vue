@@ -124,9 +124,7 @@
                             ${{ command.module }} / {{ command.integration }}
                           </template>
                           <div>
-                            <vue-code-highlight class="language-bash">
-{{ JSON.stringify(command.input) }}
-                            </vue-code-highlight>
+                            <vue-code-highlight class="language-bash">{{ JSON.stringify(command.input) }}</vue-code-highlight>
                           </div>
                         </q-timeline-entry>
                       </q-timeline>

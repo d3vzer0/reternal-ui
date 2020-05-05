@@ -115,7 +115,7 @@
               <q-checkbox v-model="clearCommands" label="Clear queue" />
             </div>
             <div class="submit-task float-right">
-              <q-btn label="Add" type="submit" color="primary" :disabled="queuedCommands.length === 0"/>
+              <q-btn label="Add task" type="submit" color="primary" :disabled="queuedCommands.length === 0"/>
             </div>
           </div>
 
@@ -135,7 +135,7 @@
                     Campaign  <q-btn v-if="nodes.length > 0" flat icon="play_circle_outline" @click="showScheduleScenario = true" /> <q-btn v-if="nodes.length > 0" flat icon="save" @click="showSaveGraph = true" />
                   </div>
                   <div class="dag-text-message text-h7" v-if="nodes.length === 0 ">
-                    No scenarios have been added to the campaign
+                    No tasks have been added to the campaign yet
                   </div>
                   <div class="dag-text-content text-h7 q-mt-md" v-if="nodes.length > 0 && selectedTask">
                     <table>
@@ -183,9 +183,7 @@
                   </template>
                   <div class="row">
                     <div class="col">
-                      <vue-code-highlight class="language-bash">
-{{ JSON.stringify(command.input) }}
-                      </vue-code-highlight>
+                      <vue-code-highlight class="language-bash">{{ JSON.stringify(command.input) }}</vue-code-highlight>
                     </div>
                   </div>
                 </q-timeline-entry>

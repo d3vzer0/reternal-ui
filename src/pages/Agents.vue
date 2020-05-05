@@ -94,8 +94,8 @@
 
               <q-separator />
               <q-card-actions align="around">
-                <q-btn flat icon="stop"  />
-                <q-btn flat icon="history" />
+                <!-- <q-btn flat icon="stop"  />
+                <q-btn flat icon="history" /> -->
                 <q-btn flat icon="info" @click="agentDetails = agent, showAgentDetails = true" />
               </q-card-actions>
               <q-separator />
