@@ -201,7 +201,6 @@ export default {
       this.stagerContent = stager['content']
       this.stagerDisplayed = true
       this.stagerGenerating = false
-      // console.log(stager)
     }
   }
 }

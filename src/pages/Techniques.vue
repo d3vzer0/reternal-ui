@@ -128,11 +128,6 @@
 {{ JSON.stringify(command.input) }}
                             </vue-code-highlight>
                           </div>
-                          <!-- <div class="row" v-if="technique.commands.length > index + 1">
-                            <div class="col">
-                              <q-badge><q-icon name="timer" /> {{ command.sleep }}s</q-badge>
-                            </div>
-                          </div> -->
                         </q-timeline-entry>
                       </q-timeline>
                     </div>
@@ -281,7 +276,7 @@ export default {
         var randomId = window.crypto.getRandomValues(randomArray)[2]
         var commandOptions = {
           reference_name: technique.name,
-          reference_id: technique._id['$oid'],
+          reference_id: technique._id,
           technique_name: technique.technique_name,
           kill_chain_phase: technique.kill_chain_phase,
           technique_id: technique.technique_id,

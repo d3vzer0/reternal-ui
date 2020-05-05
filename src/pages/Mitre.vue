@@ -1,5 +1,37 @@
 <template>
   <q-page>
+    <q-dialog v-model="techniquePrompt" persistent transition-show="flip-down" transition-hide="flip-up">
+      <q-card style="width: 700px; max-width: 80vw">
+        <q-card-section>
+          <div class="text-h5">{{ techniqueDetails.name }}</div>
+        </q-card-section>
+        <q-card-section class="q-pt-none q-gutter-sm">
+          <q-badge color="primary" v-for="platform in techniqueDetails.platforms" v-bind:key="platform" style="font-size:14px">
+            <span v-if="platform === 'macOS'" class="q-pr-xs"><q-icon class="q-ma-xs" name="fab fa-apple" color="white" />macOS </span>
+            <span v-else-if="platform === 'Linux'" class="q-pr-xs"><q-icon class="q-ma-xs" name="fab fa-linux" color="white" /> Linux</span>
+            <span v-else-if="platform === 'Windows'" class="q-pr-xs"><q-icon class="q-ma-xs" name="fab fa-windows" color="white" /> Windows</span>
+            <span v-else tyle="font-size:18px" class="q-pr-xs"><q-icon class="q-ma-xs" name="fas fa-cloud" color="white"/> {{ platform }}</span>
+          </q-badge>
+        </q-card-section>
+        <q-card-section class="q-pt-none">
+          <q-markdown>{{ techniqueDetails.description }}</q-markdown>
+        </q-card-section>
+        <q-card-section class="q-pt-none">
+          <div class="text-h5">
+            Datasources
+          </div>
+          <div class="q-pt-md">
+            <span v-for="datasource in techniqueDetails.data_sources" v-bind:key="datasource">
+              <q-chip v-if="techniqueDetails.data_sources_available.includes(datasource)" icon="done">{{ datasource }}</q-chip>
+              <q-chip v-else icon="highlight_off">{{ datasource }}</q-chip>
+            </span>
+          </div>
+        </q-card-section>
+        <q-card-actions align="right">
+          <q-btn flat label="OK" color="primary" v-close-popup />
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
 
     <!-- Center content row -->
     <div class="q-pa-md row">
@@ -9,7 +41,7 @@
           <div class="col">
             <q-card flat class="filter-row">
               <q-card-section>
-                <q-checkbox v-model="filterCoverage" label="Datasource rated" />
+                <q-checkbox v-model="filterCoverage" label="Datasource available" />
               </q-card-section>
 
             </q-card>
@@ -72,21 +104,21 @@
               <q-card-section>
                 <q-list separator>
                   <q-scroll-area style="height: 1200px;">
-                    <q-item v-ripple v-for="(technique, index) in phase.techniques" v-bind:key="index">
+                    <q-item v-for="(technique, index) in phase.techniques" v-bind:key="index">
                       <q-item-section>
                         <q-item-label>
                           {{ technique.name }}
                         </q-item-label>
                         <q-item-label>
-                          <!-- <q-rating readonly
-                            v-model="testRating"
-                            :max="5"
+                          <q-rating readonly
+                            v-model="technique.data_sources_available.length"
+                            :max="technique.data_sources.length"
                             color="primary"
-                          /> -->
+                          />
                         </q-item-label>
                       </q-item-section>
                       <q-item-section avatar>
-                        <q-icon color="primary" name="help_outline" />
+                        <q-btn icon="help_outline" flat color="primary" @click="getTechniqueDetails(technique.technique_id)" />
                       </q-item-section>
                     </q-item>
                   </q-scroll-area>
@@ -109,7 +141,6 @@ export default {
   name: 'Mitre',
   data () {
     return {
-      testRating: 3,
       currentPage: 1,
       totalPages: 4,
       maxPhases: 3,
@@ -182,7 +213,9 @@ export default {
       filterCoverage: false,
       selectedActor: '',
       searchTechnique: '',
-      techniqueOptions: []
+      techniqueOptions: [],
+      techniqueDetails: { },
+      techniquePrompt: false
     }
   },
   computed: {
@@ -221,6 +254,15 @@ export default {
     }
   },
   methods: {
+    getTechniqueDetails (technique) {
+      this.$axios
+        .get('/mitre/technique/' + technique)
+        .then(response => this.getTechniqueDetailsSuccess(response['data']))
+    },
+    getTechniqueDetailsSuccess (details) {
+      this.techniqueDetails = details
+      this.techniquePrompt = true
+    },
     getActorDetailsSuccess (details) {
       this.actorDetails = details
     },
@@ -249,7 +291,7 @@ export default {
     getTechniquesSuccess (techniques) {
       this.techniqueOptions = techniques
       techniques.forEach(technique => {
-        this.aggregatedTechniques[technique._id.kill_chain_phases]['techniques'] = technique['techniques']
+        this.aggregatedTechniques[technique._id]['techniques'] = technique['techniques']
       })
     },
     getRating (technique) {

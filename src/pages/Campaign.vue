@@ -84,7 +84,7 @@
             </div>
           </div>
           <div class="row q-mt-md">
-            <div class="col-9">
+            <div class="col-12">
               <q-card flat class="filter-row">
                 <q-card-section>
                   <div>
@@ -106,13 +106,6 @@
                       </template>
                     </q-input>
                   </div>
-                </q-card-section>
-              </q-card>
-            </div>
-            <div class="col">
-              <q-card flat class="filter-row">
-                <q-card-section>
-                  <q-input v-model="taskSleep" label="Sleep" />
                 </q-card-section>
               </q-card>
             </div>
@@ -402,7 +395,7 @@ export default {
         var randomId = window.crypto.getRandomValues(randomArray)[2]
         var commandOptions = {
           reference_name: technique.name,
-          reference_id: technique._id['$oid'],
+          reference_id: technique._id,
           technique_name: technique.technique_name,
           kill_chain_phase: technique.kill_chain_phase,
           technique_id: technique.technique_id,
