@@ -110,12 +110,12 @@
                               <q-item-label>
                                 {{ technique.name }}
                               </q-item-label>
-                              <q-item-label caption lines="1">
+                              <q-item-label lines="1">
                                 <span v-for="dsa in technique.data_sources_available" v-bind:key="dsa.id">
                                   <q-icon name="grade" color="black"/>
                                 </span>
                                  <span v-for="ds in technique.data_sources" v-bind:key="ds.id">
-                                  <q-icon name="grade" />
+                                  <q-icon name="grade" color="grey"/>
                                 </span>
                               </q-item-label>
                             </q-item-section>

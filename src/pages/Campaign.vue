@@ -332,7 +332,7 @@ export default {
         name: this.campaignName
       }
       this.$axios
-        .post('/tasks', campaignData)
+        .post('/campaigns', campaignData)
         .then(response => this.getListenerOptionsSuccess(response['data']))
     },
     scheduleCampaignSuccess (response) {
