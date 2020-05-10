@@ -10,7 +10,7 @@ const routes = [
       { path: '/agents', component: () => import('pages/Agents.vue') },
       { path: '/techniques', component: () => import('pages/Techniques.vue') },
       { path: '/campaign', component: () => import('pages/Campaign.vue') },
-      { path: '/stagers', component: () => import('pages/stagers.vue') },
+      { path: '/stagers', component: () => import('pages/Stagers.vue') },
       { path: '/listeners', component: () => import('pages/Listeners.vue') },
       { path: '/coverage', component: () => import('pages/Coverage.vue') }
     ]

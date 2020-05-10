@@ -1,8 +1,9 @@
 import Vue from 'vue'
 import axios from 'axios'
+import config from '../assets/config.json'
 
 const axiosInstance = axios.create({
-  baseURL: 'http://localhost:5000/api/v1',
+  baseURL: config['backend'],
   headers: {
     'Content-Type': 'application/json'
   }
