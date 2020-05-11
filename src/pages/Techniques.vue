@@ -83,7 +83,7 @@
               </q-tabs>
               <q-stepper v-model="phaseStep" animated vertical header-nav ref="stepper">
                 <q-step v-for="(technique, index) in phaseTechniques[tab]" v-bind:key="index"
-                  :name="technique.name" :title="technique.name" icon="details">
+                  :name="technique.name" :title="`${technique.technique_name} (${technique.name})`" icon="details">
                   <div class="row">
                     <div class="col-2">
                       <b>Name</b>

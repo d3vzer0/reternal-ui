@@ -63,9 +63,17 @@
           </q-item>
           <q-separator />
           <q-separator />
+          <q-item clickable v-ripple to="/validations">
+            <q-item-section avatar>
+              <q-icon name="policy" />
+            </q-item-section>
+            <q-item-section>
+              Hunts
+            </q-item-section>
+          </q-item>
           <q-item clickable v-ripple to="/techniques">
             <q-item-section avatar>
-              <q-icon name="link" />
+              <q-icon name="mdi-bullseye" />
             </q-item-section>
             <q-item-section>
               Techniques
@@ -73,7 +81,7 @@
           </q-item>
           <q-item clickable v-ripple to="/mitre">
             <q-item-section avatar>
-              <q-icon name="inbox" />
+              <q-icon name="mdi-book-search" />
             </q-item-section>
             <q-item-section>
               ATT&CK
@@ -81,7 +89,7 @@
           </q-item>
           <q-item clickable v-ripple to="/coverage">
             <q-item-section avatar>
-              <q-icon name="spellcheck" />
+              <q-icon name="mdi-briefcase-check" />
             </q-item-section>
             <q-item-section>
               DeTTECT

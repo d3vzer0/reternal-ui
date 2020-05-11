@@ -1,65 +1,70 @@
 <template>
   <q-page>
     <!-- Center content row -->
-    <div class="q-mt-md row justify-around q-gutter-md">
+    <div class="q-mt-md row justify-around q-gutter-sm">
       <!-- Filter column -->
-      <div class="col-xs-11 col-sm-6 col-md-6 col-lg-3 col-xl-3 " style="height: 200px;">
+      <div class="col-xs-11 col-sm-5 col-md-3 col-lg-3 col-xl-3" style="max-width:300px">
+        <ModulesActive></ModulesActive>
+      </div>
+      <div class="col-xs-11 col-sm-5 col-md-3 col-lg-3 col-xl-3 " style="height: 200px; max-width:300px">
         <q-card style="height: 200px;">
           <q-card-section horizontal>
             <q-card-section>
-              <q-knob
-                readonly
-                v-model="dsRating"
-                show-value
-                size="120px"
-                :thickness="0.22"
-                track-color="grey-3"
-                class="text-primary q-ma-md"
-              />
+             <div class="text-h2 text-bold q-mt-sm q-mb-xs">
+               137
+             </div>
+            </q-card-section>
+            <q-card-section>
+              <div class="text-h5 q-mt-sm q-mb-xs">
+                Hunts
+              </div>
+              <div class="text-caption text-grey">
+                Amount of hunts or queries available
+              </div>
+            </q-card-section>
+          </q-card-section>
+        </q-card>
+      </div>
+      <div class="col-xs-11 col-sm-5 col-md-3 col-lg-3 col-xl-3 " style="height: 200px; max-width:300px">
+        <q-card style="height: 200px;">
+          <q-card-section horizontal>
+            <q-card-section>
+             <div class="text-h2 q-mt-sm q-mb-xs text-bold">
+               51
+             </div>
+            </q-card-section>
+            <q-card-section>
+              <div class="text-h5 q-mt-sm q-mb-xs">
+                Techniques
+              </div>
+              <div class="text-caption text-grey">
+                Amount of C2 commands mapped to ATTCK
+              </div>
+            </q-card-section>
+          </q-card-section>
+        </q-card>
+      </div>
+       <div class="col-xs-11 col-sm-5 col-md-3 col-lg-3 col-xl-3" style="max-width:300px">
+        <q-card style="height: 200px;">
+          <q-card-section horizontal>
+            <q-card-section>
+             <div class="text-h2 q-mt-sm q-mb-xs text-bold">
+               10
+             </div>
             </q-card-section>
             <q-card-section>
               <div class="text-h5 q-mt-sm q-mb-xs">
                 Datasources
               </div>
               <div class="text-caption text-grey">
-                Amount of datasources mapped to the DeTTECT framework
-              </div>
-            </q-card-section>
-          </q-card-section>
-        </q-card>
-      </div>
-      <div class="col-xs-11 col-sm-6 col-md-6 col-lg-3 col-xl-3">
-        <ModulesActive></ModulesActive>
-      </div>
-
-       <div class="col-xs-11 col-sm-6 col-md-5 col-lg-3 col-xl-3">
-        <q-card style="height: 200px;">
-          <q-card-section horizontal>
-            <q-card-section>
-              <q-knob
-                readonly
-                v-model="cRating"
-                show-value
-                size="120px"
-                :thickness="0.22"
-                color="primary"
-                track-color="grey-3"
-                class="text-primary q-ma-md"
-              />
-            </q-card-section>
-            <q-card-section>
-              <div class="text-h5 q-mt-sm q-mb-xs">
-                Coverage
-              </div>
-              <div class="text-caption text-grey">
-                Percentage of ATT&CK techniques covered based on the DeTTECT coverage mapping
+                 Number of datasources mapped to the DeTTECT framework
               </div>
             </q-card-section>
           </q-card-section>
         </q-card>
       </div>
     </div>
-    <div class="q-mt-lg row q-gutter-md justify-around ">
+    <div class="q-mt-lg row q-gutter-md justify-around">
       <div class="col-11">
         <q-card>
           <q-tabs v-model="campaignTab" active-color="primary" indicator-color="primary" align="justify" class="text-grey">
@@ -196,7 +201,8 @@ export default {
     return {
       campaignTab: 'scheduled',
       selectedCampaign: null,
-      dsRating: 25,
+      queryRating: 45,
+      c2Rating: 35,
       cRating: 40,
       slide: 'style',
       pagination: {
