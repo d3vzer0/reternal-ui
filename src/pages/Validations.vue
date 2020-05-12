@@ -15,7 +15,7 @@
             </q-card>
           </div>
         </div>
-        <!-- <div class="row q-mt-md">
+        <div class="row q-mt-md">
           <div class="col">
             <q-card flat class="filter-row">
               <q-card-section>
@@ -46,7 +46,7 @@
               </q-card-section>
             </q-card>
           </div>
-        </div> -->
+        </div>
         <div class="row q-mt-md">
           <div class="col">
             <q-card flat class="filter-row">
@@ -112,7 +112,7 @@
                       {{ validator.description }}
                     </div>
                   </div>
-                  <div class="row">
+                  <div class="row" v-if="validator.magma">
                     <div class="col-2">
                       <b>Usecase</b>
                     </div>
@@ -130,15 +130,9 @@
                   </div>
                   <div class="row q-mt-md">
                     <div class="col">
-                      <!-- <q-timeline>
-                        <q-timeline-entry v-for="(query, index) in validator.queries" v-bind:key="index">
-                          <template v-slot:subtitle>
-                          </template> -->
-                          <div>
-                            <vue-code-highlight class="language-bash">{{validator.search}}</vue-code-highlight>
-                          </div>
-                        <!-- </q-timeline-entry>
-                      </q-timeline> -->
+                      <div>
+                        <vue-code-highlight class="language-bash">{{validator.search}}</vue-code-highlight>
+                      </div>
                     </div>
                   </div>
                   <div class="row q-mt-md">
@@ -213,19 +207,31 @@ export default {
   },
   watch: {
     selectedTechnique: function (technique) {
-      this.phaseValidations = {}
-      this.phaseOptions = []
-      this.getPhases()
+      this.refreshFilters()
     },
     selectedIntegration: function (platform) {
-      this.phaseValidations = {}
-      this.getPhases()
+      this.refreshFilters()
+    },
+    selectedL1Usecase: function (usecase) {
+      this.refreshFilters()
+    },
+    selectedL2Usecase: function (usecase) {
+      this.refreshFilters()
     },
     tab: function (tab) {
       this.getValidations()
     }
   },
   methods: {
+    refreshFilters () {
+      this.phaseValidations = {}
+      this.phaseOptions = []
+      this.getTechniques()
+      this.getL1Usecases()
+      this.getL2Usecases()
+      this.getPhases()
+      this.tab = this.phaseOptions[0]
+    },
     getIntegrations () {
       this.$axios
         .get('/validations/integrations')
@@ -248,12 +254,16 @@ export default {
       this.$axios
         .get('/validations/l1usecases', {
           params: {
-            integration: this.selectedIntegration
+            integration: this.selectedIntegration,
+            technique: this.selectedTechnique,
+            l1usecase: this.selectedL1Usecase,
+            l2usecase: this.selectedL2Usecase
           }
         })
         .then(response => this.getL1UsecasesSuccess(response['data']))
     },
     getL1UsecasesSuccess (usecases) {
+      this.l1UseCaseOptions = [{ value: '', label: 'Any' }]
       usecases.forEach(uc => {
         this.l1UseCaseOptions.push({ 'value': uc, 'label': uc })
       })
@@ -262,12 +272,16 @@ export default {
       this.$axios
         .get('/validations/l2usecases', {
           params: {
-            integration: this.selectedIntegration
+            integration: this.selectedIntegration,
+            technique: this.selectedTechnique,
+            l1usecase: this.selectedL1Usecase,
+            l2usecase: this.selectedL2Usecase
           }
         })
         .then(response => this.getL2UsecasesSuccess(response['data']))
     },
     getL2UsecasesSuccess (usecases) {
+      this.l2UseCaseOptions = [{ value: '', label: 'Any' }]
       usecases.forEach(uc => {
         this.l2UseCaseOptions.push({ 'value': uc, 'label': uc })
       })
@@ -276,12 +290,16 @@ export default {
       this.$axios
         .get('/validations/techniques', {
           params: {
-            integration: this.selectedIntegration
+            integration: this.selectedIntegration,
+            technique: this.selectedTechnique,
+            l1usecase: this.selectedL1Usecase,
+            l2usecase: this.selectedL2Usecase
           }
         })
         .then(response => this.getTechniquesSuccess(response['data']))
     },
     getTechniquesSuccess (techniuqes) {
+      this.techniqueOptions = [{ value: '', label: 'Any' }]
       techniuqes.forEach(technique => {
         this.techniqueOptions.push({ 'value': technique, 'label': technique })
       })
@@ -291,14 +309,16 @@ export default {
         .get('/validations/phases', {
           params: {
             integration: this.selectedIntegration,
-            technique: this.selectedTechnique
+            technique: this.selectedTechnique,
+            l1usecase: this.selectedL1Usecase,
+            l2usecase: this.selectedL2Usecase
           }
         })
         .then(response => this.getPhasesSuccess(response['data']))
     },
     getPhasesSuccess (phases) {
-      this.tab = ''
       this.phaseOptions = phases
+      this.tab = ''
       this.tab = this.phaseOptions[0]
     },
     getValidations () {
@@ -315,7 +335,6 @@ export default {
         .then(response => this.getValidationsSuccess(response['data']))
     },
     getValidationsSuccess (validators) {
-      console.log(validators)
       this.phaseValidations = {
         'initial-access': [],
         'execution': [],

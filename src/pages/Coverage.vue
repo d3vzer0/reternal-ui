@@ -4,64 +4,55 @@
     <!-- Center content row -->
     <div class="q-pa-md row">
       <!-- Filter column -->
-      <div class="col-3 col-xl-2">
-        <div class="row q-mt-md">
-          <div class="col">
-            <q-toolbar class="bg-primary text-white shadow-2">
-              <q-toolbar-title>Datasources</q-toolbar-title>
-              {{ datasourceOptions.length }}
-            </q-toolbar>
-            <q-card flat class="filter-row">
-              <q-card-section>
-                <q-input v-model="filterDatasource">
-                  <template v-slot:prepend>
-                    <q-icon name="spellcheck" />
-                  </template>
-                </q-input>
-                <q-list>
-                  <q-item v-for="(datasource, index) in filtedDatasources"
-                    :key="index" class="q-my-sm" clickable v-ripple @click="selectDatasource(datasource)">
-                    <q-item-section>
-                      <q-item-label>{{ datasource }}</q-item-label>
-                      <q-item-label caption>
-                        <q-linear-progress :value="averageScore(datasource)" class="q-mt-md" />
-                      </q-item-label>
-                    </q-item-section>
-                    <q-item-section side top>
-                      <q-item-label caption>Mapped</q-item-label>
-                      <q-icon name="check" v-if="coverage[datasource].enabled == true"/>
-                      <q-icon name="close" v-else/>
-                    </q-item-section>
-                  </q-item>
-                </q-list>
-                <!-- <q-option-group :options="datasourceOptions.filter(datasource => datasource.label.includes(filterDatasource))" label="Actors" type="radio" v-model="selectedDatasource" /> -->
-              </q-card-section>
-            </q-card>
-            <div class="div q-ml-xl q-mt-md">
-              <q-pagination
-                v-model="currentPage"
-                :max="totalPages"
-                :input="true">
-              </q-pagination>
-            </div>
-          </div>
-        </div>
-
-        <!-- /Dynamic filters-->
+      <div class="col-4 col-xl-2 q-mt-md" style="max-width: 350px;">
+        <q-table flat :data="filtedDatasources" :columns="datasourceColumns" :filter="filterDatasource"
+        :pagination.sync="datasourcePagination">
+          <template v-slot:top>
+            <q-input borderless dense debounce="100" v-model="filterDatasource" placeholder="Search" style="width:100%;">
+              <template v-slot:append>
+                <q-icon name="search" />
+              </template>
+            </q-input>
+          </template>
+          <template v-slot:body-cell-name="props">
+            <q-td :props="props">
+              <q-item @click.native="selectDatasource(props.value)">
+                <q-item-section>
+                  <q-item-label>{{ props.value }}</q-item-label>
+                  <q-item-label caption>
+                    <q-linear-progress :value="averageScore(props.value)" class="q-mt-md" />
+                  </q-item-label>
+                </q-item-section>
+                <q-item-section side top>
+                  <q-item-label caption>Available</q-item-label>
+                  <q-icon name="check" v-if="coverage[props.value].enabled == true"/>
+                  <q-icon name="close" v-else/>
+                </q-item-section>
+              </q-item>
+            </q-td>
+          </template>
+        </q-table>
       </div>
       <!-- Filter column -->
 
       <!-- Results column -->
-      <div class="col" v-if="selectedDatasource">
+      <div class="col">
         <div class="row">
           <div class="col q-pl-md q-pa-md">
-            <q-card flat class="my-card">
+            <q-card flat v-if="!selectedDatasource">
               <q-card-section>
-                <div class="text-h6">{{ selectedDatasource }} <q-toggle for="enabled" v-model="enabled" /></div>
+                <div class="text-h6">No datasource selected</div>
+              </q-card-section>
+            </q-card>
+            <q-card flat v-else>
+              <q-card-section>
+                <div class="text-h6">
+                  {{ selectedDatasource }} <q-toggle for="enabled" v-model="enabled"/>
+                  </div>
               </q-card-section>
               <q-card-section>
                 <div class="row">
-                  <div class="col q-pa-sm">
+                  <!-- <div class="col q-pa-sm">
                     <q-input filled v-model="date_registered" mask="date" label="Registration date">
                       <template v-slot:append>
                         <q-icon name="event" class="cursor-pointer">
@@ -71,7 +62,7 @@
                         </q-icon>
                       </template>
                     </q-input>
-                  </div>
+                  </div> -->
                   <div class="col q-pa-sm">
                     <q-input filled v-model="date_connected" mask="date" label="Connected date">
                       <template v-slot:append>
@@ -182,14 +173,20 @@ export default {
   name: 'Coverage',
   data () {
     return {
-      currentPage: 1,
-      maxRows: 15,
       selectedDatasource: null,
-      selectedProductRow: null,
       filterDatasource: '',
       datasourceProducts: [],
       config: {
       },
+      datasourcePagination: {
+        sortBy: 'desc',
+        descending: false,
+        rowsPerPage: 10,
+        page: 1
+      },
+      datasourceColumns: [
+        { name: 'name', label: 'Name', field: 'name', align: 'left' }
+      ],
       columns: [
         { name: 'name', label: 'Name', field: 'name' },
         { name: 'vendor', label: 'Vendor', field: 'vendor' },
@@ -208,9 +205,10 @@ export default {
     filtedDatasources () {
       var filteredOptions = []
       this.datasourceOptions.forEach((datasource, index) => {
-        if (datasource.includes(this.filterDatasource) && Math.ceil(index / this.maxRows) === this.currentPage) {
-          filteredOptions.push(datasource)
-        }
+        filteredOptions.push({ name: datasource })
+        // if (datasource.includes(this.filterDatasource) && Math.ceil(index / this.maxRows) === this.currentPage) {
+        //   filteredOptions.push(datasource)
+        // }
       })
       return filteredOptions
     },
