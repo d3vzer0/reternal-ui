@@ -10,7 +10,23 @@
           <div class="col">
             <q-card flat class="filter-row">
               <q-card-section>
-                <q-option-group :options="integrationOptions" label="Platform" type="radio" v-model="selectedIntegration" />
+                <q-option-group :options="integrationOptions" label="Platform" type="radio" v-model="filters.integration" />
+              </q-card-section>
+            </q-card>
+          </div>
+        </div>
+        <div class="row q-mt-md">
+          <div class="col">
+            <q-card flat class="filter-row">
+              <q-card-section>
+                <q-input v-model="filterDatasource" label="Datasource">
+                  <template v-slot:prepend>
+                    <q-icon name="find_in_page" />
+                  </template>
+                </q-input>
+                <q-scroll-area style="height: 250px;">
+                  <q-option-group :options="datasourceOptions.filter(ds => ds.label.includes(filterDatasource))" label="Datasource" type="radio" v-model="filters.datasource" />
+                </q-scroll-area>
               </q-card-section>
             </q-card>
           </div>
@@ -25,7 +41,7 @@
                   </template>
                 </q-input>
                 <q-scroll-area style="height: 250px;">
-                  <q-option-group :options="l1UseCaseOptions.filter(uc => uc.label.includes(filterL1Usecase))" label="L1 Usecase" type="radio" v-model="selectedL1Usecase" />
+                  <q-option-group :options="l1UseCaseOptions.filter(uc => uc.label.includes(filterL1Usecase))" label="L1 Usecase" type="radio" v-model="filters.l1Usecase" />
                 </q-scroll-area>
               </q-card-section>
             </q-card>
@@ -41,13 +57,13 @@
                   </template>
                 </q-input>
                 <q-scroll-area style="height: 250px;">
-                  <q-option-group :options="l2UseCaseOptions.filter(uc => uc.label.includes(filterL2Usecase))" label="L2 Usecase" type="radio" v-model="selectedL2Usecase" />
+                  <q-option-group :options="l2UseCaseOptions.filter(uc => uc.label.includes(filterL2Usecase))" label="L2 Usecase" type="radio" v-model="filters.l2Usecase" />
                 </q-scroll-area>
               </q-card-section>
             </q-card>
           </div>
         </div>
-        <div class="row q-mt-md">
+        <!-- <div class="row q-mt-md">
           <div class="col">
             <q-card flat class="filter-row">
               <q-card-section>
@@ -57,12 +73,12 @@
                   </template>
                 </q-input>
                 <q-scroll-area style="height: 550px;">
-                  <q-option-group :options="techniqueOptions.filter(technique => technique.label.includes(filterTechnique))" label="Techniques" type="radio" v-model="selectedTechnique" />
+                  <q-option-group :options="techniqueOptions.filter(technique => technique.label.includes(filterTechnique))" label="Techniques" type="radio" v-model="filters.technique" />
                 </q-scroll-area>
               </q-card-section>
             </q-card>
           </div>
-        </div>
+        </div> -->
         <!-- /Dynamic filters-->
       </div>
       <!-- Filter column -->
@@ -71,7 +87,14 @@
       <div class="col q-pl-md">
         <div class="row">
           <div class="col">
-            <q-card flat>
+            <q-card flat v-if="phaseOptions.length === 0">
+              <q-card-section>
+                <div class="text-h6">
+                  <span>No hunts found</span>
+                </div>
+              </q-card-section>
+            </q-card>
+            <q-card flat v-else>
               <q-tabs v-model="tab">
                 <q-tab v-for="(phase, index) in phaseOptions" v-bind:key="index"
                   :name="phase" inline-label :label="phase">
@@ -138,8 +161,9 @@
                   <div class="row q-mt-md">
                     <div class="col">
                       <span v-for="datasource in validator.data_sources" v-bind:key="datasource">
-                        <q-chip v-if="validator.data_sources_available.includes(datasource)" icon="done">{{ datasource }}</q-chip>
-                        <q-chip v-else icon="highlight_off">{{ datasource }}</q-chip>
+                        <q-chip clickable v-if="validator.data_sources_available.includes(datasource)"
+                          color="teal" text-color="white" icon="done" @click="$router.push({ path: '/coverage', query: { datasource: datasource } })">{{ datasource }}</q-chip>
+                        <q-chip clickable v-else icon="highlight_off" @click="$router.push({ path: '/coverage', query: { datasource: datasource } })">{{ datasource }}</q-chip>
                       </span>
                     </div>
                   </div>
@@ -169,12 +193,21 @@ export default {
     return {
       tab: null,
       phaseStep: '',
-      selectedIntegration: 'Splunk',
+      filters: {
+        integration: 'Splunk',
+        datasource: '',
+        l1Usecase: '',
+        l2Usecase: '',
+        technique: ''
+      },
       integrationOptions: [],
       techniqueOptions: [
         { value: '', label: 'Any' }
       ],
       phaseOptions: [],
+      datasourceOptions: [
+        { value: '', label: 'Any' }
+      ],
       l1UseCaseOptions: [
         { value: '', label: 'Any' }
       ],
@@ -184,39 +217,39 @@ export default {
       filterTechnique: '',
       filterL1Usecase: '',
       filterL2Usecase: '',
+      filterDatasource: '',
       phaseValidations: {
       },
-      selectedPhase: '',
-      selectedL1Usecase: '',
-      selectedL2Usecase: '',
-      selectedTechnique: '',
+      phase: '',
       actors: [
         { 'value': '', 'label': 'Any' }
-      ],
-      actorDetails: {},
-      selectedActor: '',
-      filterActor: ''
+      ]
+    }
+  },
+  computed: {
+    searchFilters () {
+      return {
+        integration: this.filters.integration,
+        technique: this.filters.technique,
+        l1usecase: this.filters.l1Usecase,
+        l2usecase: this.filters.l2Usecase,
+        datasource: this.filters.datasource
+      }
     }
   },
   created () {
     this.getIntegrations()
-    this.getPhases()
-    this.getTechniques()
-    this.getL1Usecases()
-    this.getL2Usecases()
+    this.refreshFilters()
   },
   watch: {
-    selectedTechnique: function (technique) {
-      this.refreshFilters()
-    },
-    selectedIntegration: function (platform) {
-      this.refreshFilters()
-    },
-    selectedL1Usecase: function (usecase) {
-      this.refreshFilters()
-    },
-    selectedL2Usecase: function (usecase) {
-      this.refreshFilters()
+    filters: {
+      handler (value) {
+        if (JSON.stringify(this.$route.query) !== JSON.stringify(this.searchFilters)) {
+          this.$router.replace({ path: '/validations', query: this.searchFilters })
+        }
+        this.refreshFilters()
+      },
+      deep: true
     },
     tab: function (tab) {
       this.getValidations()
@@ -224,8 +257,14 @@ export default {
   },
   methods: {
     refreshFilters () {
+      if (this.$route.query) {
+        for (let [key, value] of Object.entries(this.$route.query)) {
+          this.filters[key] = value
+        }
+      }
       this.phaseValidations = {}
       this.phaseOptions = []
+      this.getDatasources()
       this.getTechniques()
       this.getL1Usecases()
       this.getL2Usecases()
@@ -242,23 +281,23 @@ export default {
         this.integrationOptions.push({ 'value': val, 'label': val })
       })
     },
-    getActorDetails (actor) {
+    getDatasources () {
       this.$axios
-        .get('/mitre/actor/' + actor)
-        .then(response => this.getActorDetailsSuccess(response['data']))
+        .get('/validations/datasources', {
+          params: this.searchFilters
+        })
+        .then(response => this.getDatasourcesSuccess(response['data']))
     },
-    getActorDetailsSuccess (details) {
-      this.actorDetails = details
+    getDatasourcesSuccess (datasources) {
+      this.datasourceOptions = [{ value: '', label: 'Any' }]
+      datasources.forEach(ds => {
+        this.datasourceOptions.push({ 'value': ds, 'label': ds })
+      })
     },
     getL1Usecases () {
       this.$axios
         .get('/validations/l1usecases', {
-          params: {
-            integration: this.selectedIntegration,
-            technique: this.selectedTechnique,
-            l1usecase: this.selectedL1Usecase,
-            l2usecase: this.selectedL2Usecase
-          }
+          params: this.searchFilters
         })
         .then(response => this.getL1UsecasesSuccess(response['data']))
     },
@@ -271,12 +310,7 @@ export default {
     getL2Usecases () {
       this.$axios
         .get('/validations/l2usecases', {
-          params: {
-            integration: this.selectedIntegration,
-            technique: this.selectedTechnique,
-            l1usecase: this.selectedL1Usecase,
-            l2usecase: this.selectedL2Usecase
-          }
+          params: this.searchFilters
         })
         .then(response => this.getL2UsecasesSuccess(response['data']))
     },
@@ -289,12 +323,7 @@ export default {
     getTechniques () {
       this.$axios
         .get('/validations/techniques', {
-          params: {
-            integration: this.selectedIntegration,
-            technique: this.selectedTechnique,
-            l1usecase: this.selectedL1Usecase,
-            l2usecase: this.selectedL2Usecase
-          }
+          params: this.searchFilters
         })
         .then(response => this.getTechniquesSuccess(response['data']))
     },
@@ -307,12 +336,7 @@ export default {
     getPhases () {
       this.$axios
         .get('/validations/phases', {
-          params: {
-            integration: this.selectedIntegration,
-            technique: this.selectedTechnique,
-            l1usecase: this.selectedL1Usecase,
-            l2usecase: this.selectedL2Usecase
-          }
+          params: this.searchFilters
         })
         .then(response => this.getPhasesSuccess(response['data']))
     },
@@ -325,10 +349,11 @@ export default {
       this.$axios
         .get('/validations', {
           params: {
-            integration: this.selectedIntegration,
-            technique: this.selectedTechnique,
-            l1usecase: this.selectedL1Usecase,
-            l2usecase: this.selectedL2Usecase,
+            integration: this.filters.integration,
+            technique: this.filters.technique,
+            l1usecase: this.filters.l1Usecase,
+            l2usecase: this.filters.l2Usecase,
+            datasource: this.filters.datasource,
             phase: this.tab
           }
         })

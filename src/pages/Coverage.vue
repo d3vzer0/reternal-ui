@@ -5,33 +5,35 @@
     <div class="q-pa-md row">
       <!-- Filter column -->
       <div class="col-4 col-xl-2 q-mt-md" style="max-width: 350px;">
-        <q-table flat :data="filtedDatasources" :columns="datasourceColumns" :filter="filterDatasource"
-        :pagination.sync="datasourcePagination">
-          <template v-slot:top>
-            <q-input borderless dense debounce="100" v-model="filterDatasource" placeholder="Search" style="width:100%;">
-              <template v-slot:append>
-                <q-icon name="search" />
-              </template>
-            </q-input>
-          </template>
-          <template v-slot:body-cell-name="props">
-            <q-td :props="props">
-              <q-item @click.native="selectDatasource(props.value)">
-                <q-item-section>
-                  <q-item-label>{{ props.value }}</q-item-label>
-                  <q-item-label caption>
-                    <q-linear-progress :value="averageScore(props.value)" class="q-mt-md" />
-                  </q-item-label>
-                </q-item-section>
-                <q-item-section side top>
-                  <q-item-label caption>Available</q-item-label>
-                  <q-icon name="check" v-if="coverage[props.value].enabled == true"/>
-                  <q-icon name="close" v-else/>
-                </q-item-section>
-              </q-item>
-            </q-td>
-          </template>
-        </q-table>
+        <q-card flat>
+          <q-table flat :data="filtedDatasources" :columns="datasourceColumns" :filter="filterDatasource"
+          :pagination.sync="datasourcePagination">
+            <template v-slot:top>
+              <q-input borderless dense debounce="100" v-model="filterDatasource" placeholder="Search" style="width:100%;">
+                <template v-slot:append>
+                  <q-icon name="search" />
+                </template>
+              </q-input>
+            </template>
+            <template v-slot:body-cell-name="props">
+              <q-td :props="props">
+                <q-item @click.native="selectDatasource(props.value)">
+                  <q-item-section>
+                    <q-item-label>{{ props.value }}</q-item-label>
+                    <q-item-label caption>
+                      <q-linear-progress :value="averageScore(props.value)" class="q-mt-md" />
+                    </q-item-label>
+                  </q-item-section>
+                  <q-item-section side top>
+                    <q-item-label caption>Available</q-item-label>
+                    <q-icon name="check" v-if="coverage[props.value].enabled" class="dsavailable" />
+                    <q-icon name="close" v-else class="dsmissing"/>
+                  </q-item-section>
+                </q-item>
+              </q-td>
+            </template>
+          </q-table>
+        </q-card>
       </div>
       <!-- Filter column -->
 
@@ -41,34 +43,33 @@
           <div class="col q-pl-md q-pa-md">
             <q-card flat v-if="!selectedDatasource">
               <q-card-section>
-                <div class="text-h6">No datasource selected</div>
+                <div class="text-h6">
+                  <span>No datasource selected</span>
+                  <span class="float-right">
+                    <q-btn flat icon="refresh" label="Refresh datasources" @click="syncDatasources()"/>
+                  </span>
+                </div>
               </q-card-section>
             </q-card>
             <q-card flat v-else>
               <q-card-section>
                 <div class="text-h6">
-                  {{ selectedDatasource }} <q-toggle for="enabled" v-model="enabled"/>
-                  </div>
+                   <!-- <q-toggle for="enabled" v-model="enabled"/> -->
+                  <span>{{ selectedDatasource }}</span>
+                  <span class="float-right">
+                    <q-btn flat icon="policy" label="view Hunts" @click="$router.push({ path: '/validations', query: { datasource: selectedDatasource } })"/>
+                    <q-btn flat icon="refresh" label="Refresh datasources" @click="syncDatasources()"/>
+                  </span>
+                </div>
               </q-card-section>
               <q-card-section>
                 <div class="row">
-                  <!-- <div class="col q-pa-sm">
-                    <q-input filled v-model="date_registered" mask="date" label="Registration date">
-                      <template v-slot:append>
-                        <q-icon name="event" class="cursor-pointer">
-                          <q-popup-proxy ref="qDateProxy" transition-show="scale" transition-hide="scale">
-                            <q-date v-model="date_registered" @input="() => $refs.qDateProxy.hide()" />
-                          </q-popup-proxy>
-                        </q-icon>
-                      </template>
-                    </q-input>
-                  </div> -->
                   <div class="col q-pa-sm">
-                    <q-input filled v-model="date_connected" mask="date" label="Connected date">
+                    <q-input filled v-model="datasourceDetails.date_connected" mask="date" label="Connected date">
                       <template v-slot:append>
                         <q-icon name="event" class="cursor-pointer">
                           <q-popup-proxy ref="qDateProxy" transition-show="scale" transition-hide="scale">
-                            <q-date v-model="date_connected" @input="() => $refs.qDateProxy.hide()" />
+                            <q-date v-model="datasourceDetails.date_connected" @input="() => $refs.qDateProxy.hide()" />
                           </q-popup-proxy>
                         </q-icon>
                       </template>
@@ -77,12 +78,12 @@
                 </div>
                 <div class="row">
                   <div class="col q-pa-sm">
-                    <q-editor v-model="comment" min-height="5rem" />
+                    <q-editor v-model="datasourceDetails.comment" min-height="5rem" />
                   </div>
                 </div>
                 <div class="row">
                   <div class="col q-pa-sm">
-                    <q-table title="Log sources" flat :data="datasourceProducts" :columns="columns" row-key="name">
+                    <q-table title="Log sources" flat :data="datasourceDetails.products" :columns="columns" row-key="name">
                       <template v-slot:top="props">
                         <div class="col-3 q-table__title">Configured log sources</div>
                         <q-space />
@@ -168,12 +169,14 @@
 </template>
 
 <script>
+import moment from 'moment'
 
 export default {
   name: 'Coverage',
   data () {
     return {
       selectedDatasource: null,
+      datasourceDetails: { },
       filterDatasource: '',
       datasourceProducts: [],
       config: {
@@ -206,14 +209,8 @@ export default {
       var filteredOptions = []
       this.datasourceOptions.forEach((datasource, index) => {
         filteredOptions.push({ name: datasource })
-        // if (datasource.includes(this.filterDatasource) && Math.ceil(index / this.maxRows) === this.currentPage) {
-        //   filteredOptions.push(datasource)
-        // }
       })
       return filteredOptions
-    },
-    totalPages: function () {
-      return Math.ceil(this.datasourceOptions.length / this.maxRows)
     },
     datasourceOptions: {
       set (datasources) {
@@ -229,46 +226,6 @@ export default {
       },
       set (datasource) {
         this.$store.commit('coverage/config', datasource)
-      }
-    },
-    enabled: {
-      get () {
-        return this.$store.state.coverage.config[this.selectedDatasource].enabled
-      },
-      set (value) {
-        this.$store.commit('coverage/enabled', { 'data_source_name': this.selectedDatasource, 'value': value })
-      }
-    },
-    date_registered: {
-      get () {
-        return this.$store.state.coverage.config[this.selectedDatasource].date_registered
-      },
-      set (value) {
-        this.$store.commit('coverage/dateRegistered', { 'data_source_name': this.selectedDatasource, 'value': value })
-      }
-    },
-    date_connected: {
-      get () {
-        return this.$store.state.coverage.config[this.selectedDatasource].date_connected
-      },
-      set (value) {
-        this.$store.commit('coverage/dateConnected', { 'data_source_name': this.selectedDatasource, 'value': value })
-      }
-    },
-    available_for_data_analytics: {
-      get () {
-        return this.$store.state.coverage.config[this.selectedDatasource].available_for_data_analytics
-      },
-      set (value) {
-        this.$store.commit('coverage/dataAnalytics', { 'data_source_name': this.selectedDatasource, 'value': value })
-      }
-    },
-    comment: {
-      get () {
-        return this.$store.state.coverage.config[this.selectedDatasource].comment
-      },
-      set (value) {
-        this.$store.commit('coverage/comment', { 'data_source_name': this.selectedDatasource, 'value': value })
       }
     },
     device_completeness: {
@@ -310,22 +267,28 @@ export default {
       set (value) {
         this.$store.commit('coverage/retention', { 'data_source_name': this.selectedDatasource, 'value': value })
       }
-    },
-    products: {
-      get () {
-        return this.$store.state.coverage.config[this.selectedDatasource].products
-      },
-      set (value) {
-        this.$store.commit('coverage/products', { 'data_source_name': this.selectedDatasource, 'value': value })
-      }
     }
   },
   methods: {
+    syncDatasources () {
+      this.$axios
+        .post('/search/splunk/indices')
+        .then(response => this.syncSplunkSuccess(response['data']))
+    },
+    syncSplunkSuccess (response) {
+      var notification = {
+        title: 'Datasource synchronisation',
+        message: 'Issued task to find available datasources using Splunk',
+        datetime: moment().format()
+      }
+      this.$store.commit('notifications/addNotification', notification)
+      this.$store.commit('asyncTasks/add', { 'taskId': response.task, 'taskName': notification.title })
+    },
     deleteProductRow (row) {
       this.datasourceProducts = this.datasourceProducts.filter(e => !e.name.includes(row.name))
     },
     addProductRow () {
-      this.datasourceProducts.push({
+      this.datasourceDetails.products.push({
         name: 'New name',
         vendor: 'New vendor',
         source: 'New source',
@@ -335,16 +298,38 @@ export default {
     },
     selectDatasource (datasource) {
       this.selectedDatasource = datasource
-      this.datasourceProducts = []
-      this.products.forEach(element => {
-        this.datasourceProducts.push({
-          name: element.name,
-          vendor: element.vendor,
-          source: element.source,
-          sourcetype: element.sourcetype,
-          index: element.index
-        })
-      })
+      this.getDatasourceDetails(datasource)
+      var filterQuery = { datasource: datasource }
+      if (JSON.stringify(this.$route.query) !== JSON.stringify(filterQuery)) {
+        this.$router.replace({ path: '/coverage', query: filterQuery })
+      }
+    },
+    getDatasourceDetails (datasource) {
+      this.$axios
+        .get('/products/coverage', { params: { datasource: datasource } })
+        .then(response => this.getDatasourceDetailsSuccess(response['data']))
+        .catch(response => this.getDatasourceDetailsFail(datasource))
+    },
+    getDatasourceDetailsSuccess (response) {
+      this.datasourceDetails = response
+    },
+    getDatasourceDetailsFail (datasource) {
+      this.datasourceDetails = {
+        data_source_name: datasource,
+        date_connected: null,
+        available_for_data_analytics: false,
+        enabled: false,
+        products: [
+        ],
+        comment: '',
+        data_quality: {
+          device_completeness: 0,
+          field_completeness: 0,
+          timeliness: 0,
+          consistency: 0,
+          retention: 0
+        }
+      }
     },
     averageScore (datasource) {
       var qualityObject = this.$store.state.coverage.config[datasource].data_quality
@@ -359,12 +344,13 @@ export default {
       response.forEach(coverage => {
         this.$store.commit('coverage/config', coverage)
       })
+      if (this.$route.query) {
+        this.selectDatasource(this.$route.query.datasource)
+      }
     },
     saveCoverage () {
-      var updatedCoverage = this.$store.state.coverage.config[this.selectedDatasource]
-      updatedCoverage['products'] = this.datasourceProducts
       this.$axios
-        .post('/mitre/coverage', updatedCoverage)
+        .post('/mitre/coverage', this.datasourceDetails)
         .then(response => this.saveCoverageSuccess(response['data']))
     },
     saveCoverageSuccess (response) {
@@ -379,13 +365,8 @@ export default {
       datasources.forEach(datasource => {
         this.$store.commit('coverage/config', {
           data_source_name: datasource,
-          date_registered: null,
-          date_connected: null,
-          available_for_data_analytics: false,
-          enabled: false,
           products: [
           ],
-          comment: '',
           data_quality: {
             device_completeness: 0,
             field_completeness: 0,
@@ -400,3 +381,12 @@ export default {
   }
 }
 </script>
+
+<style lang="scss">
+.dsavailable {
+  color: green;
+}
+.dsmissing {
+  color: red;
+}
+</style>

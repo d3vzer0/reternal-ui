@@ -2,16 +2,21 @@
   <q-page>
     <!-- Center content row -->
     <div class="q-mt-md row justify-around q-gutter-sm">
-      <!-- Filter column -->
-      <div class="col-xs-11 col-sm-5 col-md-3 col-lg-3 col-xl-3" style="max-width:300px">
+      <div class="col-xs-11 col-sm-5 col-md-5 col-lg-5 col-xl-5">
         <ModulesActive></ModulesActive>
       </div>
-      <div class="col-xs-11 col-sm-5 col-md-3 col-lg-3 col-xl-3 " style="height: 200px; max-width:300px">
-        <q-card style="height: 200px;">
+      <div class="col-xs-11 col-sm-5 col-md-5 col-lg-5 col-xl-5">
+        <SearchModulesActive></SearchModulesActive>
+      </div>
+    </div>
+    <div class="q-mt-md row justify-around q-gutter-sm">
+      <!-- Filter column -->
+      <div class="col-xs-11 col-sm-5 col-md-3 col-lg-3 col-xl-3">
+        <q-card class="metric">
           <q-card-section horizontal>
             <q-card-section>
              <div class="text-h2 text-bold q-mt-sm q-mb-xs">
-               137
+               {{ validationsCount }}
              </div>
             </q-card-section>
             <q-card-section>
@@ -25,12 +30,12 @@
           </q-card-section>
         </q-card>
       </div>
-      <div class="col-xs-11 col-sm-5 col-md-3 col-lg-3 col-xl-3 " style="height: 200px; max-width:300px">
-        <q-card style="height: 200px;">
+      <div class="col-xs-11 col-sm-5 col-md-3 col-lg-3 col-xl-3">
+        <q-card class="metric">
           <q-card-section horizontal>
             <q-card-section>
              <div class="text-h2 q-mt-sm q-mb-xs text-bold">
-               51
+               {{ techniquesCount }}
              </div>
             </q-card-section>
             <q-card-section>
@@ -44,12 +49,12 @@
           </q-card-section>
         </q-card>
       </div>
-       <div class="col-xs-11 col-sm-5 col-md-3 col-lg-3 col-xl-3" style="max-width:300px">
-        <q-card style="height: 200px;">
+       <div class="col-xs-11 col-sm-5 col-md-3 col-lg-3 col-xl-3">
+        <q-card class="metric">
           <q-card-section horizontal>
             <q-card-section>
              <div class="text-h2 q-mt-sm q-mb-xs text-bold">
-               10
+               {{ coverageCount }}
              </div>
             </q-card-section>
             <q-card-section>
@@ -167,11 +172,13 @@
 <script>
 import { Network } from 'vue-vis-network'
 import ModulesActive from 'components/Modules'
+import SearchModulesActive from 'components/SearchModules'
 
 export default {
   name: 'PageIndex',
   components: {
     ModulesActive,
+    SearchModulesActive,
     Network
   },
   computed: {
@@ -200,6 +207,9 @@ export default {
   data () {
     return {
       campaignTab: 'scheduled',
+      techniquesCount: 0,
+      coverageCount: 0,
+      validationsCount: 0,
       selectedCampaign: null,
       queryRating: 45,
       c2Rating: 35,
@@ -246,6 +256,8 @@ export default {
   },
   created () {
     this.$getIntegrations()
+    this.$getSearchIntegrations()
+    this.getStatsCount()
     this.getCampaigns()
   },
   methods: {
@@ -291,6 +303,16 @@ export default {
         })
       })
     },
+    getStatsCount () {
+      this.$axios
+        .get('/stats/count')
+        .then(response => this.getStatsCountSuccess(response['data']))
+    },
+    getStatsCountSuccess (response) {
+      this.validationsCount = response['validations']
+      this.techniquesCount = response['techniques']
+      this.coverageCount = response['coverage']
+    },
     getCampaigns () {
       this.$axios
         .get('/campaigns')
@@ -321,6 +343,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+
+.metric {
+  height: 150px;
+}
+
 .tasks-table {
   height: 100%;
 }

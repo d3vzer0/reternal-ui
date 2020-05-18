@@ -8,6 +8,9 @@ import agents from './agents'
 import scheduler from './scheduler'
 import tasks from './tasks'
 import coverage from './coverage'
+import searchIntegrations from './searchIntegrations'
+import notifications from './notifications'
+import asyncTasks from './asyncTasks'
 
 Vue.use(Vuex)
 
@@ -28,7 +31,10 @@ export default function (/* { ssrContext } */) {
       agents,
       scheduler,
       tasks,
-      coverage
+      coverage,
+      notifications,
+      searchIntegrations,
+      asyncTasks
       // example
     },
 

@@ -11,6 +11,29 @@
           <q-btn flat icon="call_to_action" /> -->
         </div>
         <div class="">
+          <q-btn flat icon="mail">
+            <q-badge floating color="red" v-if="notifications.length">{{ notifications.length }}</q-badge>
+            <q-menu v-if="notifications.length">
+              <div class="row no-wrap q-pa-md">
+                <div class="col-10">
+                  <q-list seperator>
+                    <q-item v-for="notification in notifications" v-bind:key="notification.id">
+                      <q-item-section>
+                        <q-item-label>{{ notification.title }} </q-item-label>
+                        <q-item-label caption lines="2">{{ notification.message }}</q-item-label>
+                      </q-item-section>
+                      <q-item-section side top>
+                        <q-item-label caption>{{ timeAgo(notification.datetime) }}</q-item-label>
+                      </q-item-section>
+                    </q-item>
+                  </q-list>
+                </div>
+                <div class="col-2">
+                  <span class="float-right"><q-btn flat icon="clear_all" @click="clearNotifications()"/></span>
+                </div>
+              </div>
+            </q-menu>
+          </q-btn>
           <!-- <q-btn-dropdown flat icon="person_pin" v-if="$auth.user" :label="'Hi, ' + $auth.user.nickname">
             <q-list>
               <q-item>
@@ -120,24 +143,6 @@
               Stagers
             </q-item-section>
           </q-item>
-          <!-- <q-separator />
-          <q-separator />
-          <q-item clickable v-ripple>
-            <q-item-section avatar>
-              <q-icon name="bookmark" />
-            </q-item-section>
-            <q-item-section>
-              Shortcuts
-            </q-item-section>
-          </q-item>
-          <q-item clickable v-ripple>
-            <q-item-section avatar>
-              <q-icon name="save" />
-            </q-item-section>
-            <q-item-section>
-              Saves
-            </q-item-section>
-          </q-item> -->
         </q-list>
       </q-scroll-area>
     </q-drawer>
@@ -149,6 +154,8 @@
 </template>
 
 <script>
+import moment from 'moment'
+
 export default {
   name: 'MainView',
   computed: {
@@ -159,12 +166,56 @@ export default {
       set: function (value) {
         this.$q.dark.set(value)
       }
+    },
+    notifications: {
+      get: function () {
+        return this.$store.state.notifications.notifications
+      }
+    },
+    asyncTasks: {
+      get: function () {
+        return this.$store.state.asyncTasks.tasks
+      }
     }
   },
   data () {
     return {
       leftDrawerOpen: false,
       miniState: true
+    }
+  },
+  created () {
+    this.pollTasks()
+  },
+  methods: {
+    timeAgo (datetime) {
+      return moment(datetime).fromNow()
+    },
+    clearNotifications () {
+      this.$store.commit('notifications/clearNotifications')
+    },
+    getTaskState (task) {
+      this.$axios
+        .get('/state/' + task.taskId)
+        .then(response => this.getTaskStateSuccess(response['data'], task))
+    },
+    getTaskStateSuccess (taskState, task) {
+      if (taskState === 'SUCCESS') {
+        this.$store.commit('asyncTasks/pull', task.taskId)
+        var notification = {
+          title: task.taskName + ' success',
+          message: 'Succesfully completed task ' + task.taskName,
+          datetime: moment().format()
+        }
+        this.$store.commit('notifications/addNotification', notification)
+      }
+    },
+    pollTasks () {
+      setInterval(() => {
+        this.asyncTasks.forEach(task => {
+          this.getTaskState(task)
+        })
+      }, 10000)
     }
   }
 }
