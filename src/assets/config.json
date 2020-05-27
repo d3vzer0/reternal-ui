@@ -1,3 +1,11 @@
 {
-  "backend": "http://127.0.0.1:5000/api/v1"
+  "backend": "http://127.0.0.1:5000/api/v1",
+  "oauth2": {
+    "authority": "https://dev-bz1jz111.auth0.com/",
+    "url_auth": "https://dev-bz1jz111.auth0.com/authorize",
+    "client_id": "f0u3wItls9gc9dCnKaaNr0ukZ0EZ4sIb",
+    "redirect_uri": "http://localhost:9090/login",
+    "response_type": "code",
+    "scope": "openid profile email"
+  }
 }

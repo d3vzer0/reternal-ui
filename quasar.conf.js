@@ -25,7 +25,7 @@ module.exports = function (ctx) {
       // 'eva-icons',
       // 'themify',
       // 'roboto-font-latin-ext', // this or either 'roboto-font', NEVER both!
-
+      'mdi-v5',
       'roboto-font', // optional, you are not bound to it
       'material-icons' // optional, you are not bound to it
     ],

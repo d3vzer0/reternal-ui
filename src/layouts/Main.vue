@@ -34,17 +34,17 @@
               </div>
             </q-menu>
           </q-btn>
-          <!-- <q-btn-dropdown flat icon="person_pin" v-if="$auth.user" :label="'Hi, ' + $auth.user.nickname">
+          <q-btn-dropdown flat icon="person_pin" v-if="profile" :label="'Hi, ' + profile.nickname">
             <q-list>
               <q-item>
                   <q-item-section side>
                     <q-avatar>
-                      <img :src="$auth.user.picture">
+                      <img :src="profile.picture">
                     </q-avatar>
                   </q-item-section>
                   <q-item-section>
-                    <q-item-label>{{ $auth.user.nickname }}</q-item-label>
-                    <q-item-label caption lines="2">{{ $auth.user.email }}</q-item-label>
+                    <q-item-label>{{ profile.nickname }}</q-item-label>
+                    <q-item-label caption lines="2">{{ profile.email }}</q-item-label>
                   </q-item-section>
               </q-item>
               <q-separator />
@@ -52,7 +52,7 @@
                 <q-item-section>Logout</q-item-section>
               </q-item>
             </q-list>
-          </q-btn-dropdown> -->
+          </q-btn-dropdown>
         </div>
       </q-toolbar>
     </q-header>
@@ -76,9 +76,17 @@
               Home
             </q-item-section>
           </q-item>
+          <q-item clickable v-ripple to='/results'>
+            <q-item-section avatar>
+              <q-icon name="mdi-check-circle-outline" />
+            </q-item-section>
+            <q-item-section>
+              Results
+            </q-item-section>
+          </q-item>
           <q-item clickable v-ripple to='/campaign'>
             <q-item-section avatar>
-              <q-icon name="list_alt" />
+              <q-icon name="mdi-graph" />
             </q-item-section>
             <q-item-section>
               Campaign
@@ -155,6 +163,7 @@
 
 <script>
 import moment from 'moment'
+import mgr from '../auth'
 
 export default {
   name: 'MainView',
@@ -180,14 +189,20 @@ export default {
   },
   data () {
     return {
+      profile: {},
       leftDrawerOpen: false,
       miniState: true
     }
   },
   created () {
     this.pollTasks()
+    this.userInfo()
   },
   methods: {
+    async userInfo () {
+      var userInfo = await mgr.getUser()
+      this.profile = userInfo.profile
+    },
     timeAgo (datetime) {
       return moment(datetime).fromNow()
     },

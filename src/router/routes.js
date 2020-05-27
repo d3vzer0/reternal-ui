@@ -13,7 +13,8 @@ const routes = [
       { path: '/stagers', component: () => import('pages/Stagers.vue') },
       { path: '/listeners', component: () => import('pages/Listeners.vue') },
       { path: '/coverage', component: () => import('pages/Coverage.vue') },
-      { path: '/validations', component: () => import('pages/Validations.vue') }
+      { path: '/validations', component: () => import('pages/Validations.vue') },
+      { path: '/results', component: () => import('pages/Results.vue') }
     ]
   },
   {
