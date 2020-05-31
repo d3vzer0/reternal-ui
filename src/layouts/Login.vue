@@ -34,7 +34,7 @@
 </template>
 
 <script>
-import mgr from '../auth'
+// import mgr from '../auth'
 
 export default {
   name: 'Login',
@@ -59,11 +59,11 @@ export default {
   },
   methods: {
     async authenticateInit () {
-      mgr.signinRedirect()
+      this.$oauth.signinRedirect()
     },
     async authenticated () {
       if (this.$route.query) {
-        mgr.signinRedirectCallback().then(user => {
+        this.$oauth.signinRedirectCallback().then(user => {
           this.$router.push({ path: '/' })
         })
       }

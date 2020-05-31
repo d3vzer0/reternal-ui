@@ -163,7 +163,7 @@
 
 <script>
 import moment from 'moment'
-import mgr from '../auth'
+// import mgr from '../auth'
 
 export default {
   name: 'MainView',
@@ -200,7 +200,7 @@ export default {
   },
   methods: {
     async userInfo () {
-      var userInfo = await mgr.getUser()
+      var userInfo = await this.$oauth.getUser()
       this.profile = userInfo.profile
     },
     timeAgo (datetime) {
