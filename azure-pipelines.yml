@@ -27,3 +27,14 @@ stages:
         dockerfile: '$(Build.SourcesDirectory)/Dockerfile'
         tags: |
           $(tag)
+  - job: Publish
+    displayName: Publish
+    pool:
+      vmImage: 'ubuntu-latest'
+    steps:
+    - task: Docker@2
+      inputs:
+        containerRegistry: 'DockerHubReternal'
+        repository: 'reternal/ui'
+        command: 'buildAndPush'
+        Dockerfile: '**/Dockerfile'
