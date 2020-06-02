@@ -29,6 +29,7 @@ stages:
           $(tag)
   - job: Publish
     displayName: Publish
+    dependsOn: Build
     pool:
       vmImage: 'ubuntu-latest'
     steps:
