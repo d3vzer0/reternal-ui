@@ -201,7 +201,11 @@ export default {
   methods: {
     async userInfo () {
       var userInfo = await this.$oauth.getUser()
-      this.profile = userInfo.profile
+      if (userInfo.expired) {
+        this.$router.push({ path: '/login' })
+      } else {
+        this.profile = userInfo.profile
+      }
     },
     timeAgo (datetime) {
       return moment(datetime).fromNow()

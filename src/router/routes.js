@@ -14,7 +14,8 @@ const routes = [
       { path: '/listeners', component: () => import('pages/Listeners.vue') },
       { path: '/coverage', component: () => import('pages/Coverage.vue') },
       { path: '/validations', component: () => import('pages/Validations.vue') },
-      { path: '/results', component: () => import('pages/Results.vue') }
+      { path: '/results', component: () => import('pages/Results.vue') },
+      { path: '/lifecycle', component: () => import('pages/Lifecycle.vue') }
     ]
   },
   {

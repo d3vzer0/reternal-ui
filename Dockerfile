@@ -10,11 +10,6 @@ RUN npm install
 
 # Stage building the Vue app
 FROM dependency-stage as build-stage
-ARG VUE_APP_SOCKETHOST
-ENV VUE_APP_SOCKETHOST ${VUE_APP_SOCKETHOST}
-
-ARG VUE_APP_BASEAPI
-ENV VUE_APP_BASEAPI ${VUE_APP_BASEAPI}
 
 COPY . .
 RUN quasar build
