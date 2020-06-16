@@ -15,3 +15,4 @@ var oidcManager = new Oidc.UserManager({
 })
 
 Vue.prototype.$oauth = oidcManager
+export { oidcManager }

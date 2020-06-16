@@ -64,6 +64,7 @@ export default {
     async authenticated () {
       if (this.$route.query) {
         this.$oauth.signinRedirectCallback().then(user => {
+          this.$store.commit('user/setUser', user)
           this.$router.push({ path: '/' })
         })
       }

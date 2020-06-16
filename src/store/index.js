@@ -11,6 +11,7 @@ import coverage from './coverage'
 import searchIntegrations from './searchIntegrations'
 import notifications from './notifications'
 import asyncTasks from './asyncTasks'
+import user from './user'
 
 Vue.use(Vuex)
 
@@ -22,26 +23,24 @@ Vue.use(Vuex)
  * async/await or return a Promise which resolves
  * with the Store instance.
  */
+const Store = new Vuex.Store({
+  modules: {
+    queue,
+    integrations,
+    agents,
+    scheduler,
+    tasks,
+    user,
+    coverage,
+    notifications,
+    searchIntegrations,
+    asyncTasks
+    // example
+  },
 
-export default function (/* { ssrContext } */) {
-  const Store = new Vuex.Store({
-    modules: {
-      queue,
-      integrations,
-      agents,
-      scheduler,
-      tasks,
-      coverage,
-      notifications,
-      searchIntegrations,
-      asyncTasks
-      // example
-    },
+  // enable strict mode (adds overhead!)
+  // for dev mode only
+  strict: process.env.DEV
+})
 
-    // enable strict mode (adds overhead!)
-    // for dev mode only
-    strict: process.env.DEV
-  })
-
-  return Store
-}
+export default Store

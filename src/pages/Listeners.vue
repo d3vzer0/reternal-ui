@@ -180,6 +180,7 @@ export default {
     }
   },
   created () {
+    console.log(this.$store.state.user.profile.name)
     this.$getIntegrations()
   },
   watch: {

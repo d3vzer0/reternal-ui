@@ -168,6 +168,11 @@ import moment from 'moment'
 export default {
   name: 'MainView',
   computed: {
+    profile: {
+      get: function () {
+        return this.$store.state.user.profile
+      }
+    },
     darkmode: {
       get: function () {
         return this.$q.dark.isActive
@@ -189,24 +194,15 @@ export default {
   },
   data () {
     return {
-      profile: {},
+      // profile: {},
       leftDrawerOpen: false,
       miniState: true
     }
   },
   created () {
     this.pollTasks()
-    this.userInfo()
   },
   methods: {
-    async userInfo () {
-      var userInfo = await this.$oauth.getUser()
-      if (userInfo.expired) {
-        this.$router.push({ path: '/login' })
-      } else {
-        this.profile = userInfo.profile
-      }
-    },
     timeAgo (datetime) {
       return moment(datetime).fromNow()
     },
