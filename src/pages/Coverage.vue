@@ -57,7 +57,7 @@
                    <!-- <q-toggle for="enabled" v-model="enabled"/> -->
                   <span>{{ selectedDatasource }}</span>
                   <span class="float-right">
-                    <q-btn flat icon="policy" label="view Hunts" @click="$router.push({ path: '/sigma', query: { datasource: selectedDatasource } })"/>
+                    <q-btn flat icon="policy" label="Sigma rules" @click="$router.push({ path: '/sigma', query: { datasource: selectedDatasource } })"/>
                     <q-btn flat icon="refresh" label="Refresh datasources" @click="syncDatasources()"/>
                   </span>
                 </div>
