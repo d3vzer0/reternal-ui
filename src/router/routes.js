@@ -13,7 +13,7 @@ const routes = [
       { path: '/stagers', component: () => import('pages/Stagers.vue'), meta: { requiresAuth: true } },
       { path: '/listeners', component: () => import('pages/Listeners.vue'), meta: { requiresAuth: true } },
       { path: '/coverage', component: () => import('pages/Coverage.vue'), meta: { requiresAuth: true } },
-      { path: '/validations', component: () => import('pages/Validations.vue'), meta: { requiresAuth: true } },
+      { path: '/sigma', component: () => import('pages/Sigma.vue'), meta: { requiresAuth: true } },
       { path: '/results', component: () => import('pages/Results.vue'), meta: { requiresAuth: true } },
       { path: '/lifecycle', component: () => import('pages/Lifecycle.vue'), meta: { requiresAuth: true } }
     ]

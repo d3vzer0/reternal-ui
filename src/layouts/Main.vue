@@ -94,12 +94,12 @@
           </q-item>
           <q-separator />
           <q-separator />
-          <q-item clickable v-ripple to="/validations">
+          <q-item clickable v-ripple to="/sigma">
             <q-item-section avatar>
               <q-icon name="policy" />
             </q-item-section>
             <q-item-section>
-              Hunts
+              Sigma
             </q-item-section>
           </q-item>
           <q-item clickable v-ripple to="/techniques">

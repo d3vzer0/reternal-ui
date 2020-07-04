@@ -10,15 +10,6 @@
           <div class="col">
             <q-card flat class="filter-row">
               <q-card-section>
-                <q-option-group :options="integrationOptions" label="Platform" type="radio" v-model="filters.integration" />
-              </q-card-section>
-            </q-card>
-          </div>
-        </div>
-        <div class="row q-mt-md">
-          <div class="col">
-            <q-card flat class="filter-row">
-              <q-card-section>
                 <q-input v-model="filterDatasource" label="Datasource">
                   <template v-slot:prepend>
                     <q-icon name="find_in_page" />
@@ -101,14 +92,14 @@
                 </q-tab>
               </q-tabs>
               <q-stepper v-model="phaseStep" animated vertical header-nav ref="stepper">
-                <q-step v-for="(validator, index) in phaseValidations[tab]" v-bind:key="index"
-                  :name="validator.name" :title="`${validator.name} (${validator.technique_name})`" icon="details">
+                <q-step v-for="(rule, index) in phaseSigma[tab]" v-bind:key="index"
+                  :name="rule.hash" :title="`${rule.title} (${rule.technique.name} / ${rule.technique.references[0].external_id})`" icon="details">
                   <!-- <div class="row">
                     <div class="col-2">
-                      <b>Name</b>
+                      <b>Sigma ID</b>
                     </div>
                     <div class="col">
-                      {{ validator.name }}
+                      {{ rule.sigma_id }}
                     </div>
                   </div> -->
                   <div class="row">
@@ -116,15 +107,7 @@
                       <b>Author</b>
                     </div>
                     <div class="col">
-                      {{ validator.author }}
-                    </div>
-                  </div>
-                  <div class="row">
-                    <div class="col-2">
-                      <b>Reference</b>
-                    </div>
-                    <div class="col">
-                      {{ validator.reference }}
+                      {{ rule.author }}
                     </div>
                   </div>
                   <div class="row">
@@ -132,36 +115,76 @@
                       <b>Description</b>
                     </div>
                     <div class="col">
-                      {{ validator.description }}
+                      {{ rule.description }}
                     </div>
                   </div>
-                  <div class="row" v-if="validator.magma">
+                  <div class="row" v-if="rule.status">
                     <div class="col-2">
-                      <b>Usecase</b>
+                      <b>Status</b>
                     </div>
                     <div class="col">
-                      {{ validator.magma.l1_usecase_name }} / {{ validator.magma.l2_usecase_name }}
+                      {{ rule.status }}
                     </div>
                   </div>
                   <div class="row">
                     <div class="col-2">
+                      <b>Level</b>
+                    </div>
+                    <div class="col">
+                      {{ rule.level }}
+                    </div>
+                  </div>
+                  <div class="row" v-if="rule.references">
+                    <div class="col-2">
+                      <b>Reference</b>
+                    </div>
+                    <div class="col">
+                      {{ rule.references.join(', ') }}
+                    </div>
+                  </div>
+
+                  <!-- <div class="row">
+                    <div class="col-2">
+                      <b>Technique</b>
+                    </div>
+                    <div class="col">
+                      {{ rule.technique.name }}
+                    </div>
+                  </div> -->
+                  <div class="row" v-if="rule.technique.magma">
+                    <div class="col-2">
+                      <b>Usecase</b>
+                    </div>
+                    <div class="col">
+                      {{ rule.technique.magma.l1_usecase_name }} / {{ rule.technique.magma.l2_usecase_name }}
+                    </div>
+                  </div>
+                  <!-- <div class="row">
+                    <div class="col-2">
                       <b>External. ID</b>
                     </div>
                     <div class="col">
-                      {{ validator.external_id }}
+                      {{ rule.technique.references[0].external_id }}
                     </div>
-                  </div>
+                  </div> -->
                   <div class="row q-mt-md">
                     <div class="col">
                       <div>
-                        <vue-code-highlight class="language-bash">{{validator.search}}</vue-code-highlight>
+                        <vue-code-highlight class="language-bash">{{JSON.stringify(rule.detection)}}</vue-code-highlight>
                       </div>
                     </div>
                   </div>
                   <div class="row q-mt-md">
                     <div class="col">
-                      <span v-for="datasource in validator.data_sources" v-bind:key="datasource">
-                        <q-chip clickable v-if="validator.data_sources_available.includes(datasource)"
+                      <div>
+                        <vue-code-highlight class="language-bash">{{JSON.stringify(rule.logsource)}}</vue-code-highlight>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row q-mt-md">
+                    <div class="col">
+                      <span v-for="datasource in rule.technique.data_sources" v-bind:key="datasource">
+                        <q-chip clickable v-if="rule.technique.data_sources_available.includes(datasource)"
                           color="teal" text-color="white" icon="done" @click="$router.push({ path: '/coverage', query: { datasource: datasource } })">{{ datasource }}</q-chip>
                         <q-chip clickable v-else icon="highlight_off" @click="$router.push({ path: '/coverage', query: { datasource: datasource } })">{{ datasource }}</q-chip>
                       </span>
@@ -185,7 +208,7 @@ import { component as VueCodeHighlight } from 'vue-code-highlight'
 import 'vue-code-highlight/themes/prism-okaidia.css'
 
 export default {
-  name: 'Validations',
+  name: 'Sigma',
   components: {
     VueCodeHighlight
   },
@@ -194,7 +217,6 @@ export default {
       tab: null,
       phaseStep: '',
       filters: {
-        integration: 'Splunk',
         datasource: '',
         l1Usecase: '',
         l2Usecase: '',
@@ -218,7 +240,7 @@ export default {
       filterL1Usecase: '',
       filterL2Usecase: '',
       filterDatasource: '',
-      phaseValidations: {
+      phaseSigma: {
       },
       phase: '',
       actors: [
@@ -238,21 +260,22 @@ export default {
     }
   },
   created () {
-    this.getIntegrations()
     this.refreshFilters()
   },
   watch: {
     filters: {
       handler (value) {
         if (JSON.stringify(this.$route.query) !== JSON.stringify(this.searchFilters)) {
-          this.$router.replace({ path: '/validations', query: this.searchFilters })
+          this.$router.replace({ path: '/sigma', query: this.searchFilters })
         }
         this.refreshFilters()
       },
       deep: true
     },
     tab: function (tab) {
-      this.getValidations()
+      if (typeof tab !== 'undefined') {
+        this.getSigma()
+      }
     }
   },
   methods: {
@@ -262,7 +285,7 @@ export default {
           this.filters[key] = value
         }
       }
-      this.phaseValidations = {}
+      this.phaseSigma = {}
       this.phaseOptions = []
       this.getDatasources()
       this.getTechniques()
@@ -271,19 +294,9 @@ export default {
       this.getPhases()
       this.tab = this.phaseOptions[0]
     },
-    getIntegrations () {
-      this.$axios
-        .get('/validations/integrations')
-        .then(response => this.getIntegrationsSuccess(response['data']))
-    },
-    getIntegrationsSuccess (validations) {
-      validations.forEach(val => {
-        this.integrationOptions.push({ 'value': val, 'label': val })
-      })
-    },
     getDatasources () {
       this.$axios
-        .get('/validations/datasources', {
+        .get('/sigma/datasources', {
           params: this.searchFilters
         })
         .then(response => this.getDatasourcesSuccess(response['data']))
@@ -296,7 +309,7 @@ export default {
     },
     getL1Usecases () {
       this.$axios
-        .get('/validations/l1usecases', {
+        .get('/sigma/l1usecases', {
           params: this.searchFilters
         })
         .then(response => this.getL1UsecasesSuccess(response['data']))
@@ -309,7 +322,7 @@ export default {
     },
     getL2Usecases () {
       this.$axios
-        .get('/validations/l2usecases', {
+        .get('/sigma/l2usecases', {
           params: this.searchFilters
         })
         .then(response => this.getL2UsecasesSuccess(response['data']))
@@ -322,7 +335,7 @@ export default {
     },
     getTechniques () {
       this.$axios
-        .get('/validations/techniques', {
+        .get('/sigma/techniques', {
           params: this.searchFilters
         })
         .then(response => this.getTechniquesSuccess(response['data']))
@@ -335,7 +348,7 @@ export default {
     },
     getPhases () {
       this.$axios
-        .get('/validations/phases', {
+        .get('/sigma/phases', {
           params: this.searchFilters
         })
         .then(response => this.getPhasesSuccess(response['data']))
@@ -345,9 +358,9 @@ export default {
       this.tab = ''
       this.tab = this.phaseOptions[0]
     },
-    getValidations () {
+    getSigma () {
       this.$axios
-        .get('/validations', {
+        .get('/sigma', {
           params: {
             integration: this.filters.integration,
             technique: this.filters.technique,
@@ -357,25 +370,29 @@ export default {
             phase: this.tab
           }
         })
-        .then(response => this.getValidationsSuccess(response['data']))
+        .then(response => this.getSigmaSuccess(response['data']))
     },
-    getValidationsSuccess (validators) {
-      this.phaseValidations = {
-        'initial-access': [],
-        'execution': [],
-        'persistence': [],
-        'privilege-escalation': [],
-        'defense-evasion': [],
-        'credential-access': [],
-        'discovery': [],
-        'lateral-movement': [],
-        'collection': [],
-        'exfiltration': [],
-        'command-and-control': []
+    getSigmaSuccess (rules) {
+      this.phaseSigma = {
+        'initial-access': { },
+        'execution': { },
+        'persistence': { },
+        'privilege-escalation': { },
+        'defense-evasion': { },
+        'credential-access': { },
+        'discovery': { },
+        'lateral-movement': { },
+        'collection': { },
+        'exfiltration': { },
+        'command-and-control': { }
       }
-      validators.forEach(validator => {
-        validator.kill_chain_phases.forEach(phase => {
-          this.phaseValidations[phase].push(validator)
+      rules.forEach(rule => {
+        rule.techniques.forEach(technique => {
+          technique.kill_chain_phases.forEach(phase => {
+            var phaseRule = rule
+            phaseRule['technique'] = technique
+            this.phaseSigma[phase][rule['_id']] = phaseRule
+          })
         })
       })
     },
