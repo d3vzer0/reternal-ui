@@ -10,6 +10,36 @@
           <div class="col">
             <q-card flat class="filter-row">
               <q-card-section>
+                <q-input v-model="filterLevel" label="Level">
+                  <template v-slot:prepend>
+                    <q-icon name="find_in_page" />
+                  </template>
+                </q-input>
+                <q-option-group :options="levelOptions.filter(lo => lo.label.includes(filterLevel))" label="Level" type="radio" v-model="filters.level" />
+              </q-card-section>
+            </q-card>
+          </div>
+        </div>
+
+        <div class="row q-mt-md">
+          <div class="col">
+            <q-card flat class="filter-row">
+              <q-card-section>
+                <q-input v-model="filterStatus" label="Status">
+                  <template v-slot:prepend>
+                    <q-icon name="find_in_page" />
+                  </template>
+                </q-input>
+                <q-option-group :options="statusOptions.filter(so => so.label.includes(filterStatus))" label="Status" type="radio" v-model="filters.status" />
+              </q-card-section>
+            </q-card>
+          </div>
+        </div>
+
+        <div class="row q-mt-md">
+          <div class="col">
+            <q-card flat class="filter-row">
+              <q-card-section>
                 <q-input v-model="filterDatasource" label="Datasource">
                   <template v-slot:prepend>
                     <q-icon name="find_in_page" />
@@ -220,9 +250,24 @@ export default {
         datasource: '',
         l1Usecase: '',
         l2Usecase: '',
-        technique: ''
+        technique: '',
+        level: '',
+        status: ''
       },
       integrationOptions: [],
+      levelOptions: [
+        { value: '', label: 'Any' },
+        { value: 'low', label: 'low' },
+        { value: 'medium', label: 'medium' },
+        { value: 'high', label: 'high' },
+        { value: 'critical', label: 'critical' }
+      ],
+      statusOptions: [
+        { value: '', label: 'Any' },
+        { value: 'stable', label: 'stable' },
+        { value: 'testing', label: 'testing' },
+        { value: 'experimental', label: 'experimental' }
+      ],
       techniqueOptions: [
         { value: '', label: 'Any' }
       ],
@@ -236,6 +281,8 @@ export default {
       l2UseCaseOptions: [
         { value: '', label: 'Any' }
       ],
+      filterLevel: '',
+      filterStatus: '',
       filterTechnique: '',
       filterL1Usecase: '',
       filterL2Usecase: '',
@@ -255,7 +302,9 @@ export default {
         technique: this.filters.technique,
         l1usecase: this.filters.l1Usecase,
         l2usecase: this.filters.l2Usecase,
-        datasource: this.filters.datasource
+        datasource: this.filters.datasource,
+        status: this.filters.status,
+        level: this.filters.level
       }
     }
   },
@@ -367,6 +416,8 @@ export default {
             l1usecase: this.filters.l1Usecase,
             l2usecase: this.filters.l2Usecase,
             datasource: this.filters.datasource,
+            level: this.filters.level,
+            status: this.filters.status,
             phase: this.tab
           }
         })
