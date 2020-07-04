@@ -16,15 +16,15 @@
           <q-card-section horizontal>
             <q-card-section>
              <div class="text-h2 text-bold q-mt-sm q-mb-xs">
-               {{ validationsCount }}
+               {{ rulesCount }}
              </div>
             </q-card-section>
             <q-card-section>
               <div class="text-h5 q-mt-sm q-mb-xs">
-                Hunts
+                Rules
               </div>
               <div class="text-caption text-grey">
-                Amount of hunts or queries available
+                Amount of hunts or sigma rules available
               </div>
             </q-card-section>
           </q-card-section>
@@ -209,7 +209,7 @@ export default {
       campaignTab: 'scheduled',
       techniquesCount: 0,
       coverageCount: 0,
-      validationsCount: 0,
+      rulesCount: 0,
       selectedCampaign: null,
       queryRating: 45,
       c2Rating: 35,
@@ -309,7 +309,7 @@ export default {
         .then(response => this.getStatsCountSuccess(response['data']))
     },
     getStatsCountSuccess (response) {
-      this.validationsCount = response['validations']
+      this.rulesCount = response['rules']
       this.techniquesCount = response['techniques']
       this.coverageCount = response['coverage']
     },
