@@ -8,98 +8,33 @@
         <!-- Dynamic filters -->
         <div class="row">
           <div class="col">
-            <q-card flat class="filter-row">
-              <q-card-section>
-                <q-input v-model="filterLevel" label="Level">
-                  <template v-slot:prepend>
-                    <q-icon name="find_in_page" />
-                  </template>
-                </q-input>
-                <q-option-group :options="levelOptions.filter(lo => lo.label.includes(filterLevel))" label="Level" type="radio" v-model="filters.level" />
-              </q-card-section>
-            </q-card>
+            <search-filter id='status' title='Status' endpoint='/sigma/status' :params="queryParams"></search-filter>
+          </div>
+        </div>
+        <div class="row q-mt-md">
+          <div class="col">
+            <search-filter id='level' title='Level' endpoint='/sigma/level' :params="queryParams"></search-filter>
           </div>
         </div>
 
         <div class="row q-mt-md">
           <div class="col">
-            <q-card flat class="filter-row">
-              <q-card-section>
-                <q-input v-model="filterStatus" label="Status">
-                  <template v-slot:prepend>
-                    <q-icon name="find_in_page" />
-                  </template>
-                </q-input>
-                <q-option-group :options="statusOptions.filter(so => so.label.includes(filterStatus))" label="Status" type="radio" v-model="filters.status" />
-              </q-card-section>
-            </q-card>
+            <search-filter id='datasource' title='Datasource' endpoint='/sigma/datasources' :params="queryParams"></search-filter>
           </div>
         </div>
 
         <div class="row q-mt-md">
           <div class="col">
-            <q-card flat class="filter-row">
-              <q-card-section>
-                <q-input v-model="filterDatasource" label="Datasource">
-                  <template v-slot:prepend>
-                    <q-icon name="find_in_page" />
-                  </template>
-                </q-input>
-                <q-scroll-area style="height: 250px;">
-                  <q-option-group :options="datasourceOptions.filter(ds => ds.label.includes(filterDatasource))" label="Datasource" type="radio" v-model="filters.datasource" />
-                </q-scroll-area>
-              </q-card-section>
-            </q-card>
+            <search-filter id='l1usecase' title='L1 Usecase' endpoint='/sigma/l1usecases' :params="queryParams"></search-filter>
           </div>
         </div>
+
         <div class="row q-mt-md">
           <div class="col">
-            <q-card flat class="filter-row">
-              <q-card-section>
-                <q-input v-model="filterL1Usecase" label="L1 Usecase">
-                  <template v-slot:prepend>
-                    <q-icon name="mdi-bullseye" />
-                  </template>
-                </q-input>
-                <q-scroll-area style="height: 250px;">
-                  <q-option-group :options="l1UseCaseOptions.filter(uc => uc.label.includes(filterL1Usecase))" label="L1 Usecase" type="radio" v-model="filters.l1Usecase" />
-                </q-scroll-area>
-              </q-card-section>
-            </q-card>
+            <search-filter id='l2usecase' title='L2 Usecase' endpoint='/sigma/l2usecases' :params="queryParams"></search-filter>
           </div>
         </div>
-        <div class="row q-mt-md">
-          <div class="col">
-            <q-card flat class="filter-row">
-              <q-card-section>
-                <q-input v-model="filterL2Usecase" label="L2 Usecase">
-                  <template v-slot:prepend>
-                    <q-icon name="mdi-bullseye" />
-                  </template>
-                </q-input>
-                <q-scroll-area style="height: 250px;">
-                  <q-option-group :options="l2UseCaseOptions.filter(uc => uc.label.includes(filterL2Usecase))" label="L2 Usecase" type="radio" v-model="filters.l2Usecase" />
-                </q-scroll-area>
-              </q-card-section>
-            </q-card>
-          </div>
-        </div>
-        <!-- <div class="row q-mt-md">
-          <div class="col">
-            <q-card flat class="filter-row">
-              <q-card-section>
-                <q-input v-model="filterTechnique" label="Technique">
-                  <template v-slot:prepend>
-                    <q-icon name="mdi-bullseye" />
-                  </template>
-                </q-input>
-                <q-scroll-area style="height: 550px;">
-                  <q-option-group :options="techniqueOptions.filter(technique => technique.label.includes(filterTechnique))" label="Techniques" type="radio" v-model="filters.technique" />
-                </q-scroll-area>
-              </q-card-section>
-            </q-card>
-          </div>
-        </div> -->
+
         <!-- /Dynamic filters-->
       </div>
       <!-- Filter column -->
@@ -116,13 +51,13 @@
               </q-card-section>
             </q-card>
             <q-card flat v-else>
-              <q-tabs v-model="tab">
+              <q-tabs v-model="phaseSelected">
                 <q-tab v-for="(phase, index) in phaseOptions" v-bind:key="index"
                   :name="phase" inline-label :label="phase">
                 </q-tab>
               </q-tabs>
               <q-stepper v-model="phaseStep" animated vertical header-nav ref="stepper">
-                <q-step v-for="(rule, index) in phaseSigma[tab]" v-bind:key="index"
+                <q-step v-for="(rule, index) in phaseSigma[phaseSelected]" v-bind:key="index"
                   :name="rule.hash" :title="`${rule.title} (${rule.technique.name} / ${rule.technique.references[0].external_id})`" icon="details">
                   <!-- <div class="row">
                     <div class="col-2">
@@ -235,84 +170,43 @@
 
 <script>
 import { component as VueCodeHighlight } from 'vue-code-highlight'
+import SearchFilter from 'components/SearchFilter'
 import 'vue-code-highlight/themes/prism-okaidia.css'
 
 export default {
   name: 'Sigma',
   components: {
-    VueCodeHighlight
+    VueCodeHighlight,
+    SearchFilter
   },
   data () {
     return {
-      tab: null,
-      phaseStep: '',
-      filters: {
-        datasource: '',
-        l1Usecase: '',
-        l2Usecase: '',
+      queryParams: {
+        integration: '',
         technique: '',
-        level: '',
-        status: ''
+        l1usecase: '',
+        l2usecase: '',
+        datasource: '',
+        status: '',
+        level: ''
       },
-      integrationOptions: [],
-      levelOptions: [
-        { value: '', label: 'Any' },
-        { value: 'low', label: 'low' },
-        { value: 'medium', label: 'medium' },
-        { value: 'high', label: 'high' },
-        { value: 'critical', label: 'critical' }
+      phaseSelected: '',
+      phaseOptions: [
       ],
-      statusOptions: [
-        { value: '', label: 'Any' },
-        { value: 'stable', label: 'stable' },
-        { value: 'testing', label: 'testing' },
-        { value: 'experimental', label: 'experimental' }
-      ],
-      techniqueOptions: [
-        { value: '', label: 'Any' }
-      ],
-      phaseOptions: [],
-      datasourceOptions: [
-        { value: '', label: 'Any' }
-      ],
-      l1UseCaseOptions: [
-        { value: '', label: 'Any' }
-      ],
-      l2UseCaseOptions: [
-        { value: '', label: 'Any' }
-      ],
-      filterLevel: '',
-      filterStatus: '',
-      filterTechnique: '',
-      filterL1Usecase: '',
-      filterL2Usecase: '',
-      filterDatasource: '',
       phaseSigma: {
-      },
-      phase: '',
-      actors: [
-        { 'value': '', 'label': 'Any' }
-      ]
+      }
     }
   },
   computed: {
     searchFilters () {
-      return {
-        integration: this.filters.integration,
-        technique: this.filters.technique,
-        l1usecase: this.filters.l1Usecase,
-        l2usecase: this.filters.l2Usecase,
-        datasource: this.filters.datasource,
-        status: this.filters.status,
-        level: this.filters.level
-      }
+      return this.$store.state.sigma.queryParams
     }
   },
   created () {
     this.refreshFilters()
   },
   watch: {
-    filters: {
+    searchFilters: {
       handler (value) {
         if (JSON.stringify(this.$route.query) !== JSON.stringify(this.searchFilters)) {
           this.$router.replace({ path: '/sigma', query: this.searchFilters })
@@ -321,7 +215,7 @@ export default {
       },
       deep: true
     },
-    tab: function (tab) {
+    phaseSelected: function (tab) {
       if (typeof tab !== 'undefined') {
         this.getSigma()
       }
@@ -331,69 +225,10 @@ export default {
     refreshFilters () {
       if (this.$route.query) {
         for (let [key, value] of Object.entries(this.$route.query)) {
-          this.filters[key] = value
+          this.$store.commit('sigma/setQueryParam', { id: key, value: value })
         }
       }
-      this.phaseSigma = {}
-      this.phaseOptions = []
-      this.getDatasources()
-      this.getTechniques()
-      this.getL1Usecases()
-      this.getL2Usecases()
       this.getPhases()
-      this.tab = this.phaseOptions[0]
-    },
-    getDatasources () {
-      this.$axios
-        .get('/sigma/datasources', {
-          params: this.searchFilters
-        })
-        .then(response => this.getDatasourcesSuccess(response['data']))
-    },
-    getDatasourcesSuccess (datasources) {
-      this.datasourceOptions = [{ value: '', label: 'Any' }]
-      datasources.forEach(ds => {
-        this.datasourceOptions.push({ 'value': ds, 'label': ds })
-      })
-    },
-    getL1Usecases () {
-      this.$axios
-        .get('/sigma/l1usecases', {
-          params: this.searchFilters
-        })
-        .then(response => this.getL1UsecasesSuccess(response['data']))
-    },
-    getL1UsecasesSuccess (usecases) {
-      this.l1UseCaseOptions = [{ value: '', label: 'Any' }]
-      usecases.forEach(uc => {
-        this.l1UseCaseOptions.push({ 'value': uc, 'label': uc })
-      })
-    },
-    getL2Usecases () {
-      this.$axios
-        .get('/sigma/l2usecases', {
-          params: this.searchFilters
-        })
-        .then(response => this.getL2UsecasesSuccess(response['data']))
-    },
-    getL2UsecasesSuccess (usecases) {
-      this.l2UseCaseOptions = [{ value: '', label: 'Any' }]
-      usecases.forEach(uc => {
-        this.l2UseCaseOptions.push({ 'value': uc, 'label': uc })
-      })
-    },
-    getTechniques () {
-      this.$axios
-        .get('/sigma/techniques', {
-          params: this.searchFilters
-        })
-        .then(response => this.getTechniquesSuccess(response['data']))
-    },
-    getTechniquesSuccess (techniuqes) {
-      this.techniqueOptions = [{ value: '', label: 'Any' }]
-      techniuqes.forEach(technique => {
-        this.techniqueOptions.push({ 'value': technique, 'label': technique })
-      })
     },
     getPhases () {
       this.$axios
@@ -404,23 +239,13 @@ export default {
     },
     getPhasesSuccess (phases) {
       this.phaseOptions = phases
-      this.tab = ''
-      this.tab = this.phaseOptions[0]
+      this.phaseSelected = this.phaseOptions[0]
     },
     getSigma () {
+      var queryParams = this.searchFilters
+      queryParams['phase'] = this.phaseSelected
       this.$axios
-        .get('/sigma', {
-          params: {
-            integration: this.filters.integration,
-            technique: this.filters.technique,
-            l1usecase: this.filters.l1Usecase,
-            l2usecase: this.filters.l2Usecase,
-            datasource: this.filters.datasource,
-            level: this.filters.level,
-            status: this.filters.status,
-            phase: this.tab
-          }
-        })
+        .get('/sigma', { params: queryParams })
         .then(response => this.getSigmaSuccess(response['data']))
     },
     getSigmaSuccess (rules) {
@@ -446,8 +271,6 @@ export default {
           })
         })
       })
-    },
-    addToQueue (technique) {
     }
   }
 }
