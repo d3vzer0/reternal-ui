@@ -13,6 +13,7 @@ import notifications from './notifications'
 import asyncTasks from './asyncTasks'
 import user from './user'
 import sigma from './sigma'
+import techniques from './techniques'
 
 Vue.use(Vuex)
 
@@ -30,6 +31,7 @@ const Store = new Vuex.Store({
     integrations,
     agents,
     scheduler,
+    techniques,
     tasks,
     user,
     coverage,

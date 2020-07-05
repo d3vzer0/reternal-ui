@@ -18,7 +18,8 @@ export default {
     id: String,
     title: String,
     endpoint: String,
-    params: Object
+    params: Object,
+    store: String
   },
   data () {
     return {
@@ -48,18 +49,18 @@ export default {
   computed: {
     queryParams: {
       get () {
-        return this.$store.state.sigma.queryParams
+        return this.$store.state[this.store].queryParams
       },
       set (value) {
-        this.$store.commit('sigma/setQueryParams', this.params)
+        this.$store.commit(`${this.store}/setQueryParams`, this.params)
       }
     },
     paramValue: {
       get () {
-        return this.$store.state.sigma.queryParams[this.id]
+        return this.$store.state[this.store].queryParams[this.id]
       },
       set (value) {
-        this.$store.commit('sigma/setQueryParam', { id: this.id, value: value })
+        this.$store.commit(`${this.store}/setQueryParam`, { id: this.id, value: value })
       }
     }
   },

@@ -1,88 +1,42 @@
 <template>
   <q-page>
-
     <!-- Center content row -->
     <div class="q-pa-md q-mt-md row">
-      <!-- Filter column -->
       <div class="col-2">
-
         <!-- Dynamic filters -->
         <div class="row">
           <div class="col">
-            <q-card flat class="filter-row">
-              <q-card-section>
-                <q-option-group :options="platformOptions" label="Platform" type="radio" v-model="selectedPlatform" />
-              </q-card-section>
-            </q-card>
+            <search-filter store='techniques' id='platform' title='Platform'
+              :params="queryParams" endpoint="/mapping/platforms">
+            </search-filter>
           </div>
         </div>
         <div class="row q-mt-md">
           <div class="col">
-            <q-card flat class="filter-row">
-              <q-card-section>
-                <q-input v-model="filterActor">
-                  <template v-slot:prepend>
-                    <q-icon name="group" />
-                  </template>
-                </q-input>
-                  <q-option-group :options="actors.filter(actor => actor.label.includes(filterActor))" label="Actors" type="radio" v-model="selectedActor" />
-              </q-card-section>
-            </q-card>
+            <search-filter store='techniques' id='actor' title='Actor'
+              :params="queryParams" endpoint="/mapping/actors">
+            </search-filter>
           </div>
         </div>
         <!-- /Dynamic filters-->
       </div>
-      <!-- Filter column -->
-
       <!-- Results column -->
       <div class="col q-pl-md">
         <div class="row">
           <div class="col">
-            <q-card flat class="my-card">
-              <q-card-section>
-                <div class="text-h6">Actor details</div>
-                <div class="text-h7" v-if="!actorDetails.name">Select an actor to view details and filter techniques</div>
-              </q-card-section>
-
-              <q-card-section v-if="actorDetails.name">
-                <div class="row">
-                  <div class="col-2">
-                    <b>Name</b>
-                  </div>
-                  <div class="col" >
-                    {{ actorDetails.name }}
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-2">
-                    <b>Description</b>
-                  </div>
-                  <div class="col">
-                    <q-markdown :src="actorDetails.description"></q-markdown>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-2">
-                    <b>Aliases</b>
-                  </div>
-                  <div class="col">
-                    {{ (actorDetails.aliases && actorDetails.aliases.length > 0) ? actorDetails.aliases.join(', ') : "" }}
-                  </div>
-                </div>
-              </q-card-section>
-            </q-card>
+            <actor-details :name="selectedActor"></actor-details>
           </div>
         </div>
         <div class="row q-mt-md">
           <div class="col">
             <q-card flat>
-              <q-tabs v-model="tab">
+              <q-tabs v-model="phaseSelected">
                 <q-tab v-for="(phase, index) in phaseOptions" v-bind:key="index"
                   :name="phase" inline-label :label="phase">
                 </q-tab>
               </q-tabs>
               <q-stepper v-model="phaseStep" animated vertical header-nav ref="stepper">
-                <q-step v-for="(technique, index) in phaseTechniques[tab]" v-bind:key="index"
+                <q-step v-for="(technique, index) in phaseTechniques[phaseSelected]" v-bind:key="index"
                   :name="technique.name" :title="`${technique.technique_name} (${technique.name})`" icon="details">
                   <div class="row">
                     <div class="col-2">
@@ -150,107 +104,72 @@
 
 <script>
 import { component as VueCodeHighlight } from 'vue-code-highlight'
+import SearchFilter from 'components/SearchFilter'
+import ActorDetails from 'components/ActorDetails'
 import 'vue-code-highlight/themes/prism-okaidia.css'
 
 export default {
   name: 'Agents',
   components: {
-    VueCodeHighlight
+    VueCodeHighlight,
+    ActorDetails,
+    SearchFilter
   },
   data () {
     return {
-      platformOptions: [
-        { 'value': 'Windows', 'label': 'Windows' },
-        { 'value': 'macOS', 'label': 'MacOS' },
-        { 'value': 'Linux', 'label': 'Linux' }
-      ],
-      tab: null,
+      queryParams: {
+        actor: '',
+        platform: ''
+      },
+      phaseSelected: '',
       phaseStep: '',
-      selectedPlatform: 'Windows',
       phaseOptions: [],
       phaseTechniques: {
-      },
-      selectedPhase: '',
-      actors: [
-        { 'value': '', 'label': 'Any' }
-      ],
-      actorDetails: {},
-      selectedActor: '',
-      filterActor: ''
+      }
     }
   },
   created () {
     this.getPhases()
-    this.getActors()
+  },
+  computed: {
+    searchFilters () {
+      return this.$store.state.techniques.queryParams
+    },
+    selectedActor () {
+      return this.$store.state.techniques.queryParams.actor
+    }
   },
   watch: {
-    selectedPlatform: function (platform) {
-      this.phaseTechniques = {}
-      this.getPhases()
+    searchFilters: {
+      handler (value) {
+        if (JSON.stringify(this.$route.query) !== JSON.stringify(this.searchFilters)) {
+          this.$router.replace({ path: '/techniques', query: this.searchFilters })
+        }
+        this.refreshFilters()
+      },
+      deep: true
     },
-    tab: function (tab) {
+    phaseSelected: function (tab) {
       this.getTechniques()
-    },
-    selectedActor: function (actor) {
-      this.phaseTechniques = {}
-      this.phaseOptions = []
-      this.getPhases()
-      if (actor !== '') {
-        this.getActorDetails(actor)
-      } else {
-        this.actorDetails = { }
-      }
     }
   },
   methods: {
-    getActors () {
-      this.$axios
-        .get('/mapping/actors')
-        .then(response => this.getActorsSuccess(response['data']))
-    },
-    getActorsSuccess (actors) {
-      actors.forEach(actor => {
-        this.actors.push({ 'value': actor, 'label': actor })
-      })
-    },
-    getActorDetails (actor) {
-      this.$axios
-        .get('/mitre/actor/' + actor)
-        .then(response => this.getActorDetailsSuccess(response['data']))
-    },
-    getActorDetailsSuccess (details) {
-      this.actorDetails = details
-    },
     getPhases () {
       this.$axios
-        .get('/mapping/techniques/distinct', {
-          params: {
-            platform: this.selectedPlatform,
-            actor: this.selectedActor,
-            distinct: 'kill_chain_phase'
-          }
-        })
+        .get('/mapping/phases', { params: this.searchFilters })
         .then(response => this.getPhasesSuccess(response['data']))
     },
     getPhasesSuccess (phases) {
       this.phaseOptions = phases
-      this.tab = this.phaseOptions[0]
-      this.getTechniques()
+      this.phaseSelected = this.phaseOptions[0]
     },
     getTechniques () {
+      var queryParams = { ...this.searchFilters, phase: this.phaseSelected }
       this.$axios
-        .get('/mapping/techniques', {
-          params: {
-            platform: this.selectedPlatform,
-            actor: this.selectedActor,
-            phase: this.tab,
-            technique: ''
-          }
-        })
+        .get('/mapping/techniques', { params: { queryParams } })
         .then(response => this.getTechniquesSuccess(response['data']))
     },
     getTechniquesSuccess (techniques) {
-      console.log(techniques)
       this.phaseTechniques = {
         'initial-access': [],
         'execution': [],

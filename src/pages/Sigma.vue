@@ -1,44 +1,48 @@
 <template>
   <q-page>
-
-    <!-- Center content row -->
     <div class="q-pa-md q-mt-md row">
       <!-- Filter column -->
       <div class="col-2">
-        <!-- Dynamic filters -->
         <div class="row">
           <div class="col">
-            <search-filter id='status' title='Status' endpoint='/sigma/status' :params="queryParams"></search-filter>
+            <search-filter store='sigma' id='status' title='Status'
+              endpoint='/sigma/status' :params="queryParams">
+            </search-filter>
           </div>
         </div>
         <div class="row q-mt-md">
           <div class="col">
-            <search-filter id='level' title='Level' endpoint='/sigma/level' :params="queryParams"></search-filter>
+            <search-filter store='sigma' id='level' title='Level'
+              endpoint='/sigma/level' :params="queryParams">
+            </search-filter>
           </div>
         </div>
 
         <div class="row q-mt-md">
           <div class="col">
-            <search-filter id='datasource' title='Datasource' endpoint='/sigma/datasources' :params="queryParams"></search-filter>
+            <search-filter store='sigma' id='datasource' title='Datasource'
+              endpoint='/sigma/datasources' :params="queryParams">
+            </search-filter>
           </div>
         </div>
 
         <div class="row q-mt-md">
           <div class="col">
-            <search-filter id='l1usecase' title='L1 Usecase' endpoint='/sigma/l1usecases' :params="queryParams"></search-filter>
+            <search-filter store='sigma' id='l1usecase' title='L1 Usecase'
+              endpoint='/sigma/l1usecases' :params="queryParams">
+            </search-filter>
           </div>
         </div>
 
         <div class="row q-mt-md">
           <div class="col">
-            <search-filter id='l2usecase' title='L2 Usecase' endpoint='/sigma/l2usecases' :params="queryParams"></search-filter>
+            <search-filter store='sigma' id='l2usecase' title='L2 Usecase'
+              endpoint='/sigma/l2usecases' :params="queryParams">
+            </search-filter>
           </div>
         </div>
-
-        <!-- /Dynamic filters-->
+        <!-- /Filters-->
       </div>
-      <!-- Filter column -->
-
       <!-- Results column -->
       <div class="col q-pl-md">
         <div class="row">
@@ -59,14 +63,6 @@
               <q-stepper v-model="phaseStep" animated vertical header-nav ref="stepper">
                 <q-step v-for="(rule, index) in phaseSigma[phaseSelected]" v-bind:key="index"
                   :name="rule.hash" :title="`${rule.title} (${rule.technique.name} / ${rule.technique.references[0].external_id})`" icon="details">
-                  <!-- <div class="row">
-                    <div class="col-2">
-                      <b>Sigma ID</b>
-                    </div>
-                    <div class="col">
-                      {{ rule.sigma_id }}
-                    </div>
-                  </div> -->
                   <div class="row">
                     <div class="col-2">
                       <b>Author</b>
@@ -107,15 +103,6 @@
                       {{ rule.references.join(', ') }}
                     </div>
                   </div>
-
-                  <!-- <div class="row">
-                    <div class="col-2">
-                      <b>Technique</b>
-                    </div>
-                    <div class="col">
-                      {{ rule.technique.name }}
-                    </div>
-                  </div> -->
                   <div class="row" v-if="rule.technique.magma">
                     <div class="col-2">
                       <b>Usecase</b>
@@ -124,14 +111,6 @@
                       {{ rule.technique.magma.l1_usecase_name }} / {{ rule.technique.magma.l2_usecase_name }}
                     </div>
                   </div>
-                  <!-- <div class="row">
-                    <div class="col-2">
-                      <b>External. ID</b>
-                    </div>
-                    <div class="col">
-                      {{ rule.technique.references[0].external_id }}
-                    </div>
-                  </div> -->
                   <div class="row q-mt-md">
                     <div class="col">
                       <div>
@@ -162,9 +141,7 @@
         </div>
       </div>
       <!-- /Results column -->
-
     </div>
-    <!-- /Center content row -->
   </q-page>
 </template>
 
@@ -190,6 +167,7 @@ export default {
         status: '',
         level: ''
       },
+      phaseStep: '',
       phaseSelected: '',
       phaseOptions: [
       ],
@@ -242,8 +220,7 @@ export default {
       this.phaseSelected = this.phaseOptions[0]
     },
     getSigma () {
-      var queryParams = this.searchFilters
-      queryParams['phase'] = this.phaseSelected
+      var queryParams = { ...this.searchFilters, phase: this.phaseSelected }
       this.$axios
         .get('/sigma', { params: queryParams })
         .then(response => this.getSigmaSuccess(response['data']))

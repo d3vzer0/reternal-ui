@@ -144,6 +144,8 @@
 
 export default {
   name: 'Mitre',
+  components: {
+  },
   data () {
     return {
       pagination: {
