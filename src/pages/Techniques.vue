@@ -78,7 +78,9 @@
                             ${{ command.module }} / {{ command.integration }}
                           </template>
                           <div>
-                            <vue-code-highlight class="language-bash">{{ JSON.stringify(command.input) }}</vue-code-highlight>
+                            <vue-code-highlight language="yaml">
+                              <pre>{{ dumpYAML(command.input) }}</pre>
+                            </vue-code-highlight>
                           </div>
                         </q-timeline-entry>
                       </q-timeline>
@@ -107,6 +109,9 @@ import { component as VueCodeHighlight } from 'vue-code-highlight'
 import SearchFilter from 'components/SearchFilter'
 import ActorDetails from 'components/ActorDetails'
 import 'vue-code-highlight/themes/prism-okaidia.css'
+import 'prism-es6/components/prism-markup-templating'
+import 'prism-es6/components/prism-yaml'
+import YAML from 'js-yaml'
 
 export default {
   name: 'Agents',
@@ -154,6 +159,9 @@ export default {
     }
   },
   methods: {
+    dumpYAML (data) {
+      return YAML.safeDump(data)
+    },
     refreshFilters () {
       if (this.$route.query) {
         for (let [key, value] of Object.entries(this.$route.query)) {
