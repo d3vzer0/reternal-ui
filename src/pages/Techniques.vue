@@ -154,6 +154,14 @@ export default {
     }
   },
   methods: {
+    refreshFilters () {
+      if (this.$route.query) {
+        for (let [key, value] of Object.entries(this.$route.query)) {
+          this.$store.commit('techniques/setQueryParam', { id: key, value: value })
+        }
+      }
+      this.getPhases()
+    },
     getPhases () {
       this.$axios
         .get('/mapping/phases', { params: this.searchFilters })

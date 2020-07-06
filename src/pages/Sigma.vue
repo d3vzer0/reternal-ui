@@ -63,7 +63,7 @@
               <q-stepper v-model="phaseStep" animated vertical header-nav ref="stepper">
                 <q-step v-for="(rule, index) in phaseSigma[phaseSelected]" v-bind:key="index"
                   :name="rule.hash" :title="`${rule.title} (${rule.technique.name} / ${rule.technique.references[0].external_id})`" icon="details">
-                  <div class="row">
+                  <!-- <div class="row">
                     <div class="col-2">
                       <b>Author</b>
                     </div>
@@ -97,31 +97,30 @@
                   </div>
                   <div class="row" v-if="rule.references">
                     <div class="col-2">
-                      <b>Reference</b>
+                      <b>References</b>
                     </div>
                     <div class="col">
-                      {{ rule.references.join(', ') }}
+                      <div class="row" v-for="rule in rule.references" v-bind:key="rule">
+                        <div class="col">
+                          {{ rule }}
+                        </div>
+                      </div>
                     </div>
                   </div>
                   <div class="row" v-if="rule.technique.magma">
                     <div class="col-2">
-                      <b>Usecase</b>
+                      <b>Magma UC</b>
                     </div>
                     <div class="col">
                       {{ rule.technique.magma.l1_usecase_name }} / {{ rule.technique.magma.l2_usecase_name }}
                     </div>
-                  </div>
-                  <div class="row q-mt-md">
+                  </div> -->
+                  <div class="row">
                     <div class="col">
                       <div>
-                        <vue-code-highlight class="language-bash">{{JSON.stringify(rule.detection)}}</vue-code-highlight>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="row q-mt-md">
-                    <div class="col">
-                      <div>
-                        <vue-code-highlight class="language-bash">{{JSON.stringify(rule.logsource)}}</vue-code-highlight>
+                        <vue-code-highlight language="yaml">
+                          <pre>{{dumpYAML(rule)}}</pre>
+                        </vue-code-highlight>
                       </div>
                     </div>
                   </div>
@@ -147,8 +146,11 @@
 
 <script>
 import { component as VueCodeHighlight } from 'vue-code-highlight'
-import SearchFilter from 'components/SearchFilter'
 import 'vue-code-highlight/themes/prism-okaidia.css'
+import 'prism-es6/components/prism-markup-templating'
+import 'prism-es6/components/prism-yaml'
+import SearchFilter from 'components/SearchFilter'
+import YAML from 'js-yaml'
 
 export default {
   name: 'Sigma',
@@ -200,6 +202,12 @@ export default {
     }
   },
   methods: {
+    dumpYAML (data) {
+      const clonedRule = Object.assign({ id: data.sigma_id }, data)
+      let { _id, techniques, technique, hash, ...slimRule } = clonedRule
+      delete slimRule['sigma_id']
+      return YAML.safeDump(slimRule)
+    },
     refreshFilters () {
       if (this.$route.query) {
         for (let [key, value] of Object.entries(this.$route.query)) {
