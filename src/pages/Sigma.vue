@@ -5,6 +5,20 @@
       <div class="col-2">
         <div class="row">
           <div class="col">
+            <search-select store='sigma' id='technique_id' title='Technique'
+              endpoint='/sigma/techniqueids' :params="queryParams">
+            </search-select>
+          </div>
+        </div>
+        <div class="row q-mt-md">
+          <div class="col">
+            <search-filter store='sigma' id='phase' title='Phase'
+              endpoint='/sigma/phases' :params="queryParams">
+            </search-filter>
+          </div>
+        </div>
+        <div class="row q-mt-md">
+          <div class="col">
             <search-filter store='sigma' id='status' title='Status'
               endpoint='/sigma/status' :params="queryParams">
             </search-filter>
@@ -63,58 +77,6 @@
               <q-stepper v-model="phaseStep" animated vertical header-nav ref="stepper">
                 <q-step v-for="(rule, index) in phaseSigma[phaseSelected]" v-bind:key="index"
                   :name="rule.hash" :title="`${rule.title} (${rule.technique.name} / ${rule.technique.references[0].external_id})`" icon="details">
-                  <!-- <div class="row">
-                    <div class="col-2">
-                      <b>Author</b>
-                    </div>
-                    <div class="col">
-                      {{ rule.author }}
-                    </div>
-                  </div>
-                  <div class="row">
-                    <div class="col-2">
-                      <b>Description</b>
-                    </div>
-                    <div class="col">
-                      {{ rule.description }}
-                    </div>
-                  </div>
-                  <div class="row" v-if="rule.status">
-                    <div class="col-2">
-                      <b>Status</b>
-                    </div>
-                    <div class="col">
-                      {{ rule.status }}
-                    </div>
-                  </div>
-                  <div class="row">
-                    <div class="col-2">
-                      <b>Level</b>
-                    </div>
-                    <div class="col">
-                      {{ rule.level }}
-                    </div>
-                  </div>
-                  <div class="row" v-if="rule.references">
-                    <div class="col-2">
-                      <b>References</b>
-                    </div>
-                    <div class="col">
-                      <div class="row" v-for="rule in rule.references" v-bind:key="rule">
-                        <div class="col">
-                          {{ rule }}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="row" v-if="rule.technique.magma">
-                    <div class="col-2">
-                      <b>Magma UC</b>
-                    </div>
-                    <div class="col">
-                      {{ rule.technique.magma.l1_usecase_name }} / {{ rule.technique.magma.l2_usecase_name }}
-                    </div>
-                  </div> -->
                   <div class="row">
                     <div class="col">
                       <div>
@@ -150,19 +112,23 @@ import 'vue-code-highlight/themes/prism-okaidia.css'
 import 'prism-es6/components/prism-markup-templating'
 import 'prism-es6/components/prism-yaml'
 import SearchFilter from 'components/SearchFilter'
+import SearchSelect from 'components/SearchSelect'
 import YAML from 'js-yaml'
 
 export default {
   name: 'Sigma',
   components: {
     VueCodeHighlight,
-    SearchFilter
+    SearchFilter,
+    SearchSelect
   },
   data () {
     return {
       queryParams: {
+        technique_id: '',
         integration: '',
         technique: '',
+        phase: '',
         l1usecase: '',
         l2usecase: '',
         datasource: '',
@@ -245,7 +211,8 @@ export default {
         'lateral-movement': { },
         'collection': { },
         'exfiltration': { },
-        'command-and-control': { }
+        'command-and-control': { },
+        'impact': { }
       }
       rules.forEach(rule => {
         rule.techniques.forEach(technique => {
