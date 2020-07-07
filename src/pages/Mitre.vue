@@ -35,9 +35,8 @@
 
     <!-- Center content row -->
     <div class="q-pa-md row">
-      <!-- Filter column -->
       <div class="col-2">
-        <div class="row q-mt-md">
+        <!-- <div class="row">
           <div class="col">
             <q-card flat class="filter-row">
               <q-card-section>
@@ -46,10 +45,10 @@
 
             </q-card>
           </div>
-        </div>
+        </div> -->
 
         <!-- Dynamic filters -->
-        <div class="row q-mt-md">
+        <div class="row">
           <div class="col">
             <q-card flat class="filter-row">
               <q-card-section>
@@ -85,58 +84,85 @@
 
       <!-- Results column -->
       <div class="col">
-        <div class="row">
-          <div class="col q-pa-md">
-            <q-table
-              grid
-              :data="sortedTechniques"
-              :columns="columns"
-              row-key="name"
-              hide-header
-              :pagination.sync="pagination"
-            >
-              <template v-slot:item="props">
-                <div class="q-pa-xs col-xs-12 col-sm-6 col-md-4">
-                  <q-card flat>
-                    <q-card-section class="bg-primary text-white">
-                    <div class="text-h6">{{ props.row._id | capitalize }}</div>
-                    </q-card-section>
-                    <q-separator />
-                    <q-card-section>
-                      <q-list separator>
-                        <q-scroll-area style="height: 1200px;">
-                          <q-item v-for="(technique, index) in props.row.techniques" v-bind:key="index">
-                            <q-item-section>
-                              <q-item-label>
-                                {{ technique.name }}
-                              </q-item-label>
-                              <q-item-label lines="1">
-                                <span v-for="dsa in technique.data_sources_available" v-bind:key="dsa.id">
-                                  <q-icon name="grade" color="black"/>
-                                </span>
-                                 <span v-for="ds in technique.data_sources" v-bind:key="ds.id">
-                                  <q-icon name="grade" color="grey"/>
-                                </span>
-                              </q-item-label>
-                            </q-item-section>
-                            <q-item-section avatar>
-                              <q-btn icon="help_outline" flat color="primary" @click="getTechniqueDetails(technique.technique_id)" />
-                            </q-item-section>
-                          </q-item>
-                        </q-scroll-area>
+        <div class="row q-mt-md">
+          <q-table
+            grid
+            :data="sortedTechniques"
+            :columns="columns"
+            row-key="_id"
+            hide-header
+            card-container-class="justify-around cardContainerClass"
+            :pagination.sync="pagination">
+            <template v-slot:item="props">
+              <div class="q-mr-md q-mb-xl col-xs-12 col-sm-3 col-md-3">
+                <q-card flat>
+                  <q-card-section>
+                    <q-btn
+                      fab color="primary" :icon="phaseIcons[props.row._id]" class="absolute"
+                      style="top: 0; right: 12px; transform: translateY(-30%);" @click="props.expand = !props.expand"
+                    />
+                    <div class="row no-wrap items-center">
+                      <div class="col text-h6 ellipsis">
+                        {{ props.row._id | capitalize}}
+                      </div>
+                    </div>
+                  </q-card-section>
+                  <q-seperator/>
+                  <q-card-section>
+                      <q-list>
+                        <q-item>
+                          <q-item-section avatar class="stats-number-card">
+                            {{ props.row.techniques.length }}
+                          </q-item-section>
+                          <q-item-section>
+                            <q-item-label>Techniques</q-item-label>
+                            <q-item-label caption>Total number of techniques in phase</q-item-label>
+                          </q-item-section>
+                        </q-item>
+                        <q-item>
+                          <q-item-section avatar class="stats-number-card">
+                            {{ props.row.techniques.filter(technique => technique.data_sources_available.length).length}}
+                          </q-item-section>
+                          <q-item-section>
+                            <q-item-label>Coverage</q-item-label>
+                            <q-item-label caption>Total techniques with at least 1 datasource available</q-item-label>
+                          </q-item-section>
+                        </q-item>
                       </q-list>
-                    </q-card-section>
-                  </q-card>
-                </div>
-              </template>
-            </q-table>
-          </div>
+                  </q-card-section>
+                  <q-separator />
+                  <q-card-section v-if="props.expand" :props="props">
+                    <q-list separator>
+                      <q-scroll-area style="height: 400px;">
+                        <q-item v-for="(technique, index) in props.row.techniques" v-bind:key="index">
+                          <q-item-section>
+                            <q-item-label>
+                              {{ technique.name }}
+                            </q-item-label>
+                            <q-item-label lines="1">
+                              <span v-for="dsa in technique.data_sources_available" v-bind:key="dsa.id">
+                                <q-icon name="grade" color="black"/>
+                              </span>
+                                <span v-for="ds in technique.data_sources" v-bind:key="ds.id">
+                                <q-icon name="grade" color="grey"/>
+                              </span>
+                            </q-item-label>
+                          </q-item-section>
+                          <q-item-section avatar>
+                            <q-btn icon="help_outline" flat color="primary" @click="getTechniqueDetails(technique.technique_id)" />
+                          </q-item-section>
+                        </q-item>
+                      </q-scroll-area>
+                    </q-list>
+                  </q-card-section>
+                </q-card>
+              </div>
+            </template>
+          </q-table>
         </div>
       </div>
       <!-- /Results column -->
-
     </div>
-    <!-- /Center content row -->
   </q-page>
 </template>
 
@@ -150,7 +176,7 @@ export default {
     return {
       pagination: {
         page: 1,
-        rowsPerPage: 3
+        rowsPerPage: 6
       },
       columns: [
         { name: '_id', label: '_id', field: '_id' },
@@ -162,10 +188,24 @@ export default {
         { 'value': 'Linux', 'label': 'Linux' }
       ],
       selectedPlatform: 'Windows',
+      phaseIcons: {
+        'initial-access': 'mdi-clock-start',
+        'execution': 'mdi-play-circle',
+        'persistence': 'mdi-backup-restore',
+        'privilege-escalation': 'mdi-account-plus',
+        'defense-evasion': 'mdi-shield-remove',
+        'credential-access': 'mdi-lock-question',
+        'discovery': 'mdi-folder-search',
+        'lateral-movement': 'mdi-lan-pending',
+        'exfiltration': 'mdi-file-upload',
+        'collection': 'mdi-content-save-all',
+        'command-and-control': 'mdi-swap-vertical-bold',
+        'impact': 'mdi-bomb'
+      },
       phaseOptions: [
         '', 'initial-access', 'execution', 'persistence', 'privilege-escalation',
         'defense-evasion', 'credential-access', 'discovery', 'lateral-movement',
-        'exfiltration', 'collection', 'command-and-control'
+        'exfiltration', 'collection', 'command-and-control', 'impact'
       ],
       selectedPhase: '',
       actorOptions: [
@@ -275,3 +315,10 @@ export default {
   }
 }
 </script>
+
+<style lang="scss">
+.stats-number-card {
+  font-size: 30px;
+}
+
+</style>

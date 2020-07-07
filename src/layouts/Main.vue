@@ -112,18 +112,18 @@
           </q-item>
           <q-item clickable v-ripple to="/mitre">
             <q-item-section avatar>
-              <q-icon name="mdi-book-search" />
+              <q-icon name="mdi-playlist-check" />
             </q-item-section>
             <q-item-section>
-              ATT&CK
+              Coverage
             </q-item-section>
           </q-item>
           <q-item clickable v-ripple to="/coverage">
             <q-item-section avatar>
-              <q-icon name="mdi-briefcase-check" />
+              <q-icon name="mdi-database-import" />
             </q-item-section>
             <q-item-section>
-              DeTTECT
+              Datasources
             </q-item-section>
           </q-item>
           <q-separator />
