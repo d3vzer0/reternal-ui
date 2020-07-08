@@ -1,0 +1,11 @@
+{
+  "backend": "RT_API_BASE_URL",
+  "oauth2": {
+    "authority": "RT_OAUTH_AUTHORITY_URL",
+    "url_auth": "RT_OAUTH_AUTHORIZE_URL",
+    "client_id": "RT_OAUTH_CLIENT_ID",
+    "redirect_uri": "RT_OAUTH_REDIRECT_URL",
+    "response_type": "code",
+    "scope": "openid profile email"
+  }
+}

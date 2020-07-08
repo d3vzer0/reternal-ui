@@ -13,10 +13,17 @@ FROM dependency-stage as build-stage
 
 COPY . .
 RUN quasar build
-
+ 
 # Runs output of reternal build-stage and hosts content
 # via nginx service
 FROM nginx:1.13.12-alpine as production-stage
+
+# Copy entrypoint
+COPY entrypoint.sh /usr/local/bin/
+RUN ln -s /usr/local/bin/entrypoint.sh
+
 COPY --from=build-stage /app/dist/spa/ /usr/share/nginx/html
 EXPOSE 80
+
+ENTRYPOINT [ "entrypoint.sh" ]
 CMD ["nginx", "-g", "daemon off;"]
