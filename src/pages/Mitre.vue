@@ -120,8 +120,11 @@
                           </q-item-section>
                         </q-item>
                         <q-item>
-                          <q-item-section avatar class="stats-number-card">
-                            {{ props.row.techniques.filter(technique => technique.data_sources_available.length).length}}
+                          <q-item-section avatar class="stats-number-card no-coverage" v-if="coverageCount(props.row) === 0">
+                            {{ coverageCount(props.row) }}
+                          </q-item-section>
+                          <q-item-section avatar class="stats-number-card has-coverage" v-else>
+                            {{ coverageCount(props.row) }}
                           </q-item-section>
                           <q-item-section>
                             <q-item-label>Coverage</q-item-label>
@@ -245,6 +248,9 @@ export default {
     }
   },
   methods: {
+    coverageCount (phase) {
+      return phase.techniques.filter(technique => technique.data_sources_available.length).length
+    },
     sortTechniques (techniques) {
       function compareOrder (a, b) {
         const stageOrder = {
@@ -321,4 +327,11 @@ export default {
   font-size: 30px;
 }
 
+.no-coverage {
+  color: red;
+}
+
+.has-coverage {
+  color: green;
+}
 </style>

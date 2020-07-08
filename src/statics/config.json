@@ -1,0 +1,11 @@
+{
+  "backend": "http://localhost:5000/api/v1",
+  "oauth2": {
+    "authority": "",
+    "url_auth": "",
+    "client_id": "",
+    "redirect_uri": "http://localhost/login",
+    "response_type": "code",
+    "scope": "openid profile email"
+  }
+}

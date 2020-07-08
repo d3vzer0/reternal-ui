@@ -1,4 +1,4 @@
-import config from '../assets/config.json'
+import config from '../statics/config.json'
 import Oidc from 'oidc-client'
 import Vue from 'vue'
 

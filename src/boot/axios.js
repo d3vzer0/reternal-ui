@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import axios from 'axios'
-import config from '../assets/config.json'
+import config from '../statics/config.json'
 import VueAxios from 'vue-axios'
 import store from '../store'
 
