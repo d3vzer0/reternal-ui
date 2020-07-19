@@ -34,7 +34,7 @@
               </div>
             </q-menu>
           </q-btn>
-          <q-btn-dropdown flat icon="person_pin" v-if="profile" :label="'Hi, ' + profile.nickname">
+          <q-btn-dropdown flat icon="person_pin" v-if="profile" :label="'Hi, ' + profile.name">
             <q-list>
               <q-item>
                   <q-item-section side>
@@ -170,6 +170,7 @@ export default {
   computed: {
     profile: {
       get: function () {
+        console.log(this.$store.state.user.access_token)
         return this.$store.state.user.profile
       }
     },

@@ -11,7 +11,7 @@ var oidcManager = new Oidc.UserManager({
   scope: config.oauth2.scope,
   automaticSilentRenew: true,
   filterProtocolClaims: true,
-  loadUserInfo: true
+  loadUserInfo: false
 })
 
 Vue.prototype.$oauth = oidcManager
