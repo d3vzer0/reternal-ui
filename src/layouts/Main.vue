@@ -5,7 +5,6 @@
         <q-btn flat dense round @click="leftDrawerOpen = !leftDrawerOpen" icon="menu" aria-label="Menu"/>
         <!-- <q-btn flat dense round @click="miniState = !miniState" icon="menu" aria-label="Menu"/> -->
         <q-toggle color="red" label="Dark Mode" v-model="darkmode" />
-        <q-button name="okookok" @click="setWebsocket()">aa</q-button>
         <q-toolbar-title></q-toolbar-title>
         <div class="action-controls q-ml-lg">
           <!-- <q-btn flat icon="info" />
@@ -14,8 +13,8 @@
         <div class="">
           <q-btn flat icon="mail">
             <q-badge floating color="red" v-if="notifications.length">{{ notifications.length }}</q-badge>
-            <q-menu v-if="notifications.length">
-              <div class="row no-wrap q-pa-md">
+            <q-menu fit v-if="notifications.length">
+              <div class="row no-wrap q-pa-md" style="width: 400px">
                 <div class="col-10">
                   <q-list seperator>
                     <q-item v-for="notification in notifications" v-bind:key="notification.id">
@@ -199,8 +198,14 @@ export default {
     connect: function () {
       console.log('connected yo')
     },
-    customEmit: function (data) {
-      console.log(data)
+    notification: function (data) {
+      var notification = {
+        title: 'Notification',
+        from: data.from,
+        message: data.content.message,
+        datetime: moment().format()
+      }
+      this.$store.commit('notifications/addNotification', notification)
     }
   },
   data () {
@@ -216,7 +221,7 @@ export default {
   },
   methods: {
     setWebsocket () {
-      this.$socket.client.emit('rawr', { hoi: 'doei' })
+      this.$socket.client.emit('notification', { message: 'doei' })
     },
     timeAgo (datetime) {
       return moment(datetime).fromNow()
