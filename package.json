@@ -19,6 +19,7 @@
     "jwt-decode": "^2.2.0",
     "oidc-client": "^1.10.1",
     "quasar": "^1.12.8",
+    "socket.io-client": "^2.3.0",
     "vis-data": "^6.5.1",
     "vis-network": "^7.6.2",
     "vis-util": "^4.0.0",
