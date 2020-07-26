@@ -5,6 +5,7 @@
         <q-btn flat dense round @click="leftDrawerOpen = !leftDrawerOpen" icon="menu" aria-label="Menu"/>
         <!-- <q-btn flat dense round @click="miniState = !miniState" icon="menu" aria-label="Menu"/> -->
         <q-toggle color="red" label="Dark Mode" v-model="darkmode" />
+        <q-button name="okookok" @click="setWebsocket()">aa</q-button>
         <q-toolbar-title></q-toolbar-title>
         <div class="action-controls q-ml-lg">
           <!-- <q-btn flat icon="info" />
@@ -163,6 +164,7 @@
 
 <script>
 import moment from 'moment'
+
 // import mgr from '../auth'
 
 export default {
@@ -193,6 +195,14 @@ export default {
       }
     }
   },
+  sockets: {
+    connect: function () {
+      console.log('connected yo')
+    },
+    customEmit: function (data) {
+      console.log(data)
+    }
+  },
   data () {
     return {
       // profile: {},
@@ -202,8 +212,12 @@ export default {
   },
   created () {
     this.pollTasks()
+    this.$socket.client.open()
   },
   methods: {
+    setWebsocket () {
+      this.$socket.client.emit('rawr', { hoi: 'doei' })
+    },
     timeAgo (datetime) {
       return moment(datetime).fromNow()
     },

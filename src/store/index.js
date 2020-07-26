@@ -14,6 +14,7 @@ import asyncTasks from './asyncTasks'
 import user from './user'
 import sigma from './sigma'
 import techniques from './techniques'
+import ws from './ws'
 
 Vue.use(Vuex)
 
@@ -38,7 +39,8 @@ const Store = new Vuex.Store({
     notifications,
     searchIntegrations,
     sigma,
-    asyncTasks
+    asyncTasks,
+    ws
     // example
   },
 

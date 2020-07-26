@@ -26,6 +26,13 @@
         </div>
         <div class="row q-mt-md">
           <div class="col">
+            <search-select store='sigma' id='tags' title='Tags'
+              endpoint='/sigma/tags' :params="queryParams">
+            </search-select>
+          </div>
+        </div>
+        <div class="row q-mt-md">
+          <div class="col">
             <search-filter store='sigma' id='level' title='Level'
               endpoint='/sigma/level' :params="queryParams">
             </search-filter>
@@ -125,6 +132,7 @@ export default {
   data () {
     return {
       queryParams: {
+        tags: '',
         technique_id: '',
         integration: '',
         technique: '',
@@ -150,6 +158,7 @@ export default {
   },
   created () {
     this.refreshFilters()
+    this.$store.state.ws.connection.send({ 'hoi': 'daar' })
   },
   watch: {
     searchFilters: {

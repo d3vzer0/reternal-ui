@@ -3,7 +3,6 @@ import Oidc from 'oidc-client'
 import Vue from 'vue'
 
 var oidcManager = new Oidc.UserManager({
-  userStore: new Oidc.WebStorageStateStore(),
   authority: config.oauth2.authority,
   client_id: config.oauth2.client_id,
   redirect_uri: config.oauth2.redirect_uri,

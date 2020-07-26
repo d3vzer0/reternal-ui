@@ -28,6 +28,7 @@
     "vue-d3-network": "^0.1.28",
     "vue-moment": "^4.1.0",
     "vue-oidc-client": "^0.3.1",
+    "vue-socket.io-extended": "^4.0.4",
     "vue-vis-network": "^1.0.2",
     "yargs-parser": "^18.1.3"
   },

@@ -65,6 +65,7 @@ export default {
       if (this.$route.query) {
         this.$oauth.signinRedirectCallback().then(user => {
           this.$store.commit('user/setUser', user)
+          this.$setSocket(user.access_token)
           this.$router.push({ path: '/' })
         })
       }
