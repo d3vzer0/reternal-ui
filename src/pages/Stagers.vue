@@ -6,7 +6,7 @@
         <!-- Dynamic filters -->
          <div class="row">
           <div class="col">
-            <ModulesActive></ModulesActive>
+            <C2ModulesActive></C2ModulesActive>
           </div>
         </div>
 
@@ -103,7 +103,7 @@
 </template>
 
 <script>
-import ModulesActive from 'components/Modules'
+import C2ModulesActive from 'components/C2Modules'
 import { component as VueCodeHighlight } from 'vue-code-highlight'
 import 'vue-code-highlight/themes/prism-okaidia.css'
 
@@ -111,7 +111,7 @@ export default {
   name: 'Stagers',
   components: {
     VueCodeHighlight,
-    ModulesActive
+    C2ModulesActive
   },
   data () {
     return {

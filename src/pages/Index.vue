@@ -3,7 +3,7 @@
     <!-- Center content row -->
     <div class="q-mt-md row justify-around q-gutter-sm">
       <div class="col-xs-11 col-sm-5 col-md-5 col-lg-5 col-xl-5">
-        <ModulesActive></ModulesActive>
+        <C2ModulesActive></C2ModulesActive>
       </div>
       <div class="col-xs-11 col-sm-5 col-md-5 col-lg-5 col-xl-5">
         <SearchModulesActive></SearchModulesActive>
@@ -171,13 +171,13 @@
 
 <script>
 import { Network } from 'vue-vis-network'
-import ModulesActive from 'components/Modules'
+import C2ModulesActive from 'components/C2Modules'
 import SearchModulesActive from 'components/SearchModules'
 
 export default {
   name: 'PageIndex',
   components: {
-    ModulesActive,
+    C2ModulesActive,
     SearchModulesActive,
     Network
   },

@@ -44,12 +44,17 @@
 <script>
 
 export default {
-  name: 'ModulesActive',
+  name: 'C2ModulesActive',
   computed: {
     integrationOptions: {
       get () {
         return this.$store.state.integrations.integrationOptions
       }
+    }
+  },
+  sockets: {
+    result: function (data) {
+      this.$getIntegrationsResults(data.task)
     }
   },
   watch: {

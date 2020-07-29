@@ -8,7 +8,7 @@
         <!-- Dynamic filters -->
         <div class="row q-mb-md">
           <div class="col">
-            <ModulesActive></ModulesActive>
+            <C2ModulesActive></C2ModulesActive>
           </div>
         </div>
         <div class="row">
@@ -129,12 +129,12 @@
 </template>
 
 <script>
-import ModulesActive from 'components/Modules'
+import C2ModulesActive from 'components/C2Modules'
 
 export default {
   name: 'Listeners',
   components: {
-    ModulesActive
+    C2ModulesActive
   },
   computed: {
     forgotRequired: {

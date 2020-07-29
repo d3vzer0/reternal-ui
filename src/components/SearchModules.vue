@@ -45,6 +45,11 @@ export default {
       }
     }
   },
+  sockets: {
+    result: function (data) {
+      this.$getSearchIntegrationsResults(data.task)
+    }
+  },
   watch: {
     integrationOptions: function (element) {
       this.slide = Object.keys(this.integrationOptions)[0]
