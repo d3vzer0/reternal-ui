@@ -62,12 +62,13 @@
               </q-card-actions>
             </q-card>
           </q-dialog>
-          <div class="col-3 q-pa-md" v-if="agentOptions === []">
-            <q-card flat class="agent-card">
+          <div class="col-3 q-pa-md" v-if="agentOptions.length >= 0">
+            <div class='text-h6'>No agents running yet</div>
+            <!-- <q-card flat class="agent-card">
               <q-card-section>
                 <div class='text-h6'>No agents running yet</div>
               </q-card-section>
-            </q-card>
+            </q-card> -->
           </div>
           <div class="col-3 q-pa-md" v-for="(agent, index) in agentOptions" v-bind:key="index">
             <q-card flat class="agent-card">
@@ -94,9 +95,9 @@
 
               <q-separator />
               <q-card-actions align="around">
-                <!-- <q-btn flat icon="stop"  />
-                <q-btn flat icon="history" /> -->
                 <q-btn flat icon="info" @click="agentDetails = agent, showAgentDetails = true" />
+                <q-btn flat icon="stop" @click="stopAgent(agent)" />
+                <q-btn flat icon="delete" @click="deleteAgent(agent)"/>
               </q-card-actions>
               <q-separator />
               <q-card-section>
@@ -177,6 +178,12 @@ export default {
       this.$axios
         .get(`/state/agents/get/${response.task}`)
         .then(response => this.getAgentsSuccess(response.data))
+    },
+    stopAgent: function (response) {
+      this.getAgents()
+    },
+    deleteAgent: function (response) {
+      this.getAgents()
     }
   },
   computed: {
@@ -225,6 +232,14 @@ export default {
     }
   },
   methods: {
+    stopAgent (agent) {
+      this.$axios
+        .get(`agents/${agent.integration}/${agent.name}/stop`)
+    },
+    deleteAgent (agent) {
+      this.$axios
+        .delete(`agents/${agent.integration}/${agent.name}`)
+    },
     clickety (a) {
       console.log(a)
     },
