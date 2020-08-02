@@ -2,11 +2,11 @@ export default {
   methods: {
     $getIntegrations () {
       this.$axios
-        .get('/workers')
+        .get('/workers/c2')
     },
     $getIntegrationsResults (uuid) {
       this.$axios
-        .get('/workers/search/' + uuid)
+        .get('/workers/c2/' + uuid)
         .then(response => this.$getIntegrationsSuccess(response['data']))
     },
     $getIntegrationsSuccess (integrations) {

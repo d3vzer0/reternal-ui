@@ -23,7 +23,7 @@
           <div class="col">
             <q-card flat class="filter-row">
               <q-card-section>
-                <q-option-group :options="platformOptions" label="Platform" type="radio" v-model="selectedPlatform" :disable="selectedIntegration"/>
+                <q-option-group :options="platformOptions" label="Platform" type="radio" v-model="selectedPlatform" :disable="selectedIntegration === null"/>
               </q-card-section>
             </q-card>
           </div>
@@ -138,6 +138,18 @@ export default {
   created () {
     this.$getIntegrations()
   },
+  sockets: {
+    getStagers: function (response) {
+      this.$axios
+        .get(`/state/stagers/get/${response.task}`)
+        .then(response => this.getStagersSuccess(response.data))
+    },
+    createStager: function (response) {
+      this.$axios
+        .get(`/state/stagers/create/${response.task}`)
+        .then(response => this.createStagerSuccess(response.data))
+    }
+  },
   watch: {
     selectedIntegration: function (integration) {
       this.getStagers()
@@ -177,7 +189,6 @@ export default {
     getStagers () {
       this.$axios
         .get('/stagers/' + this.selectedIntegration)
-        .then(response => this.getStagersSuccess(response['data']))
     },
     getStagersSuccess (stagers) {
       this.integrationStagers = stagers
@@ -195,7 +206,6 @@ export default {
       this.stagerDisplayed = false
       this.$axios
         .post(`/stagers/${this.selectedIntegration}`, postData)
-        .then(response => this.createStagerSuccess(response['data']))
     },
     createStagerSuccess (stager) {
       this.stagerContent = stager['content']

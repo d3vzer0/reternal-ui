@@ -46,7 +46,7 @@ export default {
     }
   },
   sockets: {
-    result: function (data) {
+    getWorkersSearch: function (data) {
       this.$getSearchIntegrationsResults(data.task)
     }
   },

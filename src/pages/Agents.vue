@@ -172,6 +172,13 @@ export default {
     this.$getIntegrations()
     this.getAgents()
   },
+  sockets: {
+    getAgents: function (response) {
+      this.$axios
+        .get(`/state/agents/get/${response.task}`)
+        .then(response => this.getAgentsSuccess(response.data))
+    }
+  },
   computed: {
     terminalPrompt () {
       return `[${this.terminalUser} ${this.terminalPath}]`
@@ -225,7 +232,6 @@ export default {
       for (var integration in this.$store.state.integrations.integrationOptions) {
         this.$axios
           .get('/agents/' + integration)
-          .then(response => this.getAgentsSuccess(response['data']))
       }
     },
     getAgentsSuccess (agents) {

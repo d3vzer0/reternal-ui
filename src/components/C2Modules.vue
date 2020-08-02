@@ -53,7 +53,9 @@ export default {
     }
   },
   sockets: {
-    result: function (data) {
+    getWorkersC2: function (data) {
+      console.log(1)
+      console.log(data)
       this.$getIntegrationsResults(data.task)
     }
   },

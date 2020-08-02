@@ -107,7 +107,7 @@
                       </div>
                     </div>
                   </q-card-section>
-                  <q-seperator/>
+                  <!-- <q-seperator/> -->
                   <q-card-section>
                       <q-list>
                         <q-item>

@@ -158,7 +158,6 @@ export default {
   },
   created () {
     this.refreshFilters()
-    this.$store.state.ws.connection.send({ 'hoi': 'daar' })
   },
   watch: {
     searchFilters: {

@@ -71,6 +71,9 @@
                       </q-stepper-navigation>
                     </template>
                   </q-stepper>
+                  <q-inner-loading :showing="listenerStarting">
+                    <q-spinner size="5em" color="teal" />
+                  </q-inner-loading>
                 </q-card-section>
               </q-card>
             </div>
@@ -116,6 +119,9 @@
                     </q-tr>
                   </template>
                 </q-table>
+                <q-inner-loading :showing="listenerStopping">
+                  <q-spinner size="5em" color="teal" />
+                </q-inner-loading>
               </q-card-section>
             </q-card>
           </div>
@@ -162,6 +168,8 @@ export default {
   },
   data () {
     return {
+      listenerStarting: false,
+      listenerStopping: false,
       selectedIntegration: null,
       listenerOptions: [],
       listenerSettings: {},
@@ -180,8 +188,27 @@ export default {
     }
   },
   created () {
-    console.log(this.$store.state.user.profile.name)
     this.$getIntegrations()
+  },
+  sockets: {
+    getListeners: function (response) {
+      this.$axios
+        .get(`/state/listeners/get/${response.task}`)
+        .then(response => this.getListenersSuccess(response.data))
+    },
+    getListenerOptions: function (response) {
+      this.$axios
+        .get(`/state/listeneroptions/get/${response.task}`)
+        .then(response => this.getListenerOptionsSuccess(response.data))
+    },
+    createListener: function (response) {
+      this.listenerStarting = false
+      this.getListeners()
+    },
+    deleteListener: function (response) {
+      this.listenerStopping = false
+      this.getListeners()
+    }
   },
   watch: {
     selectedIntegration: function (integration) {
@@ -195,13 +222,12 @@ export default {
     },
     getListenerOptions () {
       this.$axios
-        .get('/listeners/options/' + this.selectedIntegration)
-        .then(response => this.getListenerOptionsSuccess(response['data']))
+        .get('/listeneroptions/' + this.selectedIntegration)
     },
     deleteListener (listener) {
+      this.listenerStopping = true
       this.$axios
         .delete(`/listener/${this.selectedIntegration}/${listener}`)
-        .then(response => this.getListeners())
     },
     getListenerOptionsSuccess (listeners) {
       this.listenerOptions = Object.keys(listeners)
@@ -210,7 +236,6 @@ export default {
     getListeners () {
       this.$axios
         .get('/listeners/' + this.selectedIntegration)
-        .then(response => this.getListenersSuccess(response['data']))
     },
     getListenersSuccess (listeners) {
       this.listenersActive = listeners
@@ -223,9 +248,9 @@ export default {
           postData[key] = relatedListener[key]['default']
         }
       })
+      this.listenerStarting = true
       this.$axios
         .post(`/listeners/${this.selectedIntegration}/${this.listenerSelected}`, postData)
-        .then(response => this.getListeners())
     }
   }
 }

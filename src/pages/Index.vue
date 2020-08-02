@@ -257,7 +257,9 @@ export default {
   created () {
     this.$getIntegrations()
     this.$getSearchIntegrations()
-    this.getStatsCount()
+    this.getCountTechniques()
+    this.getCountRules()
+    this.getCountCoverage()
     this.getCampaigns()
   },
   methods: {
@@ -303,15 +305,29 @@ export default {
         })
       })
     },
-    getStatsCount () {
+    getCountTechniques () {
       this.$axios
-        .get('/stats/count')
-        .then(response => this.getStatsCountSuccess(response['data']))
+        .get('/stats/count/techniques')
+        .then(response => this.getCountTechniquesSuccess(response['data']))
     },
-    getStatsCountSuccess (response) {
-      this.rulesCount = response['rules']
-      this.techniquesCount = response['techniques']
-      this.coverageCount = response['coverage']
+    getCountTechniquesSuccess (response) {
+      this.techniquesCount = response.count
+    },
+    getCountRules () {
+      this.$axios
+        .get('/stats/count/rules')
+        .then(response => this.getCountRulesSuccess(response['data']))
+    },
+    getCountRulesSuccess (response) {
+      this.rulesCount = response.count
+    },
+    getCountCoverage () {
+      this.$axios
+        .get('/stats/count/coverage')
+        .then(response => this.getCountCoverageSuccess(response['data']))
+    },
+    getCountCoverageSuccess (response) {
+      this.coverageCount = response.count
     },
     getCampaigns () {
       this.$axios
