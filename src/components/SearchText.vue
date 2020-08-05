@@ -1,7 +1,7 @@
 <template>
   <q-card flat class="filter-rows search-text">
     <q-card-section>
-      <q-input v-model="filterInput" :label="title" />
+      <q-input dense square v-model="filterInput" :label="title" v-on:keyup.enter="searchItems"/>
     </q-card-section>
   </q-card>
 </template>
@@ -12,24 +12,12 @@ export default {
   props: {
     id: String,
     title: String,
-    endpoint: String,
-    params: Object,
     store: String
   },
   data () {
     return {
-      filterInput: '',
+      filterInput: ''
     }
-  },
-  created () {
-    this.queryParams = this.params
-  },
-  watch: {
-    filterInput: {
-      handler (value) {
-        this.paramValue = value
-      }
-    },
   },
   computed: {
     paramValue: {
@@ -39,6 +27,11 @@ export default {
       set (value) {
         this.$store.commit(`${this.store}/setQueryParam`, { id: this.id, value: value })
       }
+    }
+  },
+  methods: {
+    searchItems (item) {
+      this.paramValue = this.filterInput
     }
   }
 }

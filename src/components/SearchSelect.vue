@@ -1,7 +1,7 @@
 <template>
   <q-card flat class="filter-rows search-select">
     <q-card-section>
-      <q-select v-model="filterSelected" use-input input-debounce="0"
+      <q-select dense v-model="filterSelected" use-input input-debounce="0"
         :label="title" :options="filteredOptions" @filter="filterFn" behavior="menu">
         <template v-slot:no-option>
           <q-item>

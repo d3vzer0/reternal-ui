@@ -216,7 +216,6 @@ export default {
     }
   },
   created () {
-    this.pollTasks()
     this.$socket.client.open()
   },
   methods: {

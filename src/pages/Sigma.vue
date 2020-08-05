@@ -1,20 +1,20 @@
 <template>
   <q-page>
-    <div class="q-pa-md q-mt-md row">
+    <div class="q-pa-md row">
       <!-- Filter column -->
       <div class="col-2">
         <div class="row">
           <div class="col">
-            <search-select store='sigma' id='technique_id' title='Technique'
-              endpoint='/sigma/techniqueids' :params="queryParams">
+            <search-select store='sigma' id='tags' title='Tags'
+              endpoint='/sigma/tags' :params="queryParams">
             </search-select>
           </div>
         </div>
         <div class="row q-mt-md">
           <div class="col">
-            <search-filter store='sigma' id='phase' title='Phase'
-              endpoint='/sigma/phases' :params="queryParams">
-            </search-filter>
+            <search-select store='sigma' id='technique_id' title='Technique'
+              endpoint='/sigma/techniqueids' :params="queryParams">
+            </search-select>
           </div>
         </div>
         <div class="row q-mt-md">
@@ -26,19 +26,18 @@
         </div>
         <div class="row q-mt-md">
           <div class="col">
-            <search-select store='sigma' id='tags' title='Tags'
-              endpoint='/sigma/tags' :params="queryParams">
-            </search-select>
-          </div>
-        </div>
-        <div class="row q-mt-md">
-          <div class="col">
             <search-filter store='sigma' id='level' title='Level'
               endpoint='/sigma/level' :params="queryParams">
             </search-filter>
           </div>
         </div>
-
+        <div class="row q-mt-md">
+          <div class="col">
+            <search-filter store='sigma' id='phase' title='Tactic'
+              endpoint='/sigma/phases' :params="queryParams">
+            </search-filter>
+          </div>
+        </div>
         <div class="row q-mt-md">
           <div class="col">
             <search-filter store='sigma' id='datasource' title='Datasource'
@@ -46,7 +45,6 @@
             </search-filter>
           </div>
         </div>
-
         <div class="row q-mt-md">
           <div class="col">
             <search-filter store='sigma' id='l1usecase' title='L1 Usecase'
@@ -54,7 +52,6 @@
             </search-filter>
           </div>
         </div>
-
         <div class="row q-mt-md">
           <div class="col">
             <search-filter store='sigma' id='l2usecase' title='L2 Usecase'
@@ -66,6 +63,11 @@
       </div>
       <!-- Results column -->
       <div class="col q-pl-md">
+        <div class="row">
+          <div class="col">
+            <search-text store="sigma" id="search" title="Search"></search-text>
+          </div>
+        </div>
         <div class="row">
           <div class="col">
             <q-card flat v-if="phaseOptions.length === 0">
@@ -120,6 +122,7 @@ import 'prism-es6/components/prism-markup-templating'
 import 'prism-es6/components/prism-yaml'
 import SearchFilter from 'components/SearchFilter'
 import SearchSelect from 'components/SearchSelect'
+import SearchText from 'components/SearchText'
 import YAML from 'js-yaml'
 
 export default {
@@ -127,11 +130,13 @@ export default {
   components: {
     VueCodeHighlight,
     SearchFilter,
-    SearchSelect
+    SearchSelect,
+    SearchText
   },
   data () {
     return {
       queryParams: {
+        search: '',
         tags: '',
         technique_id: '',
         integration: '',

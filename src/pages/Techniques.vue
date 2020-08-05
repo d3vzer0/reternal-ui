@@ -29,6 +29,11 @@
         </div>
         <div class="row q-mt-md">
           <div class="col">
+            <search-text store="techniques" id="search" title="Search"></search-text>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col">
             <q-card flat>
               <q-tabs v-model="phaseSelected">
                 <q-tab v-for="(phase, index) in phaseOptions" v-bind:key="index"
@@ -112,19 +117,22 @@ import 'vue-code-highlight/themes/prism-okaidia.css'
 import 'prism-es6/components/prism-markup-templating'
 import 'prism-es6/components/prism-yaml'
 import YAML from 'js-yaml'
+import SearchText from 'components/SearchText'
 
 export default {
   name: 'Agents',
   components: {
     VueCodeHighlight,
     ActorDetails,
-    SearchFilter
+    SearchFilter,
+    SearchText
   },
   data () {
     return {
       queryParams: {
         actor: '',
-        platform: ''
+        platform: '',
+        search: ''
       },
       phaseSelected: '',
       phaseStep: '',
