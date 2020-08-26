@@ -327,8 +327,8 @@ export default {
       console.log(this.tasks)
       this.showScheduleScenario = false
       var campaignData = {
-        tasks: this.tasks,
-        dependencies: this.dependencies,
+        nodes: this.tasks,
+        edges: this.dependencies,
         name: this.campaignName
       }
       this.$axios

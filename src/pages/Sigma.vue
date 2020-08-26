@@ -3,7 +3,60 @@
     <div class="q-pa-md row">
       <!-- Filter column -->
       <div class="col-2">
-        <div class="row">
+        <div class="row justify-end">
+          <div class="col">
+            <q-btn style="width: 100%;" unelevated color="primary" icon="add" label="Package">
+              <q-menu fit>
+                <q-list>
+                  <q-item clickable unelevated>
+                    <q-item-section>Splunk</q-item-section>
+                    <q-item-section side>
+                      <q-icon name="keyboard_arrow_right" />
+                    </q-item-section>
+                    <q-menu anchor="top right" self="top left">
+                      <q-list>
+                        <q-item clickable v-close-popup>
+                          <q-item-section>Splunk App Package</q-item-section>
+                        </q-item>
+                        <q-item clickable v-close-popup>
+                          <q-item-section>Raw Searches</q-item-section>
+                        </q-item>
+                      </q-list>
+                    </q-menu>
+                  </q-item>
+                  <q-item clickable unelevated>
+                    <q-item-section>ElasticSearch</q-item-section>
+                    <q-item-section side>
+                      <q-icon name="keyboard_arrow_right" />
+                    </q-item-section>
+                    <q-menu anchor="top right" self="top left">
+                      <q-list>
+                        <q-item clickable v-close-popup>
+                          <q-item-section>Raw Searches</q-item-section>
+                        </q-item>
+                      </q-list>
+                    </q-menu>
+                  </q-item>
+                  <q-item clickable unelevated>
+                    <q-item-section>Sentinel</q-item-section>
+                    <q-item-section side>
+                      <q-icon name="keyboard_arrow_right" />
+                    </q-item-section>
+                    <q-menu anchor="top right" self="top left">
+                      <q-list>
+                        <q-item clickable v-close-popup>
+                          <q-item-section>Raw Searches</q-item-section>
+                        </q-item>
+                      </q-list>
+                    </q-menu>
+                  </q-item>
+                </q-list>
+              </q-menu>
+            </q-btn>
+            <!-- <q-btn color="primary" round icon="add"/> -->
+          </div>
+        </div>
+        <div class="row q-mt-md">
           <div class="col">
             <search-select store='sigma' id='tags' title='Tags'
               endpoint='/sigma/tags' :params="queryParams">
@@ -97,8 +150,10 @@
                   </div>
                   <div class="row q-mt-md">
                     <div class="col">
+                      {{ rule.data_sources }}
                       <span v-for="datasource in rule.technique.data_sources" v-bind:key="datasource">
                         <q-chip clickable v-if="rule.technique.data_sources_available.includes(datasource)"
+                        {{ rule }}
                           color="teal" text-color="white" icon="done" @click="$router.push({ path: '/coverage', query: { datasource: datasource } })">{{ datasource }}</q-chip>
                         <q-chip clickable v-else icon="highlight_off" @click="$router.push({ path: '/coverage', query: { datasource: datasource } })">{{ datasource }}</q-chip>
                       </span>

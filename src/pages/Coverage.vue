@@ -26,7 +26,7 @@
                   </q-item-section>
                   <q-item-section side top>
                     <q-item-label caption>Available</q-item-label>
-                    <q-icon name="check" v-if="coverage[props.value].enabled" class="dsavailable" />
+                    <q-icon name="check" v-if="coverage[props.value].products.length > 0" class="dsavailable" />
                     <q-icon name="close" v-else class="dsmissing"/>
                   </q-item-section>
                 </q-item>
@@ -63,7 +63,7 @@
                 </div>
               </q-card-section>
               <q-card-section>
-                <div class="row">
+                <!-- <div class="row">
                   <div class="col q-pa-sm">
                     <q-input filled v-model="datasourceDetails.date_connected" mask="date" label="Connected date">
                       <template v-slot:append>
@@ -75,7 +75,7 @@
                       </template>
                     </q-input>
                   </div>
-                </div>
+                </div> -->
                 <div class="row">
                   <div class="col q-pa-sm">
                     <q-editor v-model="datasourceDetails.comment" min-height="5rem" />
@@ -282,7 +282,6 @@ export default {
         datetime: moment().format()
       }
       this.$store.commit('notifications/addNotification', notification)
-      this.$store.commit('asyncTasks/add', { 'taskId': response.task, 'taskName': notification.title })
     },
     deleteProductRow (row) {
       this.datasourceProducts = this.datasourceProducts.filter(e => !e.name.includes(row.name))
@@ -318,7 +317,6 @@ export default {
         data_source_name: datasource,
         date_connected: null,
         available_for_data_analytics: false,
-        enabled: false,
         products: [
         ],
         comment: '',
