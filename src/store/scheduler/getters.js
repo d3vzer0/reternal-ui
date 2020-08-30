@@ -1,5 +1,5 @@
 export function getTasks (state) {
-  var tasks = []
+  let tasks = []
   state.nodes.forEach(task => {
     tasks.push(task.taskData)
   })
@@ -7,7 +7,7 @@ export function getTasks (state) {
 }
 
 export function getNodes (state) {
-  var allNodes = []
+  let allNodes = []
   state.nodes.forEach(node => {
     allNodes.push({ 'id': node.id, 'label': node.label, 'taskData': node.taskData })
   })
@@ -15,7 +15,7 @@ export function getNodes (state) {
 }
 
 export function getEdges (state) {
-  var allEdges = []
+  let allEdges = []
   state.edges.forEach(edge => {
     allEdges.push({ 'source': edge.from, 'to': edge.to })
   })
@@ -23,7 +23,7 @@ export function getEdges (state) {
 }
 
 export function getAgents (state) {
-  var allAgents = []
+  let allAgents = []
   state.agents.forEach(agent => {
     allAgents.push({ 'id': agent.value, 'name': agent.value, 'integration': agent.integration })
   })
@@ -31,7 +31,7 @@ export function getAgents (state) {
 }
 
 export function getDependencies (state) {
-  var dependencies = []
+  let dependencies = []
   state.edges.forEach(dep => {
     dependencies.push(dep.dependencyData)
   })
@@ -39,9 +39,23 @@ export function getDependencies (state) {
 }
 
 export function taskOptions (state) {
-  var tasks = []
+  let tasks = []
   state.nodes.forEach(node => {
     tasks.push(node.id)
   })
   return tasks
+}
+
+export function getGraph (state) {
+  let nodes = []
+  state.nodes.forEach(node => {
+    nodes.push(node.taskData)
+  })
+
+  let edges = []
+  state.edges.forEach(edge => {
+    edges.push(edge.dependencyData)
+  })
+
+  return { nodes: nodes, edges: edges }
 }

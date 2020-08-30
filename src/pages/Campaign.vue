@@ -49,14 +49,11 @@
               <q-card flat class="filter-row">
                 <q-card-section>
                   <q-select
-                    v-model="selectedAgents"
+                    v-model="selectedAgent"
                     use-input
-                    ref="agents"
-                    use-chips
-                    multiple
+                    ref="agent"
                     :options="agentOptions"
-                    lazy-rules
-                    :rules="[ val => val && val.length > 0 || 'Select at least 1 agent']"
+                    :rules="[ val => val || 'Select at least 1 agent']"
                     label="Agents"
                   />
                 </q-card-section>
@@ -257,12 +254,21 @@ export default {
         return this.$store.state.queue.commands
       }
     },
+    // TODO: deprecate multiple agent selection
     selectedAgents: {
       set (agents) {
         this.$store.commit('scheduler/setAgents', agents)
       },
       get () {
         return this.$store.state.scheduler.agents
+      }
+    },
+    selectedAgent: {
+      set (agent) {
+        this.$store.commit('scheduler/setAgent', agent)
+      },
+      get () {
+        return this.$store.state.scheduler.agent
       }
     },
     nodes: {
@@ -278,6 +284,11 @@ export default {
     tasks: {
       get () {
         return this.$store.getters['scheduler/getTasks']
+      }
+    },
+    apiGraph: {
+      get () {
+        return this.$store.getters['scheduler/getGraph']
       }
     },
     dependencies: {
@@ -324,15 +335,13 @@ export default {
     },
     scheduleCampaign () {
       this.$refs.scenario.validate()
-      console.log(this.tasks)
       this.showScheduleScenario = false
-      var campaignData = {
-        nodes: this.tasks,
-        edges: this.dependencies,
-        name: this.campaignName
-      }
+      let apiGraph = this.apiGraph
+      apiGraph.name = this.campaignName
+      console.log(apiGraph)
+
       this.$axios
-        .post('/campaigns', campaignData)
+        .post('/campaigns', apiGraph)
         .then(response => this.getListenerOptionsSuccess(response['data']))
     },
     scheduleCampaignSuccess (response) {
@@ -341,7 +350,7 @@ export default {
     addTask () {
       // Validate form fields
       this.$refs.name.validate()
-      this.$refs.agents.validate()
+      this.$refs.agent.validate()
 
       // Create new node and add queued commands
       if (!this.nodes.some(node => node.id === this.taskName)) {
@@ -358,7 +367,11 @@ export default {
           taskData: {
             name: this.taskName,
             commands: this.$store.state.queue.commands,
-            agents: this.$store.getters['scheduler/getAgents'],
+            agent: {
+              'id': this.selectedAgent.value,
+              'name': this.selectedAgent.value,
+              'integration': this.selectedAgent.integration
+            },
             start_date: this.schedulerDate,
             sleep: this.taskSleep
           }

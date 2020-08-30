@@ -62,7 +62,7 @@
               </q-card-actions>
             </q-card>
           </q-dialog>
-          <div class="col-3 q-pa-md" v-if="agentOptions.length >= 0">
+          <div class="col-3 q-pa-md" v-if="agentOptions.length === 0">
             <div class='text-h6'>No agents running yet</div>
             <!-- <q-card flat class="agent-card">
               <q-card-section>

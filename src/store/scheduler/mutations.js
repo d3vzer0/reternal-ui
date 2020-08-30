@@ -25,6 +25,11 @@ export function deleteTask (state, task) {
   state.nodes = state.nodes.filter(node => node.id !== task.node)
 }
 
+// TODO: Deprecate multiple agent selection
 export function setAgents (state, agents) {
   state.agents = agents
+}
+
+export function setAgent (state, agent) {
+  state.agent = agent
 }

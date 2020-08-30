@@ -107,7 +107,7 @@
                           {{ col.value }}
                         </q-td>
                         <q-td>
-                          <q-icon size="sm" name="fas fa-project-diagram" v-on:click="drawCampaign(props.row.group_id)"></q-icon>
+                          <q-icon size="sm" name="fas fa-project-diagram" v-on:click="drawCampaign(props.row._id)"></q-icon>
                         </q-td>
                       </q-tr>
                       <q-tr v-show="props.expand" :props="props">
@@ -127,33 +127,26 @@
                               </q-item>
                             </q-list>
                           </div>
-                          <div class="dag" v-if="selectedCampaign === props.row.group_id">
+                          <div class="dag" v-if="selectedCampaign && selectedCampaign._id === props.row._id">
                             <div class="dag-text" style="position: absolute; z-index: 100; padding: 20px;">
-                              <!-- <div class="dag-text-title text-h5">
-                                Campaign  <q-btn v-if="nodes.length > 0" flat icon="play_circle_outline" @click="showScheduleScenario = true" /> <q-btn v-if="nodes.length > 0" flat icon="save" @click="showSaveGraph = true" />
+                              <div class="dag-text-content text-h7 q-mt-md" v-if="nodes.length > 0 && selectedNode">
+                                <div class="row">
+                                  <div class="cols-5">Name</div>
+                                  <div class="cols q-ml-sm">{{ selectedNode.name }}<q-btn v-on:click="deleteTask()" dense unelevated icon="delete" size="sm"/></div>
+                                </div>
+                                <div class="row">
+                                  <div class="cols-5">Time</div>
+                                  <div class="cols q-ml-sm">{{ selectedNode.scheduled_date }}</div>
+                                </div>
+                                <div class="row">
+                                  <div class="cols-5">Agent</div>
+                                  <div class="cols q-ml-sm">{{ selectedNode.agent.name }}</div>
+                                </div>
                               </div>
-                              <div class="dag-text-message text-h7" v-if="nodes.length === 0 ">
-                                No scenarios have been added to the campaign
-                              </div> -->
-                              <!-- <div class="dag-text-content text-h7 q-mt-md" v-if="nodes.length > 0 && selectedTask">
-                                <table>
-                                  <tr>
-                                    <td>Name</td>
-                                    <td>{{ taskDetails.id }}<q-btn v-on:click="deleteTask()" dense unelevated icon="delete" size="sm"/></td>
-                                  </tr>
-                                  <tr>
-                                    <td>Time</td>
-                                    <td>{{ taskDetails.taskData.start_date }}</td>
-                                  </tr>
-                                  <tr>
-                                    <td>Agents</td>
-                                    <td>{{ taskDetails.taskData.agents.join(',') }}</td>
-                                  </tr>
-                                </table>
-                              </div> -->
                             </div>
-                           <network ref="dag_net" :nodes="nodes" :edges="edges" :options="options" :events="['select']" >
-                          </network>
+                            <network ref="dag_net" :nodes="nodes" :edges="edges" :options="options" :events="['select']"
+                              @select='clickNode'>
+                            </network>
                           </div>
                         </q-td>
                       </q-tr>
@@ -210,7 +203,9 @@ export default {
       techniquesCount: 0,
       coverageCount: 0,
       rulesCount: 0,
+      selectedNode: null,
       selectedCampaign: null,
+      tableSeperator: 'none',
       queryRating: 45,
       c2Rating: 35,
       cRating: 40,
@@ -240,8 +235,7 @@ export default {
       columsCampaigns: [
         { name: 'name', align: 'left', label: 'Campaign', field: 'name', sortable: true },
         { name: 'saved_date', align: 'left', label: 'Issued on', field: 'saved_date', sortable: true },
-        { name: 'group_id', align: 'right', label: 'Group ID', field: 'group_id' },
-        { name: 'tasks', align: 'right', label: 'Task count', field: 'tasks', format: (val, row) => `${val.length}` }
+        { name: 'nodes', align: 'right', label: 'Task count', field: 'nodes', format: (val, row) => `${val.length}` }
 
       ],
       columnsTechniques: [
@@ -264,40 +258,41 @@ export default {
   },
   methods: {
     drawCampaign (groupId) {
-      this.selectedCampaign = groupId
       this.getCampaign(groupId)
     },
-    getCampaign (groupId) {
+    getCampaign (campaignId) {
       this.$axios
-        .get('/campaign/' + groupId)
+        .get('/campaign/' + campaignId)
         .then(response => this.getCampaignSuccess(response['data']))
     },
     getCampaignSuccess (response) {
+      this.selectedCampaign = response
       this.$store.commit('tasks/setNodes', [])
       this.$store.commit('tasks/setEdges', [])
       var stateMapping = {
-        'Open': { 'color': '#ffffff', 'font': '#343a40' },
+        'Scheduled': { 'color': '#ffffff', 'font': '#343a40' },
         'Processing': { 'color': '#343a40', 'font': '#ffffff' },
         'Processed': { 'color': '#343a40', 'font': '#ffffff' }
       }
 
-      response.forEach(task => {
+      response.nodes.forEach(node => {
         this.$store.commit('tasks/addNode', {
-          id: task.task,
-          label: task.task,
+          id: node.name,
+          label: node.name,
+          data: { 'no': 'yes' },
           shape: 'box',
-          color: stateMapping[task.state].color,
+          color: stateMapping[node.state].color,
           font: {
-            color: stateMapping[task.state].font,
+            color: stateMapping[node.state].font,
             size: 20
           },
           margin: 12
         })
 
-        task.dependencies.forEach(dep => {
+        response.edges.forEach(edge => {
           this.$store.commit('tasks/addEdge', {
-            from: dep,
-            to: task.task,
+            from: edge.source,
+            to: edge.destination,
             arrows: 'to',
             color: '#343a40',
             width: 3
@@ -353,6 +348,13 @@ export default {
     },
     getPlatformCountSuccess (response) {
       this.platforms = response
+    },
+    clickNode (event) {
+      if (event.nodes.length > 0) {
+        console.log(this.selectedCampaign)
+        let nodeData = this.selectedCampaign.nodes.filter(node => node.name.includes(event.nodes[0]))[0]
+        this.selectedNode = nodeData
+      }
     }
   }
 }

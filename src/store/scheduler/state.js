@@ -4,6 +4,7 @@ export default function () {
     nodes: [],
     edges: [],
     agents: [],
+    agent: null,
     selectedDate: ''
   }
 }
