@@ -34,35 +34,71 @@
                     <template v-slot:body="props">
                       <q-tr :props="props">
                         <q-td auto-width>
-                          <q-btn size="sm" unelevated color="primary" round dense @click="props.expand = !props.expand" :icon="props.expand ? 'remove' : 'add'" />
+                          <q-btn size="sm" unelevated color="primary" round dense @click="drawCampaign(props.row._id)" :icon="selectedCampaign && selectedCampaign._id === props.row._id ? 'remove' : 'add'" />
                         </q-td>
                         <q-td v-for="col in props.cols" :key="col.name" :props="props">
                           {{ col.value }}
                         </q-td>
-                        <q-td>
-                          <q-icon size="sm" name="fas fa-project-diagram" v-on:click="drawCampaign(props.row.group_id)"></q-icon>
-                        </q-td>
                       </q-tr>
-                      <q-tr v-show="props.expand" :props="props">
+                      <q-tr v-show="selectedCampaign && selectedCampaign._id === props.row._id" :props="props">
                         <q-td colspan="100%">
-                          <div class="task-lis">
-                            <q-list separator>
-                              <q-item class="text-left" v-for="(task, index) in props.row.tasks" v-bind:key="index">
-                                <q-item-section avatar>
-                                  <q-icon name="update"></q-icon>
-                                </q-item-section>
-                                <q-item-section>
-                                  {{ task.name }}
-                                </q-item-section>
-                                <q-item-section side>
-                                  <q-item-label caption>Queued, scheduled for {{ task.scheduled_date}}</q-item-label>
-                                </q-item-section>
-                              </q-item>
-                            </q-list>
-                          </div>
-                          <div class="dag" v-if="selectedCampaign === props.row.group_id">
-                            <div class="div">
-                               <q-table
+                          <q-carousel
+                            v-model="slide"
+                            transition-prev="jump-right"
+                            transition-next="jump-left"
+                            animated
+                            control-color="primary"
+                            prev-icon="arrow_left"
+                            next-icon="arrow_right"
+                            navigation
+                            padding
+                            arrows
+                            height="500px"
+                            class="rounded-borders"
+                          >
+                          <q-carousel-slide name="tasks" class="column no-wrap">
+                            <!-- <q-icon name="style" size="56px" /> -->
+                              <div class="task-lis">
+                                <q-list separator>
+                                  <q-item class="text-left" v-for="(node, index) in props.row.nodes" v-bind:key="index">
+                                    <q-item-section avatar>
+                                      <q-icon name="update"></q-icon>
+                                    </q-item-section>
+                                    <q-item-section>
+                                      {{ node.name }}
+                                    </q-item-section>
+                                    <q-item-section side>
+                                      <q-item-label caption>Queued, scheduled for {{ node.scheduled_date}}</q-item-label>
+                                    </q-item-section>
+                                  </q-item>
+                                </q-list>
+                              </div>
+                          </q-carousel-slide>
+                          <q-carousel-slide name="graph" class="column no-wrap">
+                            <!-- <q-icon name="style" size="56px" /> -->
+                            <div class="dag-text" style="position: absolute; z-index: 100; padding: 20px;">
+                              <div class="dag-text-content text-h7 q-mt-md" v-if="selectedNode">
+                                <div class="row">
+                                  <div class="cols-5">Name</div>
+                                  <div class="cols q-ml-sm">{{ selectedNode.name }}</div>
+                                </div>
+                                <div class="row">
+                                  <div class="cols-5">Time</div>
+                                  <div class="cols q-ml-sm">{{ selectedNode.scheduled_date }}</div>
+                                </div>
+                                <div class="row">
+                                  <div class="cols-5">Agent</div>
+                                  <div class="cols q-ml-sm">{{ selectedNode.agent.name }}</div>
+                                </div>
+                              </div>
+                            </div>
+                            <network ref="dag_net" :nodes="nodes" :edges="edges" :options="options" :events="['select']"
+                              @select='clickNode'>
+                            </network>
+                          </q-carousel-slide>
+                          <q-carousel-slide name="attck" class="column no-wrap">
+                            <!-- <q-icon name="style" size="56px" /> -->
+                            <q-table
                                 grid
                                 :data="attckData"
                                 :columns="attckColumns"
@@ -104,34 +140,8 @@
                                   </div>
                                 </template>
                               </q-table>
-                            </div>
-                            <div class="dag-text" style="position: absolute; z-index: 100; padding: 20px;">
-                              <!-- <div class="dag-text-title text-h5">
-                                Campaign  <q-btn v-if="nodes.length > 0" flat icon="play_circle_outline" @click="showScheduleScenario = true" /> <q-btn v-if="nodes.length > 0" flat icon="save" @click="showSaveGraph = true" />
-                              </div>
-                              <div class="dag-text-message text-h7" v-if="nodes.length === 0 ">
-                                No scenarios have been added to the campaign
-                              </div> -->
-                              <!-- <div class="dag-text-content text-h7 q-mt-md" v-if="nodes.length > 0 && selectedTask">
-                                <table>
-                                  <tr>
-                                    <td>Name</td>
-                                    <td>{{ taskDetails.id }}<q-btn v-on:click="deleteTask()" dense unelevated icon="delete" size="sm"/></td>
-                                  </tr>
-                                  <tr>
-                                    <td>Time</td>
-                                    <td>{{ taskDetails.taskData.start_date }}</td>
-                                  </tr>
-                                  <tr>
-                                    <td>Agents</td>
-                                    <td>{{ taskDetails.taskData.agents.join(',') }}</td>
-                                  </tr>
-                                </table>
-                              </div> -->
-                            </div>
-                           <network ref="dag_net" :nodes="nodes" :edges="edges" :options="options" :events="['select']" >
-                          </network>
-                          </div>
+                            </q-carousel-slide>
+                          </q-carousel>
                         </q-td>
                       </q-tr>
                     </template>
@@ -156,7 +166,7 @@
 import { Network } from 'vue-vis-network'
 
 export default {
-  name: 'PageIndex',
+  name: 'Results',
   components: {
     Network
   },
@@ -193,6 +203,10 @@ export default {
   },
   data () {
     return {
+      slide: 'tasks',
+      selectedCampaign: null,
+      selectedNode: null,
+      campaignDetails: false,
       attckColumns: [
         { name: '_id', label: '_id', field: '_id' },
         { name: 'techniques', label: 'techniques', field: 'techniques' }
@@ -233,11 +247,9 @@ export default {
       techniquesCount: 0,
       coverageCount: 0,
       validationsCount: 0,
-      selectedCampaign: null,
       queryRating: 45,
       c2Rating: 35,
       cRating: 40,
-      slide: 'style',
       pagination: {
         rowsPerPage: 0
       },
@@ -263,8 +275,7 @@ export default {
       columsCampaigns: [
         { name: 'name', align: 'left', label: 'Campaign', field: 'name', sortable: true },
         { name: 'saved_date', align: 'left', label: 'Issued on', field: 'saved_date', sortable: true },
-        { name: 'group_id', align: 'right', label: 'Group ID', field: 'group_id' },
-        { name: 'tasks', align: 'right', label: 'Task count', field: 'tasks', format: (val, row) => `${val.length}` }
+        { name: 'nodes', align: 'right', label: 'Task count', field: 'nodes', format: (val, row) => `${val.length}` }
 
       ],
       columnsTechniques: [
@@ -314,9 +325,8 @@ export default {
       return techniques.sort(compareOrder)
     },
     drawCampaign (groupId) {
-      this.selectedCampaign = groupId
+      this.campaignDetails = true
       this.getCampaign(groupId)
-      this.getResults(groupId)
     },
     getCampaign (groupId) {
       this.$axios
@@ -324,47 +334,37 @@ export default {
         .then(response => this.getCampaignSuccess(response['data']))
     },
     getCampaignSuccess (response) {
-      console.log(response)
+      this.selectedCampaign = response
       this.$store.commit('tasks/setNodes', [])
       this.$store.commit('tasks/setEdges', [])
       var stateMapping = {
-        'Open': { 'color': '#ffffff', 'font': '#343a40' },
+        'Scheduled': { 'color': '#ffffff', 'font': '#343a40' },
         'Processing': { 'color': '#343a40', 'font': '#ffffff' },
         'Processed': { 'color': '#343a40', 'font': '#ffffff' }
       }
 
-      response.forEach(task => {
+      response.nodes.forEach(node => {
         this.$store.commit('tasks/addNode', {
-          id: task.task,
-          label: task.task,
+          id: node.name,
+          label: node.name,
           shape: 'box',
-          color: stateMapping[task.state].color,
+          color: stateMapping[node.state].color,
           font: {
-            color: stateMapping[task.state].font,
+            color: stateMapping[node.state].font,
             size: 20
           },
           margin: 12
         })
 
-        task.dependencies.forEach(dep => {
+        response.edges.forEach(edge => {
           this.$store.commit('tasks/addEdge', {
-            from: dep,
-            to: task.task,
+            from: edge.source,
+            to: edge.destination,
             arrows: 'to',
             color: '#343a40',
             width: 3
           })
         })
-      })
-    },
-    getResults (groupId) {
-      this.$axios
-        .get('/results', { params: { group_id: groupId } })
-        .then(response => this.getResultsSuccess(response['data']))
-    },
-    getResultsSuccess (response) {
-      response.forEach(element => {
-        this.attckGrid[element.kill_chain_phase].push(element)
       })
     },
     getCampaigns () {
@@ -391,6 +391,12 @@ export default {
     },
     getPlatformCountSuccess (response) {
       this.platforms = response
+    },
+    clickNode (event) {
+      if (event.nodes.length > 0) {
+        let nodeData = this.selectedCampaign.nodes.filter(node => node.name.includes(event.nodes[0]))[0]
+        this.selectedNode = nodeData
+      }
     }
   }
 }
