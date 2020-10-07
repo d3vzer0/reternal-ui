@@ -4,7 +4,6 @@
     <div class="q-pa-md row q-gutter-md justify-around">
       <div class="col">
         <q-card>
-          {{ gridCols }}
           <!-- <q-tabs v-model="campaignTab" active-color="primary" indicator-color="primary" align="justify" class="text-grey">
             <q-tab name="scheduled" label="Scheduled"/>
             <q-tab name="processing" label="Processing" />

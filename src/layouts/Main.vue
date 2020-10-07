@@ -83,7 +83,7 @@
               Home
             </q-item-section>
           </q-item>
-          <q-item clickable v-ripple to='/results'>
+          <q-item clickable v-ripple to='/results' v-if="$isC2Enabled()">
             <q-item-section avatar>
               <q-icon name="mdi-check-circle-outline" />
             </q-item-section>
@@ -134,7 +134,7 @@
             </q-item-section>
           </q-item>
           <q-separator />
-          <q-item clickable v-ripple to="/agents">
+          <q-item clickable v-ripple to="/agents" v-if="$isC2Enabled()">
             <q-item-section avatar>
               <q-icon name="desktop_windows" />
             </q-item-section>
@@ -142,7 +142,7 @@
               Agents
             </q-item-section>
           </q-item>
-           <q-item clickable v-ripple to='/listeners'>
+           <q-item clickable v-ripple to='/listeners' v-if="$isC2Enabled()">
             <q-item-section avatar>
               <q-icon name="settings_ethernet" />
             </q-item-section>
@@ -150,7 +150,7 @@
               Listeners
             </q-item-section>
           </q-item>
-          <q-item clickable v-ripple to="/stagers">
+          <q-item clickable v-ripple to="/stagers" v-if="$isC2Enabled()">
             <q-item-section avatar>
               <q-icon name="save_alt" />
             </q-item-section>

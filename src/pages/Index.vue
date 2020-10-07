@@ -2,10 +2,10 @@
   <q-page>
     <!-- Center content row -->
     <div class="q-mt-md row justify-around q-gutter-sm">
-      <div class="col-xs-11 col-sm-5 col-md-5 col-lg-5 col-xl-5">
+      <div class="col-xs-11 col-sm-5 col-md-5 col-lg-5 col-xl-5" v-if="$isC2Enabled()">
         <C2ModulesActive></C2ModulesActive>
       </div>
-      <div class="col-xs-11 col-sm-5 col-md-5 col-lg-5 col-xl-5">
+      <div class="col-xs-11 col-sm-5 col-md-5 col-lg-5 col-xl-5" v-if="$isSearchEnabled()">
         <SearchModulesActive></SearchModulesActive>
       </div>
     </div>
@@ -110,8 +110,8 @@ export default {
     }
   },
   created () {
-    this.$getIntegrations()
-    this.$getSearchIntegrations()
+    // this.$getIntegrations()
+    // this.$getSearchIntegrations()
     this.getCountTechniques()
     this.getCountRules()
     this.getCountCoverage()

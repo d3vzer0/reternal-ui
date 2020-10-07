@@ -1,13 +1,5 @@
-import config from '../assets/config.json'
-
 export default {
   methods: {
-    $isC2Enabled () {
-      return config.c2
-    },
-    $isSearchEnabled () {
-      return config.search
-    },
     $getIntegrations () {
       this.$axios
         .get('/workers/c2')
