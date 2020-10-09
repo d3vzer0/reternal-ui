@@ -65,7 +65,7 @@
         </div>
         <div class="row q-mt-md">
           <div class="col">
-            <search-select store='sigma' id='techniques.references.external_id' title='Technique'
+            <search-select store='sigma' id='techniques.references.0.external_id' title='Technique'
               :params="queryParams">
             </search-select>
           </div>
@@ -126,7 +126,7 @@
             <q-card flat v-else>
               <q-tabs v-model="phaseSelected">
                 <q-tab v-for="(phase, index) in phaseOptions" v-bind:key="index"
-                  :name="phase.label" inline-label :label="phase.label">
+                  :name="phase.value" inline-label :label="phase.label">
                 </q-tab>
               </q-tabs>
               <q-stepper v-model="phaseStep" animated vertical header-nav ref="stepper">
@@ -170,6 +170,18 @@
             </q-card>
           </div>
         </div>
+        <div class="row">
+          <div class="col no-shadow-pagination">
+            <q-pagination
+              flat
+              v-model="currentPage"
+              :max="maxPages"
+              :max-pages="6"
+              :input="true"
+            >
+            </q-pagination>
+          </div>
+        </div>
       </div>
       <!-- /Results column -->
     </div>
@@ -196,12 +208,15 @@ export default {
   },
   data () {
     return {
+      maxResults: 10,
+      resultsTotal: 0,
+      currentPage: 1,
       filterFields: [
         'status',
         'level',
         'tags',
         'techniques.name',
-        'techniques.references.external_id',
+        'techniques.references.0.external_id',
         'techniques.kill_chain_phases',
         'techniques.magma.l1_usecase_name',
         'techniques.magma.l2_usecase_name',
@@ -227,12 +242,21 @@ export default {
       sigmaRules: [
       ],
       techniqueColumns: [
-        { name: 'name', label: 'Technique', field: 'name' },
-        { name: 'data_sources', label: 'Datasources', field: 'data_sources' }
+        { name: 'name', label: 'Technique', field: 'name', align: 'left' },
+        { name: 'data_sources', label: 'Datasources', field: 'data_sources', align: 'left' }
       ]
     }
   },
   computed: {
+    maxPages () {
+      return Math.floor((this.resultsTotal + this.maxResults - 1) / this.maxResults)
+    },
+    searchSkip () {
+      return (this.currentPage - 1) * this.maxResults
+    },
+    searchLimit () {
+      return this.currentPage * this.maxResults
+    },
     searchFilters () {
       return this.$store.state.sigma.queryParams
     },
@@ -241,13 +265,13 @@ export default {
     }
   },
   created () {
-    this.refreshFilters()
+    // this.refreshFilters()
     this.getDistinct()
+    this.getSigma()
   },
   watch: {
     searchFilters: {
       handler (value) {
-        console.log(123123)
         if (JSON.stringify(this.$route.query) !== JSON.stringify(this.searchFilters)) {
           this.$router.replace({ path: '/sigma', query: this.searchFilters })
         }
@@ -256,6 +280,11 @@ export default {
     },
     phaseSelected: function (tab) {
       if (typeof tab !== 'undefined') {
+        this.getSigma()
+      }
+    },
+    currentPage: {
+      handler (value) {
         this.getSigma()
       }
     }
@@ -274,6 +303,7 @@ export default {
       //   }
       // }
       this.getDistinct()
+      this.getSigma()
     },
     getDistinct () {
       this.$axios
@@ -283,14 +313,33 @@ export default {
         .then(response => this.$store.commit('sigma/setFilterValues', response['data']))
     },
     getSigma () {
-      var queryParams = { ...this.searchFilters, phase: this.phaseSelected }
+      var queryParams = {
+        ...this.searchFilters,
+        phase: this.phaseSelected,
+        skip: this.searchSkip,
+        limit: this.searchLimit
+      }
       this.$axios
         .get('/sigma', { params: queryParams })
         .then(response => this.getSigmaSuccess(response['data']))
     },
     getSigmaSuccess (rules) {
-      this.sigmaRules = rules
+      this.resultsTotal = rules.total
+      this.sigmaRules = rules.results
     }
   }
 }
 </script>
+
+<style lang="scss">
+.no-shadow-pagination {
+  box-shadow: 0 !important;
+  .q-btn {
+    span {
+      border-radius: 0;
+    }
+    box-shadow: 0;
+    border-radius: 0px !important;
+  }
+}
+</style>
