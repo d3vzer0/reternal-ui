@@ -37,7 +37,7 @@
             <q-card flat>
               <q-card-section>
                 <q-stepper v-model="step" ref="stepper" color="primary" animated flat>
-                  <q-step :name="1" title="Select stager" icon="settings" :done="step > 1">
+                  <q-step :name="1" title="Select stager" icon="settings" :done="step > 1" :disable="selectedIntegration === null">
                     <q-list v-if="selectedPlatform">
                       <q-item tag="label" v-ripple v-for="(options, stager) in integrationStagers[selectedPlatform]" v-bind:key="stager">
                         <q-item-section avatar>
@@ -83,7 +83,7 @@
                       </q-inner-loading>
                     </q-card>
                   </q-step>
-                  <template v-slot:navigation>
+                  <template v-slot:navigation v-if="selectedIntegration !== null">
                     <q-stepper-navigation>
                       <q-btn v-if="step < 2" @click="$refs.stepper.next()" color="primary" label="Next" />
                       <q-btn v-if="step === 2" @click="createStager(), $refs.stepper.next()" color="primary" label="Generate" />
@@ -120,7 +120,7 @@ export default {
         { 'value': 'macOS', 'label': 'MacOS' },
         { 'value': 'Linux', 'label': 'Linux' }
       ],
-      selectedIntegration: '',
+      selectedIntegration: null,
       selectedPlatform: 'Windows',
       selectedStager: null,
       tab: null,
@@ -175,8 +175,8 @@ export default {
       get () {
         const options = [
         ]
-        for (var integration in this.$store.state.integrations.integrationOptions) {
-          options.push({ 'value': integration, 'label': integration })
+        for (const [key, value] of Object.entries(this.$store.state.integrations.integrationOptions)) {
+          options.push({ 'value': key, 'label': key, 'disable': !value.enabled })
         }
         return options
       }

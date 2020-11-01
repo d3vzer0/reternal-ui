@@ -33,7 +33,10 @@
             </span>
           </div>
           <div class="div absolute-bottom text-right q-pa-sm">
-            <q-btn flat icon="info" @click="showDescription = true, selectedIntegration = integration"  />
+            <q-badge color="red" v-if="!mapping.enabled">
+              Disabled <q-icon name="warning" color="white" class="q-ml-xs" />
+            </q-badge>
+           <q-btn flat icon="info" @click="showDescription = true, selectedIntegration = integration"  />
           </div>
         </div>
       </q-carousel-slide>

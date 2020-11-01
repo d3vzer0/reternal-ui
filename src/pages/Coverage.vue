@@ -46,7 +46,7 @@
                 <div class="text-h6">
                   <span>No datasource selected</span>
                   <span class="float-right">
-                    <q-btn flat icon="refresh" label="Refresh datasources" @click="syncDatasources()"/>
+                    <q-btn disable flat icon="refresh" label="Sync datasources" @click="syncDatasources()"/>
                   </span>
                 </div>
               </q-card-section>
@@ -58,7 +58,7 @@
                   <span>{{ selectedDatasource }}</span>
                   <span class="float-right">
                     <q-btn flat icon="policy" label="Sigma rules" @click="$router.push({ path: '/sigma', query: { datasource: selectedDatasource } })"/>
-                    <q-btn flat icon="refresh" label="Refresh datasources" @click="syncDatasources()"/>
+                    <q-btn disable flat icon="refresh" label="Sync datasources" @click="syncDatasources()"/>
                   </span>
                 </div>
               </q-card-section>

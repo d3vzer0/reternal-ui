@@ -33,7 +33,7 @@
               <q-card flat>
                 <q-card-section>
                   <q-stepper v-model="step" ref="stepper" color="primary" animated flat v-if="listenerOptions">
-                    <q-step :name="1" title="Choose listener type" icon="settings" :done="step > 1">
+                    <q-step :name="1" title="Choose listener type" icon="settings" :done="step > 1" :disable="!selectedIntegration">
                       <q-list>
                         <q-item tag="label" v-ripple v-for="(value, index) in listenerOptions" v-bind:key="index">
                           <q-item-section avatar>
@@ -159,8 +159,8 @@ export default {
       get () {
         const options = [
         ]
-        for (var integration in this.$store.state.integrations.integrationOptions) {
-          options.push({ 'value': integration, 'label': integration })
+        for (const [key, value] of Object.entries(this.$store.state.integrations.integrationOptions)) {
+          options.push({ 'value': key, 'label': key, 'disable': !value.enabled })
         }
         return options
       }

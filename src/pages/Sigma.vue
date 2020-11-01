@@ -1,6 +1,24 @@
 <template>
   <q-page>
     <div class="q-pa-md row">
+      <q-dialog v-model="packageProcessing" seamless position="top">
+        <q-card style="width: 350px">
+          <q-linear-progress indeterminate color="pink" />
+
+          <q-card-section class="row items-center no-wrap">
+            <div>
+              <div class="text-weight-bold">Packaging...</div>
+              <div class="text-grey">Converting SIGMA rules to {{ packageFormat }}</div>
+            </div>
+
+            <q-space />
+
+            <q-btn flat round icon="get_app" />
+            <q-btn flat round icon="close" v-close-popup />
+          </q-card-section>
+        </q-card>
+      </q-dialog>
+
       <!-- Filter column -->
       <div class="col-2">
         <div class="row justify-end">
@@ -15,10 +33,10 @@
                     </q-item-section>
                     <q-menu anchor="top right" self="top left">
                       <q-list>
-                        <q-item clickable v-close-popup>
+                        <!-- <q-item clickable v-close-popup>
                           <q-item-section>Splunk App Package</q-item-section>
-                        </q-item>
-                        <q-item clickable v-close-popup>
+                        </q-item> -->
+                        <q-item clickable v-close-popup @click="packageRules('splunk2')">
                           <q-item-section>Raw Searches</q-item-section>
                         </q-item>
                       </q-list>
@@ -31,9 +49,9 @@
                     </q-item-section>
                     <q-menu anchor="top right" self="top left">
                       <q-list>
-                        <q-item clickable v-close-popup>
+                        <!-- <q-item clickable v-close-popup>
                           <q-item-section>Raw Searches</q-item-section>
-                        </q-item>
+                        </q-item> -->
                       </q-list>
                     </q-menu>
                   </q-item>
@@ -44,9 +62,9 @@
                     </q-item-section>
                     <q-menu anchor="top right" self="top left">
                       <q-list>
-                        <q-item clickable v-close-popup>
+                        <!-- <q-item clickable v-close-popup>
                           <q-item-section>Raw Searches</q-item-section>
-                        </q-item>
+                        </q-item> -->
                       </q-list>
                     </q-menu>
                   </q-item>
@@ -65,7 +83,7 @@
         </div>
         <div class="row q-mt-md">
           <div class="col">
-            <search-select store='sigma' id='techniques.references.0.external_id' title='Technique'
+            <search-select store='sigma' id='technique' title='Technique'
               :params="queryParams">
             </search-select>
           </div>
@@ -86,12 +104,12 @@
         </div>
         <div class="row q-mt-md">
           <div class="col">
-            <search-filter store='sigma' id='techniques.data_sources' title='Datasource'
+            <search-filter store='sigma' id='data_source' title='Datasource'
              :params="queryParams">
             </search-filter>
           </div>
         </div>
-        <div class="row q-mt-md">
+        <!-- <div class="row q-mt-md">
           <div class="col">
             <search-filter store='sigma' id='techniques.magma.l1_usecase_name' title='L1 Usecase'
              :params="queryParams">
@@ -104,7 +122,7 @@
               :params="queryParams">
             </search-filter>
           </div>
-        </div>
+        </div> -->
         <!-- /Filters -->
       </div>
       <!-- Results column -->
@@ -116,14 +134,14 @@
         </div>
         <div class="row">
           <div class="col">
-            <q-card flat v-if="phaseOptions.length === 0">
+            <!-- <q-card flat v-if="phaseOptions.length === 0">
               <q-card-section>
                 <div class="text-h6">
                   <span>No hunts found</span>
                 </div>
               </q-card-section>
-            </q-card>
-            <q-card flat v-else>
+            </q-card> -->
+            <q-card flat>
               <q-tabs v-model="phaseSelected">
                 <q-tab v-for="(phase, index) in phaseOptions" v-bind:key="index"
                   :name="phase.value" inline-label :label="phase.label">
@@ -208,6 +226,8 @@ export default {
   },
   data () {
     return {
+      packageProcessing: false,
+      packageFormat: 'Splunk',
       maxResults: 10,
       resultsTotal: 0,
       currentPage: 1,
@@ -215,25 +235,21 @@ export default {
         'status',
         'level',
         'tags',
-        'techniques.name',
-        'techniques.references.0.external_id',
-        'techniques.kill_chain_phases',
-        'techniques.magma.l1_usecase_name',
-        'techniques.magma.l2_usecase_name',
-        'techniques.data_sources'
+        'technique',
+        'actor',
+        'phase',
+        'data_source'
       ],
       queryParams: {
         search: '',
         tags: '',
         status: '',
         level: '',
+        actor: '',
         integration: '',
-        'techniques.references.external_id': '',
-        'techniques.name': '',
-        'techniques.kill_chain_phases': '',
-        'techniques.magma.l1_usecase_name': '',
-        'techniques.magma.l2_usecase_name': '',
-        'techniques.data_sources': ''
+        technique: '',
+        phase: '',
+        data_source: ''
       },
       phaseStep: '',
       phaseSelected: '',
@@ -261,11 +277,15 @@ export default {
       return this.$store.state.sigma.queryParams
     },
     phaseOptions () {
-      return this.$store.state.sigma.filterValues['techniques.kill_chain_phases']
+      return this.$store.state.sigma.filterValues['phase']
+    }
+  },
+  sockets: {
+    createSigmaPackage: function (data) {
+      console.log(data)
     }
   },
   created () {
-    // this.refreshFilters()
     this.getDistinct()
     this.getSigma()
   },
@@ -290,6 +310,17 @@ export default {
     }
   },
   methods: {
+    packageRules (target) {
+      this.packageFormat = target
+      var queryParams = {
+        ...this.searchFilters,
+        phase: this.phaseSelected
+      }
+      this.$axios
+        .get(`/sigma/package/${target}`, {
+          params: queryParams
+        })
+    },
     dumpYAML (data) {
       const clonedRule = Object.assign({ id: data.sigma_id }, data)
       let { _id, techniques, technique, hash, ...slimRule } = clonedRule

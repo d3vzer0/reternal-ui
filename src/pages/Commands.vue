@@ -7,14 +7,14 @@
         <div class="row">
           <div class="col">
             <search-filter store='techniques' id='platform' title='Platform'
-              :params="queryParams" endpoint="/mapping/platforms">
+              :params="queryParams">
             </search-filter>
           </div>
         </div>
         <div class="row q-mt-md">
           <div class="col">
             <search-filter store='techniques' id='actor' title='Actor'
-              :params="queryParams" endpoint="/mapping/actors">
+              :params="queryParams">
             </search-filter>
           </div>
         </div>
@@ -37,12 +37,12 @@
             <q-card flat>
               <q-tabs v-model="phaseSelected">
                 <q-tab v-for="(phase, index) in phaseOptions" v-bind:key="index"
-                  :name="phase" inline-label :label="phase">
+                  :name="phase.value" inline-label :label="phase.label">
                 </q-tab>
               </q-tabs>
               <q-stepper v-model="phaseStep" animated vertical header-nav ref="stepper">
-                <q-step v-for="(technique, index) in phaseTechniques[phaseSelected]" v-bind:key="index"
-                  :name="technique.name" :title="`${technique.technique_name} (${technique.name})`" icon="details">
+                <q-step v-for="(technique, index) in mappedTechniques" v-bind:key="index"
+                  :name="technique.name" :title="`${technique.name}`" icon="details">
                   <div class="row">
                     <div class="col-2">
                       <b>Name</b>
@@ -101,6 +101,18 @@
             </q-card>
           </div>
         </div>
+        <div class="row">
+          <div class="col no-shadow-pagination">
+            <q-pagination
+              flat
+              v-model="currentPage"
+              :max="maxPages"
+              :max-pages="6"
+              :input="true"
+            >
+            </q-pagination>
+          </div>
+        </div>
       </div>
       <!-- /Results column -->
 
@@ -111,7 +123,7 @@
 
 <script>
 import { component as VueCodeHighlight } from 'vue-code-highlight'
-import SearchFilter from 'components/SearchFilter'
+import SearchFilter from 'components/SearchFilterDistinct'
 import ActorDetails from 'components/ActorDetails'
 import 'vue-code-highlight/themes/prism-okaidia.css'
 import 'prism-es6/components/prism-markup-templating'
@@ -129,20 +141,30 @@ export default {
   },
   data () {
     return {
+      maxResults: 10,
+      resultsTotal: 0,
+      currentPage: 1,
+      filterFields: [
+        'phase',
+        'actor',
+        'platform'
+      ],
       queryParams: {
         actor: '',
         platform: '',
         search: ''
       },
+      mappedTechniques: [
+      ],
       phaseSelected: '',
       phaseStep: '',
-      phaseOptions: [],
       phaseTechniques: {
       }
     }
   },
   created () {
-    this.getPhases()
+    this.getDistinct()
+    this.getMappedTechniques()
   },
   computed: {
     searchFilters () {
@@ -150,20 +172,39 @@ export default {
     },
     selectedActor () {
       return this.$store.state.techniques.queryParams.actor
+    },
+    maxPages () {
+      return Math.floor((this.resultsTotal + this.maxResults - 1) / this.maxResults)
+    },
+    searchSkip () {
+      return (this.currentPage - 1) * this.maxResults
+    },
+    searchLimit () {
+      return this.currentPage * this.maxResults
+    },
+    phaseOptions () {
+      return this.$store.state.techniques.filterValues['phase']
     }
   },
   watch: {
     searchFilters: {
       handler (value) {
-        if (JSON.stringify(this.$route.query) !== JSON.stringify(this.searchFilters)) {
-          this.$router.replace({ path: '/techniques', query: this.searchFilters })
-        }
+        // if (JSON.stringify(this.$route.query) !== JSON.stringify(this.searchFilters)) {
+        //   this.$router.replace({ path: '/techniques', query: this.searchFilters })
+        // }
         this.refreshFilters()
       },
       deep: true
     },
     phaseSelected: function (tab) {
-      this.getTechniques()
+      if (typeof tab !== 'undefined') {
+        this.getMappedTechniques()
+      }
+    },
+    currentPage: {
+      handler (value) {
+        this.getMappedTechniques()
+      }
     }
   },
   methods: {
@@ -171,45 +212,48 @@ export default {
       return YAML.safeDump(data)
     },
     refreshFilters () {
-      if (this.$route.query) {
-        for (let [key, value] of Object.entries(this.$route.query)) {
-          this.$store.commit('techniques/setQueryParam', { id: key, value: value })
-        }
-      }
-      this.getPhases()
+      // if (this.$route.query) {
+      //   for (let [key, value] of Object.entries(this.$route.query)) {
+      //     this.$store.commit('techniques/setQueryParam', { id: key, value: value })
+      //   }
+      // }
+      this.getDistinct()
+      this.getMappedTechniques()
     },
-    getPhases () {
+    getDistinct () {
       this.$axios
-        .get('/mapping/phases', { params: this.searchFilters })
-        .then(response => this.getPhasesSuccess(response['data']))
+        .get('/mapping/distinct', {
+          params: { ...this.searchFilters, fields: this.filterFields.join(',') }
+        })
+        .then(response => this.$store.commit('techniques/setFilterValues', response['data']))
     },
-    getPhasesSuccess (phases) {
-      this.phaseOptions = phases
-      this.phaseSelected = this.phaseOptions[0]
-    },
-    getTechniques () {
-      var queryParams = { ...this.searchFilters, phase: this.phaseSelected }
-      this.$axios
-        .get('/mapping/techniques', { params: { queryParams } })
-        .then(response => this.getTechniquesSuccess(response['data']))
-    },
-    getTechniquesSuccess (techniques) {
-      this.phaseTechniques = {
-        'initial-access': [],
-        'execution': [],
-        'persistence': [],
-        'privilege-escalation': [],
-        'defense-evasion': [],
-        'credential-access': [],
-        'discovery': [],
-        'lateral-movement': [],
-        'collection': [],
-        'exfiltration': [],
-        'command-and-control': []
+    getMappedTechniques () {
+      var queryParams = {
+        ...this.searchFilters,
+        phase: this.phaseSelected,
+        skip: this.searchSkip,
+        limit: this.searchLimit
       }
-      techniques.forEach(technique => {
-        this.phaseTechniques[technique.kill_chain_phase].push(technique)
-      })
+      this.$axios
+        .get('/mapping/techniques', { params: { ...queryParams } })
+        .then(response => this.getMappedTechniquesSuccess(response['data']))
+    },
+    getMappedTechniquesSuccess (mappedTechniques) {
+      // this.phaseTechniques = {
+      //   'initial-access': [],
+      //   'execution': [],
+      //   'persistence': [],
+      //   'privilege-escalation': [],
+      //   'defense-evasion': [],
+      //   'credential-access': [],
+      //   'discovery': [],
+      //   'lateral-movement': [],
+      //   'collection': [],
+      //   'exfiltration': [],
+      //   'command-and-control': []
+      // }
+      this.resultsTotal = mappedTechniques.total
+      this.mappedTechniques = mappedTechniques.results
     },
     addToQueue (technique) {
       technique.commands.forEach(command => {

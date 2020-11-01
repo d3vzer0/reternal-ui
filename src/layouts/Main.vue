@@ -109,12 +109,12 @@
               Sigma
             </q-item-section>
           </q-item>
-          <q-item clickable v-ripple to="/techniques">
+          <q-item clickable v-ripple to="/commands">
             <q-item-section avatar>
               <q-icon name="mdi-bullseye" />
             </q-item-section>
             <q-item-section>
-              Techniques
+              Commands
             </q-item-section>
           </q-item>
           <q-item clickable v-ripple to="/mitre">

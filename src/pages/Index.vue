@@ -2,10 +2,10 @@
   <q-page>
     <!-- Center content row -->
     <div class="q-mt-md row justify-around q-gutter-sm">
-      <div class="col-xs-11 col-sm-5 col-md-5 col-lg-5 col-xl-5" v-if="$isC2Enabled()">
+      <div class="col-xs-11 col-sm-5 col-md-5 col-lg-5 col-xl-5">
         <C2ModulesActive></C2ModulesActive>
       </div>
-      <div class="col-xs-11 col-sm-5 col-md-5 col-lg-5 col-xl-5" v-if="$isSearchEnabled()">
+      <div class="col-xs-11 col-sm-5 col-md-5 col-lg-5 col-xl-5">
         <SearchModulesActive></SearchModulesActive>
       </div>
     </div>
@@ -40,7 +40,7 @@
             </q-card-section>
             <q-card-section>
               <div class="text-h5 q-mt-sm q-mb-xs">
-                Techniques
+                Commands
               </div>
               <div class="text-caption text-grey">
                 Amount of C2 commands mapped to ATTCK
