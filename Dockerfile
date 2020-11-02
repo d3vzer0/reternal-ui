@@ -23,6 +23,7 @@ COPY entrypoint.sh /usr/local/bin/
 RUN ln -s /usr/local/bin/entrypoint.sh
 
 COPY --from=build-stage /app/dist/spa/ /usr/share/nginx/html
+COPY ./default.conf /etc/nginx/conf.d/default.conf
 EXPOSE 80
 
 ENTRYPOINT [ "entrypoint.sh" ]
