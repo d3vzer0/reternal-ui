@@ -331,21 +331,20 @@ export default {
         .then(response => this.saveGraphSuccess(response['data']))
     },
     saveGraphSuccess (response) {
-      console.log(response)
+      // console.log(response)
     },
     scheduleCampaign () {
       this.$refs.scenario.validate()
       this.showScheduleScenario = false
       let apiGraph = this.apiGraph
       apiGraph.name = this.campaignName
-      console.log(apiGraph)
 
       this.$axios
         .post('/campaigns', apiGraph)
         .then(response => this.getListenerOptionsSuccess(response['data']))
     },
     scheduleCampaignSuccess (response) {
-      console.log(response)
+      // console.log(response)
     },
     addTask () {
       // Validate form fields

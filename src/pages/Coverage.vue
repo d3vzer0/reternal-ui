@@ -352,7 +352,7 @@ export default {
         .then(response => this.saveCoverageSuccess(response['data']))
     },
     saveCoverageSuccess (response) {
-      console.log(response)
+      // console.log(response)
     },
     getDatasources () {
       this.$axios

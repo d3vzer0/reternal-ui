@@ -282,7 +282,7 @@ export default {
   },
   sockets: {
     createSigmaPackage: function (data) {
-      console.log(data)
+      // console.log(data)
     }
   },
   created () {

@@ -240,9 +240,6 @@ export default {
       this.$axios
         .delete(`agents/${agent.integration}/${agent.name}`)
     },
-    clickety (a) {
-      console.log(a)
-    },
     getAgents () {
       for (var integration in this.$store.state.integrations.integrationOptions) {
         this.$axios

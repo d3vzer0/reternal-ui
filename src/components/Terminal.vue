@@ -65,7 +65,6 @@ export default {
       this.terminalHistory.push(`${this.terminalPrompt} ${this.terminalInput}`)
       this.terminalInput = ''
       if (command === 'shell') {
-        console.log('nou')
       } else if (!Object.keys(this.moduleList).includes(command)) {
         this.terminalHistory.push(`Command: ${command} not found`)
       } else {
@@ -85,7 +84,6 @@ export default {
       }
     },
     autoComplete () {
-      console.log(this.agentsSelected)
       this.terminalSuggestion = ''
       var totalMatches = new Set()
       for (var module of Object.keys(this.moduleList)) {

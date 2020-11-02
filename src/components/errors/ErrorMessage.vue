@@ -28,12 +28,10 @@ export default {
   },
   methods: {
     onError () {
-      console.log(1)
       if (this.errorDialog === false) {
         this.errorDialog = true
         this.interval = setInterval(() => {
           if (this.errorProgress >= 1) {
-            console.log('hier')
             this.errorDialog = false
             // this.error_progress = 0.10
             return

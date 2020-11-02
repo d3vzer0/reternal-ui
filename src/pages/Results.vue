@@ -178,9 +178,9 @@ export default {
     },
     gridCols: {
       get () {
-        for (let [key, value] of Object.entries(this.attckGrid)) {
-          console.log(key, value)
-        }
+        // for (let [key, value] of Object.entries(this.attckGrid)) {
+        //   console.log(key, value)
+        // }
         return 1
       }
     },
@@ -372,7 +372,6 @@ export default {
         .then(response => this.getCampaignsSuccess(response['data']))
     },
     getCampaignsSuccess (response) {
-      console.log(response)
       this.campaigns = response
     },
     getTechniquesCount () {

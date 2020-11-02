@@ -223,7 +223,6 @@ export default {
       })
     },
     addToQueue (technique) {
-      console.log(technique)
       technique.commands.forEach(command => {
         var randomArray = new Uint32Array(5)
         var randomId = window.crypto.getRandomValues(randomArray)[2]

@@ -178,7 +178,6 @@ export default {
   computed: {
     profile: {
       get: function () {
-        console.log(this.$store.state.user.access_token)
         return this.$store.state.user.profile
       }
     },
@@ -203,7 +202,7 @@ export default {
   },
   sockets: {
     connect: function () {
-      console.log('connected yo')
+      console.log('Connected to socket yo')
     },
     notification: function (data) {
       var notification = {
