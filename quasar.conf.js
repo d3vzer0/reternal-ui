@@ -25,7 +25,7 @@ module.exports = function (ctx) {
       iconSet: 'material-icons',
       lang: 'en-us',
       all: 'auto',
-
+      dark: 'auto',
       components: [],
       directives: [],
       plugins: []
@@ -56,10 +56,20 @@ module.exports = function (ctx) {
 
     // Full list of options: https://quasar.dev/quasar-cli/quasar-conf-js#Property%3A-devServer
     devServer: {
-      https: false,
+      https: true,
       host: '127.0.0.1',
       port: 9090,
-      open: false
+      open: false,
+      proxy: {
+        // proxy all requests starting with /api to jsonplaceholder
+        '/socket.io': {
+          target: 'http://api:5000/socket.io',
+          changeOrigin: true,
+          pathRewrite: {
+            '^/socket.io': ''
+          }
+        }
+      }
     },
 
     // https://quasar.dev/options/animations

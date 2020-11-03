@@ -110,8 +110,6 @@ export default {
     }
   },
   created () {
-    // this.$getIntegrations()
-    // this.$getSearchIntegrations()
     this.getCountTechniques()
     this.getCountRules()
     this.getCountCoverage()
@@ -119,7 +117,7 @@ export default {
   methods: {
     getCountTechniques () {
       this.$axios
-        .get('/stats/count/techniques')
+        .get('/stats/count/commands')
         .then(response => this.getCountTechniquesSuccess(response['data']))
     },
     getCountTechniquesSuccess (response) {
