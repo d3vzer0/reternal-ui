@@ -4,7 +4,7 @@
     <!-- Center content row -->
     <div class="q-pa-md q-mt-md row">
       <!-- Filter column -->
-      <div class="col-3 q-mr-md">
+      <div class="col-sm-3 col-md-3 col-xs-5 q-mr-md">
         <!-- Dynamic filters -->
         <div class="row q-mb-md">
           <div class="col">

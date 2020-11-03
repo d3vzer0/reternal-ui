@@ -4,7 +4,7 @@
     <!-- Center content row -->
     <div class="q-pa-md row">
       <!-- Filter column -->
-      <div class="col-4 col-xl-2 q-mt-md" style="max-width: 350px;">
+      <div class="col-md-4 col-xs-5 col-xl-2 q-mt-md" style="max-width: 350px;">
         <q-card flat>
           <q-table flat :data="filtedDatasources" :columns="datasourceColumns" :filter="filterDatasource"
           :pagination.sync="datasourcePagination">

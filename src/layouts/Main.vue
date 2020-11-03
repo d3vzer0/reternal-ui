@@ -6,17 +6,6 @@
         <!-- <q-btn flat dense round @click="miniState = !miniState" icon="menu" aria-label="Menu"/> -->
         <q-toggle color="red" label="Dark Mode" v-model="darkmode" />
         <q-toolbar-title></q-toolbar-title>
-        <div class="action-controls q-ml-lg">
-          <!--<q-btn flat icon="info" /> -->
-          <!-- <q-btn flat icon="call_to_action" /> -->
-        </div>
-        <!-- <div class="q-gutter-md">
-          <q-btn dense round flat icon="policy">
-            <q-badge floating color="red">1</q-badge>
-          </q-btn>
-          <q-btn dense round flat icon="mdi-graph">
-          </q-btn>
-        </div> -->
         <div class="">
           <q-btn flat icon="mail">
             <q-badge floating color="red" v-if="notifications.length">{{ notifications.length }}</q-badge>

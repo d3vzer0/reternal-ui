@@ -2,7 +2,7 @@
   <q-page>
     <!-- Center content row -->
     <div class="q-pa-md q-mt-md row">
-      <div class="col-3">
+      <div class="col-sm-3 col-md-3 col-xs-5 q-mr-md">
         <!-- Dynamic filters -->
          <div class="row">
           <div class="col">

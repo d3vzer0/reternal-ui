@@ -35,7 +35,7 @@
 
     <!-- Center content row -->
     <div class="q-pa-md row">
-      <div class="col-2">
+      <div class="col-md-2 col-xl-2 col-sm-3 col-xs-4">
         <!-- <div class="row">
           <div class="col">
             <q-card flat class="filter-row">
@@ -84,7 +84,7 @@
 
       <!-- Results column -->
       <div class="col">
-        <div class="row q-mt-md">
+        <div class="row q-mt-md q-pl-md">
           <q-table
             grid
             :data="sortedTechniques"
@@ -94,7 +94,7 @@
             card-container-class="justify-around cardContainerClass"
             :pagination.sync="pagination">
             <template v-slot:item="props">
-              <div class="q-mr-md q-mb-xl col-xs-12 col-sm-3 col-md-3">
+              <div class="q-mr-md q-mb-xl col-xs-12 col-sm-5 col-md-3 col-lg-3">
                 <q-card flat>
                   <q-card-section>
                     <q-btn
