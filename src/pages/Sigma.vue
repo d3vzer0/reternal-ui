@@ -33,16 +33,16 @@
                     </q-item-section>
                     <q-menu anchor="top right" self="top left">
                       <q-list>
-                        <!-- <q-item clickable v-close-popup>
-                          <q-item-section>Splunk App Package</q-item-section>
-                        </q-item> -->
                         <q-item clickable v-close-popup @click="packageRules('splunk2')">
-                          <q-item-section>Raw Searches</q-item-section>
+                          <q-item-section>Enriched Searches</q-item-section>
+                        </q-item>
+                        <q-item clickable v-close-popup disabled>
+                          <q-item-section>Full Splunk App Package</q-item-section>
                         </q-item>
                       </q-list>
                     </q-menu>
                   </q-item>
-                  <q-item clickable unelevated>
+                  <q-item clickable unelevated disabled>
                     <q-item-section>ElasticSearch</q-item-section>
                     <q-item-section side>
                       <q-icon name="keyboard_arrow_right" />
@@ -55,7 +55,7 @@
                       </q-list>
                     </q-menu>
                   </q-item>
-                  <q-item clickable unelevated>
+                  <q-item clickable unelevated disabled>
                     <q-item-section>Sentinel</q-item-section>
                     <q-item-section side>
                       <q-icon name="keyboard_arrow_right" />

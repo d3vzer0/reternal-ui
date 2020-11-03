@@ -1,5 +1,7 @@
 {
   "backend": "RT_API_BASE_URL",
+  "search": true,
+  "c2": true, 
   "oauth2": {
     "authority": "RT_OAUTH_AUTHORITY_URL",
     "url_auth": "RT_OAUTH_AUTHORIZE_URL",
