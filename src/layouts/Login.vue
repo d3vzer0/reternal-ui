@@ -11,7 +11,7 @@
     <q-page-container>
       <q-page class="q-pa-md q-mt-lg">
         <div class="q-pa-md row items-start justify-center">
-          <div class="col-2">
+          <div class="col-xl-2 col-md-3 col-xs-6">
             <q-card>
               <q-card-section>
                 <div class="row">
