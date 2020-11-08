@@ -68,6 +68,13 @@ module.exports = function (ctx) {
           pathRewrite: {
             '^/socket.io': ''
           }
+        },
+        '/api/v1': {
+          target: 'http://api:5000/api/v1',
+          changeOrigin: true,
+          pathRewrite: {
+            '^/api/v1': ''
+          }
         }
       }
     },

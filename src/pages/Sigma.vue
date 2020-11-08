@@ -10,11 +10,7 @@
               <div class="text-weight-bold">Packaging...</div>
               <div class="text-grey">Converting SIGMA rules to {{ packageFormat }}</div>
             </div>
-
             <q-space />
-
-            <q-btn flat round icon="get_app" />
-            <q-btn flat round icon="close" v-close-popup />
           </q-card-section>
         </q-card>
       </q-dialog>
@@ -33,11 +29,8 @@
                     </q-item-section>
                     <q-menu anchor="top right" self="top left">
                       <q-list>
-                        <q-item clickable v-close-popup @click="packageRules('splunk2')">
-                          <q-item-section>Enriched Searches</q-item-section>
-                        </q-item>
-                        <q-item clickable v-close-popup disabled>
-                          <q-item-section>Full Splunk App Package</q-item-section>
+                        <q-item clickable v-close-popup  @click="packageRules('splunk')">
+                          <q-item-section>Enriched Splunk App (.tar.gz)</q-item-section>
                         </q-item>
                       </q-list>
                     </q-menu>
@@ -227,7 +220,12 @@ export default {
   data () {
     return {
       packageProcessing: false,
-      packageFormat: 'Splunk',
+      packageFormat: 'splunk',
+      packageNames: {
+        'splunk': 'splunk_sigma_rules.tar.gz',
+        'sentinel': 'sentinel_sigma_rules.json',
+        'elasticsearch': 'elastic_sigma_rules.json'
+      },
       maxResults: 10,
       resultsTotal: 0,
       currentPage: 1,
@@ -282,7 +280,7 @@ export default {
   },
   sockets: {
     createSigmaPackage: function (data) {
-      // console.log(data)
+      this.getPackage(data['task'])
     }
   },
   created () {
@@ -310,8 +308,27 @@ export default {
     }
   },
   methods: {
+    getPackage (uid) {
+      var url = `/sigma/package/${this.packageFormat}/${uid}`
+      this.$axios({
+        method: 'get',
+        url,
+        responseType: 'arraybuffer'
+      })
+        .then(response => this.getPackageSuccess(response['data']))
+    },
+    getPackageSuccess (data) {
+      this.packageProcessing = false
+      var downloadUrl = window.URL.createObjectURL(new Blob([data]))
+      var downloadLink = document.createElement('a')
+      downloadLink.href = downloadUrl
+      downloadLink.setAttribute('download', this.packageNames[this.packageFormat])
+      document.body.appendChild(downloadLink)
+      downloadLink.click()
+    },
     packageRules (target) {
       this.packageFormat = target
+      this.packageProcessing = true
       var queryParams = {
         ...this.searchFilters,
         phase: this.phaseSelected
