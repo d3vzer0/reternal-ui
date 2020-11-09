@@ -1,5 +1,22 @@
 <template>
   <q-page>
+    <!-- <q-dialog v-model="uploadDialog">
+      <q-card>
+        <q-card-section>
+          <div class="text-h6">Upload...</div>
+        </q-card-section>
+
+        <q-card-section class="q-pt-none" style="max-width: 700px; word-wrap: break-word;">
+          <vue-code-highlight>
+            {{ uploadHelp[uploadTarget] }}
+          </vue-code-highlight>
+        </q-card-section>
+
+        <q-card-actions align="right">
+          <q-btn flat label="OK" color="primary" v-close-popup />
+        </q-card-actions>
+      </q-card>
+    </q-dialog> -->
     <q-dialog v-model="techniquePrompt">
       <q-card style="width: 700px; max-width: 80vw">
         <q-card-section>
@@ -46,9 +63,21 @@
             </q-card>
           </div>
         </div> -->
+        <div class="row justify-end">
+          <div class="col">
+            <axiosUploader flat
+              ref="coverageuploader"
+              style="max-width: 100%"
+              label="Upload CSV"
+              accept=".csv, text/csv"
+              :multiple="false"
+              />
+            <!-- <q-btn color="primary" round icon="add"/> -->
+          </div>
+        </div>
 
         <!-- Dynamic filters -->
-        <div class="row">
+        <div class="row q-mt-md">
           <div class="col">
             <q-card flat class="filter-row">
               <q-card-section>
@@ -170,13 +199,19 @@
 </template>
 
 <script>
+import axiosUploader from 'components/axiosUploader'
 
 export default {
   name: 'Mitre',
   components: {
+    axiosUploader
   },
   data () {
     return {
+      uploadDialog: false,
+      uploadHelp: {
+        splunk: '| tstats values(sourcetype) AS sourcetype where index=* group by index, source| mvexpand sourcetype'
+      },
       pagination: {
         page: 1,
         rowsPerPage: 6

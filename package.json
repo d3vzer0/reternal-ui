@@ -16,6 +16,7 @@
     "axios": "^0.18.1",
     "install": "^0.13.0",
     "js-yaml": "^3.14.0",
+    "papaparse": "^5.3.0",
     "jwt-decode": "^2.2.0",
     "oidc-client": "^1.10.1",
     "quasar": "^1.12.8",
