@@ -7,11 +7,11 @@
           <div class="text-h5">{{ techniqueDetails.name }}</div>
         </q-card-section>
         <q-card-section class="q-pt-none q-gutter-sm">
-          <q-badge color="primary" v-for="platform in techniqueDetails.platforms" v-bind:key="platform" style="font-size:14px">
-            <span v-if="platform === 'macOS'" class="q-pr-xs"><q-icon class="q-ma-xs" name="fab fa-apple" color="white" />macOS </span>
-            <span v-else-if="platform === 'Linux'" class="q-pr-xs"><q-icon class="q-ma-xs" name="fab fa-linux" color="white" /> Linux</span>
-            <span v-else-if="platform === 'Windows'" class="q-pr-xs"><q-icon class="q-ma-xs" name="fab fa-windows" color="white" /> Windows</span>
-            <span v-else tyle="font-size:18px" class="q-pr-xs"><q-icon class="q-ma-xs" name="fas fa-cloud" color="white"/> {{ platform }}</span>
+          <q-badge v-for="platform in techniqueDetails.platforms" v-bind:key="platform" style="font-size:14px">
+            <span v-if="platform === 'macOS'" class="q-pr-xs platformbadge"><q-icon class="q-ma-xs" name="fab fa-apple"  />macOS </span>
+            <span v-else-if="platform === 'Linux'" class="q-pr-xs platformbadge"><q-icon class="q-ma-xs" name="fab fa-linux" /> Linux</span>
+            <span v-else-if="platform === 'Windows'" class="q-pr-xs platformbadge"><q-icon class="q-ma-xs" name="fab fa-windows" /> Windows</span>
+            <span v-else tyle="font-size:18px" class="q-pr-xs platformbadge"><q-icon class="q-ma-xs" name="fas fa-cloud" /> {{ platform }}</span>
           </q-badge>
         </q-card-section>
         <q-card-section class="q-pt-none">
@@ -23,8 +23,8 @@
           </div>
           <div class="q-pt-md">
             <span v-for="datasource in techniqueDetails.data_sources" v-bind:key="datasource">
-              <q-chip v-if="techniqueDetails.data_sources_available.includes(datasource)" icon="done">{{ datasource }}</q-chip>
-              <q-chip v-else icon="highlight_off">{{ datasource }}</q-chip>
+              <q-chip class="datasourcehip" v-if="techniqueDetails.data_sources_available.includes(datasource)" icon="done">{{ datasource }}</q-chip>
+              <q-chip class="datasourcehip" v-else icon="highlight_off">{{ datasource }}</q-chip>
             </span>
           </div>
         </q-card-section>
@@ -50,6 +50,7 @@
         <div class="row justify-end">
           <div class="col">
             <axiosUploader flat
+              class="uploaderCol"
               ref="coverageuploader"
               style="max-width: 100%"
               label="Upload CSV"
@@ -159,7 +160,7 @@
                             <q-item-label lines="1">
                               <q-linear-progress size="25px" :value="technique.data_sources_available.length / technique.data_sources.length">
                                 <div class="absolute-full flex flex-center">
-                                  <q-badge color="white" text-color="primary">{{ technique.data_sources_available.length }} / {{ technique.data_sources.length }}</q-badge>
+                                  <q-badge class="badgestatus">{{ technique.data_sources_available.length }} / {{ technique.data_sources.length }}</q-badge>
                                 </div>
                               </q-linear-progress>
                             </q-item-label>
@@ -361,4 +362,33 @@ export default {
 .filter-col {
   max-width: 250px !important;
 }
+
+.body--light {
+  .badgestatus {
+    background-color: white;
+    color: $primary;
+  }
+  .q-uploader__header {
+    background-color: $primary;
+    color: white;
+  }
+}
+
+.body--dark {
+  .badgestatus {
+    background-color: $primary;
+    color: #f5f5f5;
+  }
+  .q-uploader__header {
+    color: $primary;
+  }
+  .datasourcehip {
+    background-color: #f5f5f5;
+    color: $primary;
+  }
+  .platformbadge {
+    color: $primary;
+  }
+}
+
 </style>
