@@ -19,7 +19,7 @@
       <div class="col-sm-3 col-md-2 col-xs-4">
         <div class="row justify-end">
           <div class="col">
-            <q-btn style="width: 100%;" unelevated color="primary" icon="add" label="Package">
+            <q-btn style="width: 100%;" unelevated color="primary" icon="get_app" label="Package">
               <q-menu fit>
                 <q-list>
                   <q-item clickable unelevated>

@@ -1,22 +1,6 @@
 <template>
   <q-page>
-    <!-- <q-dialog v-model="uploadDialog">
-      <q-card>
-        <q-card-section>
-          <div class="text-h6">Upload...</div>
-        </q-card-section>
 
-        <q-card-section class="q-pt-none" style="max-width: 700px; word-wrap: break-word;">
-          <vue-code-highlight>
-            {{ uploadHelp[uploadTarget] }}
-          </vue-code-highlight>
-        </q-card-section>
-
-        <q-card-actions align="right">
-          <q-btn flat label="OK" color="primary" v-close-popup />
-        </q-card-actions>
-      </q-card>
-    </q-dialog> -->
     <q-dialog v-model="techniquePrompt">
       <q-card style="width: 700px; max-width: 80vw">
         <q-card-section>
@@ -52,7 +36,7 @@
 
     <!-- Center content row -->
     <div class="q-pa-md row">
-      <div class="col-md-2 col-xl-2 col-sm-3 col-xs-4">
+      <div class="col-md-2 col-xl-2 col-sm-3 col-xs-4 filter-col">
         <!-- <div class="row">
           <div class="col">
             <q-card flat class="filter-row">
@@ -113,22 +97,22 @@
 
       <!-- Results column -->
       <div class="col">
-        <div class="row q-mt-md q-pl-md">
+        <div class="row q-pa-md">
           <q-table
             grid
             :data="sortedTechniques"
             :columns="columns"
             row-key="_id"
             hide-header
-            card-container-class="justify-around cardContainerClass"
+            card-container-class="cardContainerClass"
             :pagination.sync="pagination">
             <template v-slot:item="props">
-              <div class="q-mr-md q-mb-xl col-xs-12 col-sm-5 col-md-3 col-lg-3">
+              <div class="q-pa-sm col-xl-3 col-xs-12 col-sm-6 col-md-4 col-lg-4">
                 <q-card flat>
                   <q-card-section>
-                    <q-btn
+                    <q-btn unelevated
                       fab color="primary" :icon="phaseIcons[props.row._id]" class="absolute"
-                      style="top: 0; right: 12px; transform: translateY(-30%);" @click="props.expand = !props.expand"
+                      style="top: 0; right: 20px; transform: translateY(-30%);" @click="props.expand = !props.expand"
                     />
                     <div class="row no-wrap items-center">
                       <div class="col text-h6 ellipsis">
@@ -163,21 +147,21 @@
                       </q-list>
                   </q-card-section>
                   <q-separator />
-                  <q-card-section v-if="props.expand" :props="props">
+                   <!-- v-if="props.expand"  -->
+                  <q-card-section>
                     <q-list separator>
-                      <q-scroll-area style="height: 400px;">
+                      <q-scroll-area style="height: 600px;">
                         <q-item v-for="(technique, index) in props.row.techniques" v-bind:key="index">
                           <q-item-section>
                             <q-item-label>
                               {{ technique.name }}
                             </q-item-label>
                             <q-item-label lines="1">
-                              <span v-for="dsa in technique.data_sources_available" v-bind:key="dsa.id">
-                                <q-icon name="grade" color="black"/>
-                              </span>
-                                <span v-for="ds in technique.data_sources" v-bind:key="ds.id">
-                                <q-icon name="grade" color="grey"/>
-                              </span>
+                              <q-linear-progress size="25px" :value="technique.data_sources_available.length / technique.data_sources.length">
+                                <div class="absolute-full flex flex-center">
+                                  <q-badge color="white" text-color="primary">{{ technique.data_sources_available.length }} / {{ technique.data_sources.length }}</q-badge>
+                                </div>
+                              </q-linear-progress>
                             </q-item-label>
                           </q-item-section>
                           <q-item-section avatar>
@@ -214,7 +198,7 @@ export default {
       },
       pagination: {
         page: 1,
-        rowsPerPage: 6
+        rowsPerPage: 4
       },
       columns: [
         { name: '_id', label: '_id', field: '_id' },
@@ -283,6 +267,10 @@ export default {
     }
   },
   methods: {
+    infiteTechniques (shownCount, techniques) {
+      console.log(shownCount, techniques)
+      return ''
+    },
     coverageCount (phase) {
       return phase.techniques.filter(technique => technique.data_sources_available.length).length
     },
@@ -368,5 +356,9 @@ export default {
 
 .has-coverage {
   color: green;
+}
+
+.filter-col {
+  max-width: 250px !important;
 }
 </style>
