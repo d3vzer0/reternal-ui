@@ -14,15 +14,16 @@
           <div class="col-xl-2 col-md-3 col-xs-6">
             <q-card>
               <q-card-section>
-                <div class="row">
                   <div class="col" style="text-align:center;">
-                     <q-icon name="mdi-shield-account" color="primary" style="font-size:100px"/>
+                    <q-spinner
+                      color="primary"
+                      size="xl"
+                    />
                   </div>
-                </div>
-                <div class="row q-mt-lg">
-                  <div class="col">
-                    <q-btn type="submit" unelevated @click="authenticateInit()" label="Authenticate" class="full-width"/>
-                  </div>
+              </q-card-section>
+              <q-card-section>
+                <div class="text-h6 text-center">
+                    Authenticating ...
                 </div>
               </q-card-section>
             </q-card>
@@ -34,8 +35,6 @@
 </template>
 
 <script>
-// import mgr from '../auth'
-
 export default {
   name: 'Login',
   components: {
@@ -62,12 +61,15 @@ export default {
       this.$oauth.signinRedirect()
     },
     async authenticated () {
-      if (this.$route.query) {
+      const currentQuery = this.$route.query
+      if ('code' in currentQuery) {
         this.$oauth.signinRedirectCallback().then(user => {
           this.$store.commit('user/setUser', user)
           this.$setSocket(user.access_token)
           this.$router.push({ path: '/' })
         })
+      } else {
+        this.authenticateInit()
       }
     }
   }
