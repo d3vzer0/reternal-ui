@@ -15,7 +15,8 @@ const routes = [
       { path: '/coverage', component: () => import('pages/Coverage.vue'), meta: { requiresAuth: true } },
       { path: '/sigma', component: () => import('pages/Sigma.vue'), meta: { requiresAuth: true } },
       { path: '/results', component: () => import('pages/Results.vue'), meta: { requiresAuth: true } },
-      { path: '/lifecycle', component: () => import('pages/Lifecycle.vue'), meta: { requiresAuth: true } }
+      { path: '/lifecycle', component: () => import('pages/Lifecycle.vue'), meta: { requiresAuth: true } },
+      { path: '/flowchart', component: () => import('pages/FlowChart.vue'), meta: { requiresAuth: true } }
     ]
   },
   {

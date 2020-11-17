@@ -14,6 +14,7 @@ import asyncTasks from './asyncTasks'
 import user from './user'
 import sigma from './sigma'
 import techniques from './techniques'
+import flowchart from './flowchart'
 import ws from './ws'
 
 Vue.use(Vuex)
@@ -35,6 +36,7 @@ const Store = new Vuex.Store({
     techniques,
     tasks,
     user,
+    flowchart,
     coverage,
     notifications,
     searchIntegrations,

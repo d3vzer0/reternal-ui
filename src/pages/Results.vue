@@ -91,9 +91,9 @@
                                 </div>
                               </div>
                             </div>
-                            <network ref="dag_net" :nodes="nodes" :edges="edges" :options="options" :events="['select']"
+                            <!-- <network ref="dag_net" :nodes="nodes" :edges="edges" :options="options" :events="['select']"
                               @select='clickNode'>
-                            </network>
+                            </network> -->
                           </q-carousel-slide>
                           <q-carousel-slide name="attck" class="column no-wrap">
                             <!-- <q-icon name="style" size="56px" /> -->
@@ -162,12 +162,10 @@
 </template>
 
 <script>
-import { Network } from 'vue-vis-network'
 
 export default {
   name: 'Results',
   components: {
-    Network
   },
   computed: {
     filtered_ca: function () {

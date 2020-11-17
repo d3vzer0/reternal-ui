@@ -80,7 +80,7 @@
               Results
             </q-item-section>
           </q-item>
-          <q-item clickable v-ripple to='/campaign'>
+          <q-item clickable v-ripple to='/flowchart'>
             <q-item-section avatar>
               <q-icon name="mdi-graph" />
             </q-item-section>
@@ -88,7 +88,6 @@
               Campaign
             </q-item-section>
           </q-item>
-          <q-separator />
           <q-separator />
           <q-item clickable v-ripple to="/sigma">
             <q-item-section avatar>
