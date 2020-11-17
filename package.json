@@ -14,6 +14,7 @@
   "dependencies": {
     "@quasar/extras": "^1.9.10",
     "axios": "^0.18.1",
+    "drawflow": "0.0.30",
     "install": "^0.13.0",
     "js-yaml": "^3.14.0",
     "jwt-decode": "^2.2.0",
@@ -21,7 +22,6 @@
     "papaparse": "^5.3.0",
     "quasar": "^1.14.3",
     "socket.io-client": "^2.3.0",
-    "vis-data": "^6.5.1",
     "vue-axios": "^2.1.5",
     "vue-code-highlight": "^0.7.4",
     "vue-command": "^7.3.2",

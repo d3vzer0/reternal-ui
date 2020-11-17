@@ -151,10 +151,10 @@
                     </table>
                   </div>
                 </div>
-                <network :nodes="nodes" :edges="edges" :options="options"
+                <!-- <network :nodes="nodes" :edges="edges" :options="options"
                   :events="['select']"
                   @select='clickNode' ref="campaign_dag">
-                </network>
+                </network> -->
               </div>
             </q-card>
           </div>
@@ -196,7 +196,6 @@
 </template>
 
 <script>
-import { Network } from 'vue-vis-network'
 import { component as VueCodeHighlight } from 'vue-code-highlight'
 import 'vue-code-highlight/themes/prism-okaidia.css'
 import moment from 'moment'
@@ -204,7 +203,6 @@ import moment from 'moment'
 export default {
   name: 'Campaign',
   components: {
-    Network,
     VueCodeHighlight
   },
   data () {
