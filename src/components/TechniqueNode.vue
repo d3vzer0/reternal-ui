@@ -12,7 +12,21 @@
         </q-item-section>
       </q-item>
       <q-card-actions vertical class="justify-around q-px-md">
-        <q-btn flat round color="primary" icon="desktop_windows" @click="getData()" />
+        <q-btn flat round color="primary" icon="desktop_windows" @click="agentDialog = true, getAgents()" />
+        <q-popup-edit v-model="agentDialog" :cover="false"
+          :offset="[100, -140]">
+          <q-select
+            v-model="agentsSelected"
+            multiple
+            :options="agentOptions"
+            option-value="id"
+            option-label="name"
+            use-chips
+            style="width:200px"
+            stack-label
+            label="Select agents"
+          />
+      </q-popup-edit>
       </q-card-actions>
     </q-card-section>
     <q-card-section>
@@ -50,6 +64,9 @@ export default {
   },
   data () {
     return {
+      agentDialog: false,
+      agentOptions: [],
+      agentsSelected: [],
       nodeId: null,
       dataNode: null,
       moduleSelected: null,
@@ -62,6 +79,13 @@ export default {
     nodeData () {
       const dataNode = this.graphObject.getNodeFromId(this.nodeId.slice(5)).data
       return dataNode
+    }
+  },
+  sockets: {
+    getAgents: function (response) {
+      this.$axios
+        .get(`/state/agents/get/${response.task}`)
+        .then(response => this.getAgentsSuccess(response.data))
     }
   },
   methods: {
@@ -80,6 +104,15 @@ export default {
     },
     getModulesSuccess (modules) {
       this.moduleDefaultOptions = modules.name
+    },
+    getAgents () {
+      // for (var integration in this.integrationOptions) {
+      //   this.$axios
+      //     .get('/agents/' + integration)
+      // }
+    },
+    getAgentsSuccess (response) {
+      this.agentOptions = response
     }
   },
   mounted () {

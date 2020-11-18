@@ -118,6 +118,7 @@ export default {
           name: 'Run technique',
           icon: 'mdi-bullseye',
           module: 'execTechnique',
+          integrations: this.integrationOptions,
           description: 'Run commands mapped to ATTCK techniques',
           type: 'technique',
           config: {
