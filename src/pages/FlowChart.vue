@@ -255,7 +255,7 @@ export default {
     exportFlowchart () {
       this.$refs.graphForm.validate().then(success => {
         if (success) {
-          var downloadUrl = window.URL.createObjectURL(new Blob([this.editor.export()]))
+          var downloadUrl = window.URL.createObjectURL(new Blob([JSON.stringify(this.editor.export())]))
           var downloadLink = document.createElement('a')
           downloadLink.href = downloadUrl
           downloadLink.setAttribute('download', 'flowchart.json')
