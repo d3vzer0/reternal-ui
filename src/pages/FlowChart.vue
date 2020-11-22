@@ -16,45 +16,18 @@
                   </div>
                 </q-item>
                 <q-separator />
-                <q-item-label header>Conditionals</q-item-label>
-                <q-item draggable="true" v-on:dragend="dragNodeEnd(cond)" clickable v-ripple v-for="(cond, index) in availableConditions" v-bind:key="'cond-' + index">
+                <q-item-label header>Nodes</q-item-label>
+                <q-item draggable="true" v-on:dragend="dragNodeEnd(cond)" clickable v-ripple v-for="(cond, index) in nodeOptions" v-bind:key="index">
                   <q-item-section avatar>
                     <q-avatar class="node-icon">
-                      <q-icon :name="cond.icon" class="node-icon-content"/>
+                      <q-icon v-if="cond.icon" :name="cond.icon" class="node-icon-content"/>
+                      <img v-else-if="cond.thumbnail" :src="cond.thumbnail">
+                      <q-icon v-else name="event"/>
                     </q-avatar>
                   </q-item-section>
                   <q-item-section>
-                    <q-item-label>{{cond.name}}</q-item-label>
+                    <q-item-label>{{cond.label}}</q-item-label>
                     <q-item-label caption lines="2">{{cond.description}}</q-item-label>
-                  </q-item-section>
-                </q-item>
-                <q-separator />
-              </q-list>
-               <q-list>
-                <q-separator />
-                <q-item-label header>Global</q-item-label>
-                <q-item draggable="true" v-on:dragend="dragNodeEnd(cond)" clickable v-ripple v-for="(cond, index) in availableGlobalModules" v-bind:key="'glb-' + index">
-                  <q-item-section avatar>
-                    <q-avatar class="node-icon">
-                      <q-icon :name="cond.icon" class="node-icon-content"/>
-                    </q-avatar>
-                  </q-item-section>
-                  <q-item-section>
-                    <q-item-label>{{cond.name}}</q-item-label>
-                    <q-item-label caption lines="2">{{cond.description}}</q-item-label>
-                  </q-item-section>
-                </q-item>
-                <q-separator />
-              </q-list>
-              <q-list>
-                <q-item-label header>C2 Integrations</q-item-label>
-                <q-item draggable="true" v-on:dragend="dragNodeEnd(mod)" clickable v-ripple v-for="(mod, index) in availableModules" v-bind:key="'mod-' + index">
-                  <q-item-section avatar>
-                    <q-avatar><img src="statics/empire_small.png"/></q-avatar>
-                  </q-item-section>
-                  <q-item-section>
-                    <q-item-label>{{mod.integration}}: {{mod.name}}</q-item-label>
-                    <q-item-label caption lines="2">{{mod.description}}</q-item-label>
                   </q-item-section>
                 </q-item>
               </q-list>
@@ -65,7 +38,7 @@
       <div class="col">
         <div class="inner-graph">
           <div class="graph-actions">
-            <span class="run-graph"><q-btn flat class="node-icon" unelevated round icon="play_arrow" /></span>
+            <span class="run-graph"><q-btn flat class="node-icon" unelevated round icon="play_arrow" @click="getAvailableNodes()" /></span>
             <span class="save-graph"><q-btn flat class="node-icon" unelevated round icon="get_app" @click="exportFlowchart"/></span>
           </div>
           <div id="drawflow" v-on:dragover="dragNode">
@@ -83,17 +56,11 @@ import styleDrawflow from 'drawflow/dist/drawflow.min.css' // eslint-disable-lin
 
 import Vue from 'vue'
 import Drawflow from 'drawflow'
-import ConditionalNodeText from 'components/ConditionalNodeText'
-import ConditionalNodeDate from 'components/ConditionalNodeDate'
-import TechniqueNode from 'components/TechniqueNode'
-import C2ModuleNode from 'components/C2ModuleNode'
-import C2AgentNode from 'components/C2AgentNode'
+import C2Node from 'components/C2Node'
+import BaseNode from 'components/BaseNode'
 
-Vue.component('ConditionalNodeText', ConditionalNodeText)
-Vue.component('ConditionalNodeDate', ConditionalNodeDate)
-Vue.component('TechniqueNode', TechniqueNode)
-Vue.component('C2ModuleNode', C2ModuleNode)
-Vue.component('C2AgentNode', C2AgentNode)
+Vue.component('C2Node', C2Node)
+Vue.component('BaseNode', BaseNode)
 
 export default {
   name: 'DAG',
@@ -101,6 +68,7 @@ export default {
   },
   data () {
     return {
+      nodeOptions: [],
       campaignName: null,
       baseNodeX: 100,
       baseNodeY: 200,
@@ -110,62 +78,16 @@ export default {
       },
       editor: null,
       filterTask: null,
-      availableModules: [
-      ],
-      availableGlobalModules: [
-        {
-          node: 'TechniqueNode',
-          name: 'Run technique',
-          icon: 'mdi-bullseye',
-          module: 'execTechnique',
-          integrations: this.integrationOptions,
-          description: 'Run commands mapped to ATTCK techniques',
-          type: 'technique',
-          config: {
-            inputs: 1,
-            outputs: 1
-          }
-        }
-      ],
-      availableConditions: [
-        {
-          node: 'ConditionalNode',
-          name: 'Result Contains',
-          icon: 'spellcheck',
-          module: 'ifCommandContainsString',
-          description: 'Continue to next task if results from previous stage contains string',
-          type: 'conditional',
-          config: {
-            inputs: 1,
-            outputs: 2
-          }
-        },
-        {
-          node: 'ConditionalNodeDate',
-          name: 'From Date',
-          icon: 'event',
-          module: 'ifDateExceeds',
-          description: 'Continue to next task after specified datetime',
-          type: 'conditional',
-          config: {
-            inputs: 1,
-            outputs: 1
-          }
-        }
-      ]
+      defaultNode: 'C2Node'
     }
   },
   computed: {
-    integrationOptions: {
-      get () {
-        return this.$store.state.integrations.integrationOptions
-      }
-    }
   },
   sockets: {
-    getWorkersC2: function (data) {
-      this.$getIntegrationsResults(data.task)
-      this.populateModules()
+    getNodes: function (data) {
+      this.$axios
+        .get(`/state/nodes/get/${data.task}`)
+        .then(response => this.getAvailableNodesResults(response.data))
     }
   },
   mounted () {
@@ -173,49 +95,13 @@ export default {
     this.editor = new Drawflow(id, Vue)
     this.editor.start()
     var props = { graphObject: this.editor }
-    this.editor.registerNode('ConditionalNode', ConditionalNodeText, props, this.graphOptions)
-    this.editor.registerNode('ConditionalNodeDate', ConditionalNodeDate, props, this.graphOptions)
-    this.editor.registerNode('TechniqueNode', TechniqueNode, props, this.graphOptions)
-    this.editor.registerNode('C2ModuleNode', C2ModuleNode, props, this.graphOptions)
-    this.editor.registerNode('C2AgentNode', C2AgentNode, props, this.graphOptions)
-    this.$getIntegrations()
-    this.addBaseNode()
+    this.editor.registerNode('C2Node', C2Node, props, this.graphOptions)
+    this.editor.registerNode('BaseNode', BaseNode, props, this.graphOptions)
+    this.getAvailableNodes()
   },
   created () {
   },
   methods: {
-    populateModules () {
-      for (const [key, value] of Object.entries(this.integrationOptions)) {
-        var moduleNode = {
-          node: 'C2ModuleNode',
-          integration: key,
-          name: 'Run module',
-          img: '/statics/empire_small.png',
-          module: value.name,
-          description: 'Run a C2 module on specified agent(s)',
-          type: 'c2',
-          config: {
-            inputs: 1,
-            outputs: 1
-          }
-        }
-        this.availableModules.push(moduleNode)
-
-        var agentNode = {
-          node: 'C2AgentNode',
-          integration: key,
-          name: 'Stop agent',
-          img: '/statics/empire_small.png',
-          description: 'Stop/Kill specified agent(s)',
-          type: 'c2',
-          config: {
-            inputs: 1,
-            outputs: 1
-          }
-        }
-        this.availableModules.push(agentNode)
-      }
-    },
     dragNodeEnd (nodeContent) {
       // Calculate posX to place node on canvas
       const posX = this.draggedNodePos.clientX * (this.editor.precanvas.clientWidth /
@@ -232,25 +118,10 @@ export default {
     dragNode (event) {
       this.draggedNodePos = { clientX: event.clientX, clientY: event.clientY }
     },
-    addBaseNode () {
-      const baseNode = {
-        node: 'ConditionalNodeDate',
-        name: 'From Date',
-        icon: 'event',
-        module: 'ifDateExceeds',
-        description: 'Continue to next task after specified datetime',
-        type: 'conditional',
-        config: {
-          inputs: 0,
-          outputs: 1
-        }
-      }
-      this.addNode(baseNode, this.baseNodeX, this.baseNodeY)
-    },
     addNode (nodeData, posX, posY) {
       var randomArray = new Uint32Array(5)
       var randomId = window.crypto.getRandomValues(randomArray)[2]
-      this.editor.addNode(randomId, nodeData.config.inputs, nodeData.config.outputs, posX, posY, 'nodeClass', nodeData, nodeData.node, 'vue')
+      this.editor.addNode(randomId, nodeData.inputs, nodeData.outputs, posX, posY, 'nodeClass', nodeData, 'C2Node', 'vue')
     },
     exportFlowchart () {
       this.$refs.graphForm.validate().then(success => {
@@ -264,6 +135,14 @@ export default {
         }
       })
     },
+    getAvailableNodes () {
+      this.$axios
+        .get('nodes')
+    },
+    getAvailableNodesResults (response) {
+      console.log(response)
+      this.nodeOptions = response
+    },
     nodeDelete (node) {
       console.log(node)
     }
@@ -273,6 +152,20 @@ export default {
 
 <style lang="scss">
 .body--light {
+  .drawflow .drawflow-node {
+    background: $primary;
+    color: #f5f5f5;
+  }
+  .drawflow .drawflow-node:hover {
+    background: $primary;
+    color: #f5f5f5;
+  }
+
+  .drawflow .drawflow-node.selected {
+    background: $primary;
+    color: #f5f5f5;
+  }
+
   .node-icon {
     background-color: $primary;
     color: #f5f5f5;
@@ -280,6 +173,10 @@ export default {
 }
 
 .body--dark {
+  .drawflow .drawflow-node {
+    background: #f5f5f5;
+    color: $primary;
+  }
   .node-icon {
     background-color: #f5f5f5;
     color: $primary;
@@ -317,222 +214,62 @@ export default {
   position: relative;
 }
 
-:root {
-  --dfBackgroundColor: null;
-  --dfBackgroundSize: 0px;
-  --dfBackgroundImage: none;
-
-  --dfNodeType: flex;
-  --dfNodeTypeFloat: none;
-  --dfNodeBackgroundColor: #ffffff;
-  --dfNodeTextColor: #000000;
-  --dfNodeBorderSize: 1px;
-  --dfNodeBorderColor: #000000;
-  --dfNodeBorderRadius: 4px;
-  --dfNodeMinHeight: 40px;
-  --dfNodeMinWidth: 100px;
-  --dfNodePaddingTop: 0px;
-  --dfNodePaddingBottom: 0px;
-  --dfNodeBoxShadowHL: 0px;
-  --dfNodeBoxShadowVL: 2px;
-  --dfNodeBoxShadowBR: 0px;
-  --dfNodeBoxShadowS: 0px;
-  --dfNodeBoxShadowColor: rgba(184, 184, 184, 1);
-
-  --dfNodeHoverBackgroundColor: #ffffff;
-  --dfNodeHoverTextColor: #000000;
-  --dfNodeHoverBorderSize: 2px;
-  --dfNodeHoverBorderColor: #000000;
-  --dfNodeHoverBorderRadius: 4px;
-
-  --dfNodeHoverBoxShadowHL: 0px;
-  --dfNodeHoverBoxShadowVL: 2px;
-  --dfNodeHoverBoxShadowBR: 15px;
-  --dfNodeHoverBoxShadowS: 2px;
-  --dfNodeHoverBoxShadowColor: #4ea9ff;
-
-  --dfNodeSelectedBackgroundColor: rgba(255, 255, 255, 1);
-  --dfNodeSelectedTextColor: null;
-  --dfNodeSelectedBorderSize: 2px;
-  --dfNodeSelectedBorderColor: #000000;
-  --dfNodeSelectedBorderRadius: 4px;
-
-  --dfNodeSelectedBoxShadowHL: 0px;
-  --dfNodeSelectedBoxShadowVL: 2px;
-  --dfNodeSelectedBoxShadowBR: 15px;
-  --dfNodeSelectedBoxShadowS: 2px;
-  --dfNodeSelectedBoxShadowColor: #4ea9ff;
-
-  --dfInputBackgroundColor: #ffffff;
-  --dfInputBorderSize: 2px;
-  --dfInputBorderColor: #000000;
-  --dfInputBorderRadius: 50px;
-  --dfInputLeft: -27px;
-  --dfInputHeight: 20px;
-  --dfInputWidth: 20px;
-
-  --dfInputHoverBackgroundColor: #ffffff;
-  --dfInputHoverBorderSize: 2px;
-  --dfInputHoverBorderColor: #000000;
-  --dfInputHoverBorderRadius: 50px;
-
-  --dfOutputBackgroundColor: #ffffff;
-  --dfOutputBorderSize: 2px;
-  --dfOutputBorderColor: #000000;
-  --dfOutputBorderRadius: 50px;
-  --dfOutputRight: -3px;
-  --dfOutputHeight: 20px;
-  --dfOutputWidth: 20px;
-
-  --dfOutputHoverBackgroundColor: #ffffff;
-  --dfOutputHoverBorderSize: 2px;
-  --dfOutputHoverBorderColor: #000000;
-  --dfOutputHoverBorderRadius: 50px;
-
-  --dfLineWidth: 5px;
-  --dfLineColor: #4682b4;
-  --dfLineHoverColor: #4682b4;
-  --dfLineSelectedColor: #43b993;
-
-  --dfRerouteBorderWidth: 2px;
-  --dfRerouteBorderColor: #000000;
-  --dfRerouteBackgroundColor: #ffffff;
-
-  --dfRerouteHoverBorderWidth: 2px;
-  --dfRerouteHoverBorderColor: #000000;
-  --dfRerouteHoverBackgroundColor: #ffffff;
-
-  --dfDeleteDisplay: block;
-  --dfDeleteColor: #ffffff;
-  --dfDeleteBackgroundColor: #000000;
-  --dfDeleteBorderSize: 2px;
-  --dfDeleteBorderColor: #ffffff;
-  --dfDeleteBorderRadius: 50px;
-  --dfDeleteTop: -15px;
-
-  --dfDeleteHoverColor: #000000;
-  --dfDeleteHoverBackgroundColor: #ffffff;
-  --dfDeleteHoverBorderSize: 2px;
-  --dfDeleteHoverBorderColor: #000000;
-  --dfDeleteHoverBorderRadius: 50px;
-
-}
-
-#drawflow {
-  background: var(--dfBackgroundColor);
-  background-size: var(--dfBackgroundSize) var(--dfBackgroundSize);
-  background-image: var(--dfBackgroundImage);
-}
-
 .drawflow .drawflow-node {
-  display: var(--dfNodeType);
-  background: var(--dfNodeBackgroundColor);
-  color: var(--dfNodeTextColor);
-  border: var(--dfNodeBorderSize)  solid var(--dfNodeBorderColor);
-  border-radius: var(--dfNodeBorderRadius);
-  min-height: var(--dfNodeMinHeight);
-  width: auto;
-  min-width: var(--dfNodeMinWidth);
-  padding-top: var(--dfNodePaddingTop);
-  padding-bottom: var(--dfNodePaddingBottom);
-  -webkit-box-shadow: var(--dfNodeBoxShadowHL) var(--dfNodeBoxShadowVL) var(--dfNodeBoxShadowBR) var(--dfNodeBoxShadowS) var(--dfNodeBoxShadowColor);
-  box-shadow:  var(--dfNodeBoxShadowHL) var(--dfNodeBoxShadowVL) var(--dfNodeBoxShadowBR) var(--dfNodeBoxShadowS) var(--dfNodeBoxShadowColor);
+  padding: 0px;
+  width: 350px;
+  border-radius: 0px;
+  .node-arguments {
+    margin-top: -2px;
+    outline: 2px solid $primary;
+  }
 }
 
-.drawflow .drawflow-node:hover {
-  background: var(--dfNodeHoverBackgroundColor);
-  color: var(--dfNodeHoverTextColor);
-  border: var(--dfNodeHoverBorderSize)  solid var(--dfNodeHoverBorderColor);
-  border-radius: var(--dfNodeHoverBorderRadius);
-  -webkit-box-shadow: var(--dfNodeHoverBoxShadowHL) var(--dfNodeHoverBoxShadowVL) var(--dfNodeHoverBoxShadowBR) var(--dfNodeHoverBoxShadowS) var(--dfNodeHoverBoxShadowColor);
-  box-shadow:  var(--dfNodeHoverBoxShadowHL) var(--dfNodeHoverBoxShadowVL) var(--dfNodeHoverBoxShadowBR) var(--dfNodeHoverBoxShadowS) var(--dfNodeHoverBoxShadowColor);
-}
-
-.drawflow .drawflow-node.selected {
-  background: var(--dfNodeSelectedBackgroundColor);
-  color: var(--dfNodeSelectedTextColor);
-  border: var(--dfNodeSelectedBorderSize)  solid var(--dfNodeSelectedBorderColor);
-  border-radius: var(--dfNodeSelectedBorderRadius);
-  -webkit-box-shadow: var(--dfNodeSelectedBoxShadowHL) var(--dfNodeSelectedBoxShadowVL) var(--dfNodeSelectedBoxShadowBR) var(--dfNodeSelectedBoxShadowS) var(--dfNodeSelectedBoxShadowColor);
-  box-shadow:  var(--dfNodeSelectedBoxShadowHL) var(--dfNodeSelectedBoxShadowVL) var(--dfNodeSelectedBoxShadowBR) var(--dfNodeSelectedBoxShadowS) var(--dfNodeSelectedBoxShadowColor);
-}
-
-.drawflow .drawflow-node .input {
-  left: var(--dfInputLeft);
-  background: var(--dfInputBackgroundColor);
-  border: var(--dfInputBorderSize)  solid var(--dfInputBorderColor);
-  border-radius: var(--dfInputBorderRadius);
-  height: var(--dfInputHeight);
-  width: var(--dfInputWidth);
-}
-
-.drawflow .drawflow-node .input:hover {
-  background: var(--dfInputHoverBackgroundColor);
-  border: var(--dfInputHoverBorderSize)  solid var(--dfInputHoverBorderColor);
-  border-radius: var(--dfInputHoverBorderRadius);
-}
-
-.drawflow .drawflow-node .outputs {
-  float: var(--dfNodeTypeFloat);
-}
-
-.drawflow .drawflow-node .output {
-  right: var(--dfOutputRight);
-  background: var(--dfOutputBackgroundColor);
-  border: var(--dfOutputBorderSize)  solid var(--dfOutputBorderColor);
-  border-radius: var(--dfOutputBorderRadius);
-  height: var(--dfOutputHeight);
-  width: var(--dfOutputWidth);
-}
-
-.drawflow .drawflow-node .output:hover {
-  background: var(--dfOutputHoverBackgroundColor);
-  border: var(--dfOutputHoverBorderSize)  solid var(--dfOutputHoverBorderColor);
-  border-radius: var(--dfOutputHoverBorderRadius);
+.drawflow .drawflow-node.selected  {
+  background: white;
+  border: 2px solid #4ea9ff;
+  .node-arguments {
+    margin-top: -2px;
+    outline: 2px solid #4ea9ff;
+  }
 }
 
 .drawflow .connection .main-path {
-  stroke-width: var(--dfLineWidth);
-  stroke: var(--dfLineColor);
+  stroke: #4ea9ff;
+  stroke-width: 3px;
 }
 
-.drawflow .connection .main-path:hover {
-  stroke: var(--dfLineHoverColor);
+.drawflow .drawflow-node .input, .drawflow .drawflow-node .output {
+  height: 15px;
+  width: 15px;
+  border: 2px solid $primary;
 }
 
-.drawflow .connection .main-path.selected {
-  stroke: var(--dfLineSelectedColor);
+.drawflow .drawflow-node .input:hover, .drawflow .drawflow-node .output:hover {
+  background: #4ea9ff;
 }
 
-.drawflow .connection .point {
-  stroke: var(--dfRerouteBorderColor);
-  stroke-width: var(--dfRerouteBorderWidth);
-  fill: var(--dfRerouteBackgroundColor);
+.drawflow .drawflow-node .output {
+  right: 8px;
 }
 
-.drawflow .connection .point:hover {
-  stroke: var(--dfRerouteHoverBorderColor);
-  stroke-width: var(--dfRerouteHoverBorderWidth);
-  fill: var(--dfRerouteHoverBackgroundColor);
+.drawflow .drawflow-node .input {
+  left: -8px;
+  background: white;
+}
+
+.drawflow > .drawflow-delete {
+  border: 2px solid #43b993;
+  background: white;
+  color: #43b993;
+  -webkit-box-shadow: 0 2px 10px 2px $primary;
+  box-shadow: 0 2px 10px 2px #43b993;
 }
 
 .drawflow-delete {
-  display: var(--dfDeleteDisplay);
-  color: var(--dfDeleteColor);
-  background: var(--dfDeleteBackgroundColor);
-  border: var(--dfDeleteBorderSize) solid var(--dfDeleteBorderColor);
-  border-radius: var(--dfDeleteBorderRadius);
+  border: 2px solid #4ea9ff;
+  background: white;
+  color: #4ea9ff;
+  -webkit-box-shadow: 0 2px 20px 2px $primary;
+  box-shadow: 0 2px 20px 2px $primary;
 }
-
-.parent-node .drawflow-delete {
-  top: var(--dfDeleteTop);
-}
-
-.drawflow-delete:hover {
-  color: var(--dfDeleteHoverColor);
-  background: var(--dfDeleteHoverBackgroundColor);
-  border: var(--dfDeleteHoverBorderSize) solid var(--dfDeleteHoverBorderColor);
-  border-radius: var(--dfDeleteHoverBorderRadius);
-}
-
 </style>
