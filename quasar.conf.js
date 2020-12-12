@@ -1,18 +1,14 @@
 module.exports = function (ctx) {
   return {
-    // https://quasar.dev/quasar-cli/cli-documentation/boot-files
     boot: [
       'axios',
       'mixins',
       'auth',
       'socketio'
     ],
-    // https://quasar.dev/quasar-cli/quasar-conf-js#Property%3A-css
     css: [
       'app.scss'
     ],
-
-    // https://github.com/quasarframework/quasar/tree/dev/extras
     extras: [
       'fontawesome-v5',
       'mdi-v5',
@@ -20,27 +16,26 @@ module.exports = function (ctx) {
       'material-icons'
     ],
 
-    // https://quasar.dev/quasar-cli/quasar-conf-js#Property%3A-framework
     framework: {
+      config: {
+        dark: 'auto'
+      },
       iconSet: 'material-icons',
       lang: 'en-us',
       all: 'auto',
-      dark: 'auto',
       components: [],
       directives: [],
       plugins: []
     },
     supportIE: false,
 
-    // Full list of options: https://quasar.dev/quasar-cli/quasar-conf-js#Property%3A-build
     build: {
       scopeHoisting: true,
-      vueRouterMode: 'hash', // available values: 'hash', 'history'
+      vueRouterMode: 'history', // available values: 'hash', 'history'
       showProgress: true,
       gzip: false,
       analyze: false,
 
-      // https://quasar.dev/quasar-cli/cli-documentation/handling-webpack
       extendWebpack (cfg) {
         cfg.module.rules.push({
           enforce: 'pre',
@@ -54,7 +49,6 @@ module.exports = function (ctx) {
       }
     },
 
-    // Full list of options: https://quasar.dev/quasar-cli/quasar-conf-js#Property%3A-devServer
     devServer: {
       https: true,
       host: '127.0.0.1',
@@ -94,7 +88,7 @@ module.exports = function (ctx) {
       manifest: {
         name: 'Reternal',
         short_name: 'Reternal',
-        description: 'VueJS UI for the reternal platform',
+        description: 'Reternal UI',
         display: 'standalone',
         orientation: 'portrait',
         background_color: '#ffffff',
@@ -128,18 +122,12 @@ module.exports = function (ctx) {
         ]
       }
     },
-
-    // Full list of options: https://quasar.dev/quasar-cli/developing-cordova-apps/configuring-cordova
     cordova: {
       id: ''
     },
-
-    // Full list of options: https://quasar.dev/quasar-cli/developing-capacitor-apps/configuring-capacitor
     capacitor: {
       hideSplashscreen: true
     },
-
-    // Full list of options: https://quasar.dev/quasar-cli/developing-electron-apps/configuring-electron
     electron: {
       bundler: 'packager',
       packager: {
@@ -150,8 +138,6 @@ module.exports = function (ctx) {
       },
       nodeIntegration: true,
       extendWebpack (cfg) {
-        // do something with Electron main process Webpack cfg
-        // chainWebpack also available besides this extendWebpack
       }
     }
   }

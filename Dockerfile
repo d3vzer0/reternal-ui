@@ -2,7 +2,7 @@
 # https://vuejs.org/v2/cookbook/dockerize-vuejs-app.html
 
 # Installs the reternal-ui project deps during initial dep-stage
-FROM node:11.13.0 as dependency-stage
+FROM node:14.15 as dependency-stage
 WORKDIR /app
 COPY package*.json ./
 RUN npm install -g @quasar/cli
