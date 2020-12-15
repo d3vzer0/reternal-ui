@@ -19,51 +19,61 @@
       <div class="col-sm-3 col-md-2 col-xs-4">
         <div class="row justify-end">
           <div class="col">
-            <q-btn style="width: 100%;" unelevated color="primary" icon="get_app" label="Package">
-              <q-menu fit>
-                <q-list>
-                  <q-item clickable unelevated>
-                    <q-item-section>Splunk</q-item-section>
-                    <q-item-section side>
-                      <q-icon name="keyboard_arrow_right" />
-                    </q-item-section>
-                    <q-menu anchor="top right" self="top left">
-                      <q-list>
-                        <q-item clickable v-close-popup  @click="packageRules('splunk')">
-                          <q-item-section>Enriched Splunk App (.tar.gz)</q-item-section>
-                        </q-item>
-                      </q-list>
-                    </q-menu>
-                  </q-item>
-                  <q-item clickable unelevated disabled>
-                    <q-item-section>ElasticSearch</q-item-section>
-                    <q-item-section side>
-                      <q-icon name="keyboard_arrow_right" />
-                    </q-item-section>
-                    <q-menu anchor="top right" self="top left">
-                      <q-list>
-                        <!-- <q-item clickable v-close-popup>
-                          <q-item-section>Raw Searches</q-item-section>
-                        </q-item> -->
-                      </q-list>
-                    </q-menu>
-                  </q-item>
-                  <q-item clickable unelevated disabled>
-                    <q-item-section>Sentinel</q-item-section>
-                    <q-item-section side>
-                      <q-icon name="keyboard_arrow_right" />
-                    </q-item-section>
-                    <q-menu anchor="top right" self="top left">
-                      <q-list>
-                        <!-- <q-item clickable v-close-popup>
-                          <q-item-section>Raw Searches</q-item-section>
-                        </q-item> -->
-                      </q-list>
-                    </q-menu>
-                  </q-item>
-                </q-list>
-              </q-menu>
-            </q-btn>
+            <q-card flat>
+              <q-file
+                v-model="configFiles"
+                label="Sigma config files"
+                accept=".yml, application/x-yaml"
+                class="q-pa-sm"
+                clearable
+                style="max-width: 100%">
+              </q-file>
+              <q-btn style="width: 100%;" square unelevated color="primary" icon="get_app" label="Package" :disable="configFiles ? false : true">
+                <q-menu fit>
+                  <q-list>
+                    <q-item clickable unelevated>
+                      <q-item-section>Splunk</q-item-section>
+                      <q-item-section side>
+                        <q-icon name="keyboard_arrow_right" />
+                      </q-item-section>
+                      <q-menu anchor="top right" self="top left">
+                        <q-list>
+                          <q-item clickable v-close-popup  @click="packageRules('splunk')">
+                            <q-item-section>Enriched Splunk App (.tar.gz)</q-item-section>
+                          </q-item>
+                        </q-list>
+                      </q-menu>
+                    </q-item>
+                    <q-item clickable unelevated disabled>
+                      <q-item-section>ElasticSearch</q-item-section>
+                      <q-item-section side>
+                        <q-icon name="keyboard_arrow_right" />
+                      </q-item-section>
+                      <q-menu anchor="top right" self="top left">
+                        <q-list>
+                          <!-- <q-item clickable v-close-popup>
+                            <q-item-section>Raw Searches</q-item-section>
+                          </q-item> -->
+                        </q-list>
+                      </q-menu>
+                    </q-item>
+                    <q-item clickable unelevated disabled>
+                      <q-item-section>Sentinel</q-item-section>
+                      <q-item-section side>
+                        <q-icon name="keyboard_arrow_right" />
+                      </q-item-section>
+                      <q-menu anchor="top right" self="top left">
+                        <q-list>
+                          <!-- <q-item clickable v-close-popup>
+                            <q-item-section>Raw Searches</q-item-section>
+                          </q-item> -->
+                        </q-list>
+                      </q-menu>
+                    </q-item>
+                  </q-list>
+                </q-menu>
+              </q-btn>
+            </q-card>
             <!-- <q-btn color="primary" round icon="add"/> -->
           </div>
         </div>
@@ -220,6 +230,7 @@ export default {
   data () {
     return {
       packageProcessing: false,
+      configFiles: null,
       packageFormat: 'splunk',
       packageNames: {
         'splunk': 'splunk_sigma_rules.tar.gz',
@@ -329,14 +340,18 @@ export default {
     packageRules (target) {
       this.packageFormat = target
       this.packageProcessing = true
-      var queryParams = {
-        ...this.searchFilters,
-        phase: this.phaseSelected
+      let reader = new FileReader()
+      reader.readAsText(this.configFiles)
+      reader.onload = () => {
+        var queryParams = {
+          ...this.searchFilters,
+          phase: this.phaseSelected
+        }
+        this.$axios
+          .post(`/sigma/package/${target}`,
+            YAML.safeLoad(reader.result),
+            { params: queryParams })
       }
-      this.$axios
-        .get(`/sigma/package/${target}`, {
-          params: queryParams
-        })
     },
     dumpYAML (data) {
       const clonedRule = Object.assign({ id: data.sigma_id }, data)

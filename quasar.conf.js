@@ -54,6 +54,9 @@ module.exports = function (ctx) {
       host: '127.0.0.1',
       port: 9090,
       open: false,
+      watchOptions: {
+        poll: 1000
+      },
       proxy: {
         // proxy all requests starting with /api to jsonplaceholder
         '/socket.io': {
