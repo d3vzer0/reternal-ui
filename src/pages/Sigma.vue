@@ -107,6 +107,27 @@
         </div>
         <div class="row q-mt-md">
           <div class="col">
+            <search-filter store='sigma' id='category' title='Category'
+              :params="queryParams">
+            </search-filter>
+          </div>
+        </div>
+        <div class="row q-mt-md">
+          <div class="col">
+            <search-filter store='sigma' id='product' title='Product'
+              :params="queryParams">
+            </search-filter>
+          </div>
+        </div>
+        <div class="row q-mt-md">
+          <div class="col">
+            <search-filter store='sigma' id='service' title='Service'
+              :params="queryParams">
+            </search-filter>
+          </div>
+        </div>
+        <div class="row q-mt-md">
+          <div class="col">
             <search-filter store='sigma' id='data_source' title='Datasource'
              :params="queryParams">
             </search-filter>
@@ -247,10 +268,15 @@ export default {
         'technique',
         'actor',
         'phase',
-        'data_source'
+        'data_source',
+        'category',
+        'product',
+        'service'
       ],
       queryParams: {
         search: '',
+        product: '',
+        service: '',
         tags: '',
         status: '',
         level: '',
@@ -258,7 +284,8 @@ export default {
         integration: '',
         technique: '',
         phase: '',
-        data_source: ''
+        data_source: '',
+        category: ''
       },
       phaseStep: '',
       phaseSelected: '',
