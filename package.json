@@ -13,7 +13,7 @@
   },
   "dependencies": {
     "@quasar/extras": "^1.9.10",
-    "axios": "^0.18.1",
+    "axios": "^0.21.1",
     "chokidar": "^3.4.3",
     "core-js": "^3.8.1",
     "drawflow": "0.0.32",
